@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "specto_client",
+    "slug": "specto-client",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.spectacle.specto",
+      "versionCode": 1,
+      "permissions": [
+        "NOTIFICATIONS"
+      ],
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "184cbd4a-4986-4e07-91df-ab93a9285f32"
+      }
+    },
+    "owner": "bongjs"
+  }
+}
