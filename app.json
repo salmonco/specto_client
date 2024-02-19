@@ -7,15 +7,14 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.spectacle.specto"
     },
     "android": {
       "adaptiveIcon": {
@@ -24,9 +23,7 @@
       },
       "package": "com.spectacle.specto",
       "versionCode": 1,
-      "permissions": [
-        "NOTIFICATIONS"
-      ],
+      "permissions": ["NOTIFICATIONS"],
       "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true
     },
