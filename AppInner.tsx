@@ -55,6 +55,8 @@ function AppInner() {
         // redux state 업데이트하면 컴포넌트는 자동으로 리렌더링됨
         dispatch(
           userSlice.actions.setUser({
+            id: response.data.data.id,
+            email: response.data.data.email,
             name: response.data.data.name,
             accessToken: response.data.data.accessToken,
           })
