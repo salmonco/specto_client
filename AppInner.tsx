@@ -14,7 +14,6 @@ import Main from "./src/tabNav/Main";
 
 export type RootStackParamList = {
   Splash: undefined;
-  FontSizeSet: undefined;
   Auth: undefined;
   Main: undefined;
 };
@@ -24,16 +23,6 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function AppInner() {
   const dispatch = useAppDispatch();
   const isLoggedIn = useSelector((state: RootState) => !!state.user.name);
-  const [showSplash, setShowSplash] = useState(true);
-
-  // TODO: 타이머 스플래시 없애고, 앱을 처음 실행했을 때 첫 시작 화면 보이게 하기
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSplash(false);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   // 앱 실행 시 refreshToken 있으면 자동 로그인
   useEffect(() => {
@@ -103,13 +92,13 @@ function AppInner() {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {showSplash && <Stack.Screen name="Splash" component={Splash} />}
       {isLoggedIn ? (
         <Stack.Screen name="Main" component={Main} />
       ) : (
         <Stack.Group>
-          <Stack.Screen name="Main" component={Main} />
+          <Stack.Screen name="Splash" component={Splash} />
           <Stack.Screen name="Auth" component={Auth} />
+          <Stack.Screen name="Main" component={Main} />
         </Stack.Group>
       )}
     </Stack.Navigator>
