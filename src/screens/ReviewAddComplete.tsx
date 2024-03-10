@@ -1,12 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-function RetrospectListUp() {
+function ReviewAddComplete() {
   return (
     <View>
-      <Text>RetrospectListUp</Text>
+      <Text>ReviewAddComplete</Text>
     </View>
   );
 }
 
-export default RetrospectListUp;
+export default ReviewAddComplete;

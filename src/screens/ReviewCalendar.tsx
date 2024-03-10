@@ -1,12 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-function RetrospectCalendar() {
+function ReviewCalendar() {
   return (
     <View>
-      <Text>RetrospectCalendar</Text>
+      <Text>ReviewCalendar</Text>
     </View>
   );
 }
 
-export default RetrospectCalendar;
+export default ReviewCalendar;

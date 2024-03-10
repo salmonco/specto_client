@@ -1,12 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-function RetrospectList() {
+function ContestAdd2() {
   return (
     <View>
-      <Text>RetrospectList</Text>
+      <Text>ContestAdd2</Text>
     </View>
   );
 }
 
-export default RetrospectList;
+export default ContestAdd2;

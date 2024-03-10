@@ -3,21 +3,21 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MyPageScreen from "../stackNav/MyPageScreen";
 import HomeScreen from "../stackNav/HomeScreen";
 import SpecScreen from "../stackNav/SpecScreen";
-import RetrospectScreen from "./RetrospectScreen";
+import ReviewScreen from "./ReviewScreen";
 import MyPageIcon from "../../assets/images/myPage.svg";
 import MyPageFocusedIcon from "../../assets/images/myPage.svg";
 import HomeIcon from "../../assets/images/home.svg";
 import HomeFocusedIcon from "../../assets/images/home.svg";
 import SpecIcon from "../../assets/images/spec.svg";
 import SpecFocusedIcon from "../../assets/images/specFocused.svg";
-import RetrospectIcon from "../../assets/images/retrospect.svg";
-import RetrospectFocusedIcon from "../../assets/images/retrospectFocused.svg";
+import ReviewIcon from "../../assets/images/review.svg";
+import ReviewFocusedIcon from "../../assets/images/reviewFocused.svg";
 
 export type MainParamList = {
   MyPageScreen: undefined;
   HomeScreen: undefined;
   SpecScreen: undefined;
-  RetrospectScreen: undefined;
+  ReviewScreen: undefined;
 };
 
 const Tab = createBottomTabNavigator();
@@ -56,12 +56,12 @@ function Main() {
         }}
       />
       <Tab.Screen
-        name="RetrospectScreen"
-        component={RetrospectScreen}
+        name="ReviewScreen"
+        component={ReviewScreen}
         options={{
           tabBarLabel: "내 회고",
           tabBarIcon: ({ focused }) =>
-            focused ? <RetrospectFocusedIcon /> : <RetrospectIcon />,
+            focused ? <ReviewFocusedIcon /> : <ReviewIcon />,
         }}
       />
     </Tab.Navigator>

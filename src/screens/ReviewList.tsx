@@ -1,12 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-function CompetitionAdd2() {
+function ReviewList() {
   return (
     <View>
-      <Text>CompetitionAdd2</Text>
+      <Text>ReviewList</Text>
     </View>
   );
 }
 
-export default CompetitionAdd2;
+export default ReviewList;
