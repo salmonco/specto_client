@@ -1,12 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-function RetrospectAdd() {
+function ReviewAdd() {
   return (
     <View>
-      <Text>RetrospectAdd</Text>
+      <Text>ReviewAdd</Text>
     </View>
   );
 }
 
-export default RetrospectAdd;
+export default ReviewAdd;
