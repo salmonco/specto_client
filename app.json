@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.spectacle.specto"
@@ -23,7 +25,9 @@
       },
       "package": "com.spectacle.specto",
       "versionCode": 1,
-      "permissions": ["NOTIFICATIONS"],
+      "permissions": [
+        "NOTIFICATIONS"
+      ],
       "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true
     },
@@ -35,6 +39,9 @@
         "projectId": "184cbd4a-4986-4e07-91df-ab93a9285f32"
       }
     },
-    "owner": "bongjs"
+    "owner": "bongjs",
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
