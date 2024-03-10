@@ -5,12 +5,13 @@ type Component = {
   children: string | string[];
   style?: TextStyle | TextStyle[];
   className?: string;
+  size?: number;
 };
 export const CustomText: React.FC<Component> = ({ children, ...props }) => {
   return (
     <Text
       {...props}
-      style={[styles.defaultFontText, props.style]}
+      style={[styles(props.size ?? 16).defaultFontText, props.style]}
       className={props.className}
     >
       {children}
@@ -18,8 +19,10 @@ export const CustomText: React.FC<Component> = ({ children, ...props }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  defaultFontText: {
-    fontFamily: "Inter-Regular",
-  },
-});
+const styles = (size: number) =>
+  StyleSheet.create({
+    defaultFontText: {
+      fontFamily: "Inter-Regular",
+      fontSize: size,
+    },
+  });
