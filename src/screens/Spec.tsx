@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { FlatList, Pressable, View } from "react-native";
-import { CustomText as Text } from "../components/CustomText";
+import { CustomText as Text } from "@components/CustomText";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Header from "../components/Header";
+import Header from "@components/Header";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { SpecScreenStackParamList } from "../stackNav/SpecScreen";
-import Button from "../components/Button";
-import Contest from "../../assets/images/contest.svg";
-import Certificate from "../../assets/images/certificate.svg";
-import Intern from "../../assets/images/intern.svg";
-import Project from "../../assets/images/project.svg";
-import AddIcon from "../../assets/images/add-blue.svg";
+import { SpecScreenStackParamList } from "@stackNav/SpecScreen";
+import Button from "@components/Button";
+import Contest from "@assets/images/contest.svg";
+import Certificate from "@assets/images/certificate.svg";
+import Intern from "@assets/images/intern.svg";
+import Project from "@assets/images/project.svg";
+import AddIcon from "@assets/images/add-blue.svg";
 
 type SpecScreenProps = NativeStackScreenProps<SpecScreenStackParamList, "Spec">;
 

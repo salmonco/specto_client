@@ -2,6 +2,14 @@
   "extends": "expo/tsconfig.base",
   "include": ["**/*", "node_modules/nativewind"],
   "compilerOptions": {
-    "strict": true
+    "strict": true,
+    "baseUrl": "./",
+    "paths": {
+      "@assets/*": ["./assets/*"],
+      "@components/*": ["./src/components/*"],
+      "@screens/*": ["./src/screens/*"],
+      "@stackNav/*": ["./src/stackNav/*"],
+      "@tabNav/*": ["./src/tabNav/*"]
+    }
   }
 }
