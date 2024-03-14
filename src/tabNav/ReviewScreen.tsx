@@ -14,10 +14,12 @@ function ReviewScreen() {
   return (
     <ReviewScreenTab.Navigator>
       <ReviewScreenTab.Screen
+        options={{ title: "캘린더" }}
         name="ReviewCalendarScreen"
         component={ReviewCalendarScreen}
       />
       <ReviewScreenTab.Screen
+        options={{ title: "회고리스트" }}
         name="ReviewListScreen"
         component={ReviewListScreen}
       />

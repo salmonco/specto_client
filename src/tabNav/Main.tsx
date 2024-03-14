@@ -59,6 +59,8 @@ function Main() {
         name="ReviewScreen"
         component={ReviewScreen}
         options={{
+          headerShown: true,
+          title: "내 회고",
           tabBarLabel: "내 회고",
           tabBarIcon: ({ focused }) =>
             focused ? <ReviewFocusedIcon /> : <ReviewIcon />,

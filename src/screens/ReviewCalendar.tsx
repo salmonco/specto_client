@@ -1,12 +1,17 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { CustomText as Text } from "@components/CustomText";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { ReviewCalendarScreenStackParamList } from "@stackNav/ReviewCalendarScreen";
 
-function ReviewCalendar() {
-  return (
-    <View>
-      <Text>ReviewCalendar</Text>
-    </View>
-  );
+type ReviewCalendarScreenProps = NativeStackScreenProps<
+  ReviewCalendarScreenStackParamList,
+  "ReviewCalendar"
+>;
+
+function ReviewCalendar({ navigation }: Readonly<ReviewCalendarScreenProps>) {
+  return <SafeAreaView edges={["top"]} className="flex-1"></SafeAreaView>;
 }
 
 export default ReviewCalendar;
