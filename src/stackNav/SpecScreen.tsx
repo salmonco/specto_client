@@ -16,14 +16,16 @@ const SpecScreenStack = createNativeStackNavigator<SpecScreenStackParamList>();
 
 function SpecScreen() {
   return (
-    <SpecScreenStack.Navigator screenOptions={{ headerShown: false }}>
+    <SpecScreenStack.Navigator screenOptions={{ title: "내 스펙" }}>
       <SpecScreenStack.Screen name="Spec" component={Spec} />
       <SpecScreenStack.Screen name="SpecDetail" component={SpecDetail} />
       <SpecScreenStack.Screen
+        options={{ headerShown: false }}
         name="ContestAddScreen"
         component={ContestAddScreen}
       />
       <SpecScreenStack.Screen
+        options={{ headerShown: false }}
         name="CertificateAddScreen"
         component={CertificateAddScreen}
       />

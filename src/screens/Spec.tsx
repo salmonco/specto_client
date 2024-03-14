@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Pressable, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Header from "@components/Header";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SpecScreenStackParamList } from "@stackNav/SpecScreen";
 import Button from "@components/Button";
@@ -15,6 +13,16 @@ import AddIcon from "@assets/images/add-blue.svg";
 type SpecScreenProps = NativeStackScreenProps<SpecScreenStackParamList, "Spec">;
 
 function Spec({ navigation }: Readonly<SpecScreenProps>) {
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable onPress={() => console.log("우측 버튼을 눌렀습니다.")}>
+          <Text className="text-[#0094FF]">클릭</Text>
+        </Pressable>
+      ),
+    });
+  }, [navigation]);
+
   const CATEGORY_LABEL: { [key: string]: string } = {
     all: "전체",
     contest: "공모전",
@@ -153,8 +161,7 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
   };
 
   return (
-    <SafeAreaView edges={["top"]} className="flex-1 relative">
-      <Header label="내 스펙" closeCallbackFn={() => navigation.goBack()} />
+    <View className="flex-1 relative">
       <View className="flex-row justify-between gap-[8] py-[23] px-[20] border-b border-b-[#ECEBEB]">
         {MENU.map((v) => (
           <Pressable
@@ -199,7 +206,7 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
       >
         <AddIcon />
       </Pressable>
-    </SafeAreaView>
+    </View>
   );
 }
 
