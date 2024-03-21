@@ -10,6 +10,12 @@ import Intern from "@assets/images/intern.svg";
 import Project from "@assets/images/project.svg";
 import AddIcon from "@assets/images/add-blue.svg";
 
+import SpecContest from "@screens/SpecContest";
+import SpecCertificate from "@screens/SpecCertificate";
+import SpecIntern from "@screens/SpecIntern";
+import SpecActivity from "@screens/SpecActivity";
+import SpecProject from "@screens/SpecProject";
+
 type SpecScreenProps = NativeStackScreenProps<SpecScreenStackParamList, "Spec">;
 
 function Spec({ navigation }: Readonly<SpecScreenProps>) {
@@ -115,13 +121,47 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
         return <Project />;
     }
   };
+
+  const navigateToSpecComponent = (category: string, id: number) => {
+    switch (category) {
+      case "contest":
+        navigation.navigate("SpecContest", { id });
+        break;
+      case "certificate":
+        navigation.navigate("SpecCertificate", { id });
+        break;
+      case "intern":
+        navigation.navigate("SpecIntern", { id });
+        break;
+      case "activity":
+        navigation.navigate("SpecActivity", { id });
+        break;
+      case "project":
+        navigation.navigate("SpecProject", { id });
+        break;
+      default:
+        break;
+    }
+  };
+
+  // 각 스펙 클릭 이벤트 핸들러
+  const handleSpecClick = (id: number) => {
+    console.log(`스펙 ID ${id}를 클릭 - 개별 페이지로 이동.`);
+    // SpecDetail 스크린으로 이동하면서 id 전달
+    // navigation.navigate("SpecDetail", { id });
+  };
+
   const renderItem = ({ item }: { item: Readonly<SpecBase> }) => {
     return (
       <Pressable
         key={item.id}
         className="flex-1 flex-row justify-between items-center gap-[10] border border-[#DEDEDE] p-[16] h-[78] mx-[14] my-[1]"
         style={{ borderRadius: 10 }}
-        onPress={() => console.log(`${item.id}번 스펙을 클릭했습니다.`)}
+        onPress={() => {
+          console.log(`${item.id}번 스펙을 클릭했습니다.`);
+          // handleSpecClick(item.id);
+          navigateToSpecComponent(item.category, item.id);
+        }}
       >
         <View>
           <View className="flex-row gap-[10] items-center">
@@ -170,7 +210,10 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
             }`}
             style={{ borderRadius: 4 }}
             key={v.category}
-            onPress={() => setClickedCategory(v.category)}
+            onPress={() => {
+              setClickedCategory(v.category);
+              // navigateToSpecComponent(v.category); // 이 부분을 추가해주세요.
+            }}
           >
             <Text
               className={`font-[Inter-Medium] text-center ${

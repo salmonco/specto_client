@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import store from "./src/store";
@@ -13,13 +13,16 @@ const navTheme = {
   },
 };
 
-function App() {
+const App: React.FC = () => {
   const [fontsLoaded] = useFonts({
     "Inter-Regular": require("./assets/fonts/Inter-Regular.ttf"),
     "Inter-Medium": require("./assets/fonts/Inter-Medium.ttf"),
     "Inter-SemiBold": require("./assets/fonts/Inter-SemiBold.ttf"),
   });
-  if (!fontsLoaded) return null;
+
+  if (!fontsLoaded) {
+    return null; // 폰트가 로드되지 않았을 때 로딩 화면을 보여줍니다.
+  }
 
   return (
     <Provider store={store}>
@@ -28,6 +31,6 @@ function App() {
       </NavigationContainer>
     </Provider>
   );
-}
+};
 
 export default App;
