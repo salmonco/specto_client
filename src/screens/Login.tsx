@@ -6,10 +6,22 @@ import {
   TouchableOpacity,
   Alert,
   StatusBar,
+  Dimensions,
 } from "react-native";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native"; // 이곳으로 import
 
-const LoginScreen: React.FC = () => {
+import Logo from "../../assets/images/logo.svg";
+const VIEW_HEIGHT = Dimensions.get("window").height; // 화면 세로길이
+
+const Login: React.FC = () => {
+  const navigation = useNavigation();
+
+  // const handleStart = () => {
+  //   console.log("Home으로 이동");
+  //   navigation.navigate("Main");
+  // };
+
   const handleGoogleLogin = () => {
     Alert.alert("", "'스펙토'에서 '구글'을 열려고 합니다.", [
       {
@@ -44,7 +56,7 @@ const LoginScreen: React.FC = () => {
     <View style={styles.container}>
       <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
       <View style={styles.logoContainer}>
-        <Text style={styles.logo}>specto.</Text>
+        <Logo />
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
@@ -64,15 +76,22 @@ const LoginScreen: React.FC = () => {
         >
           <Ionicons name="chatbubble" size={18} color="#381E1E" />
           <Text
-            style={[styles.buttonText, styles.kakaoText, , { marginLeft: 10 }]}
+            style={[styles.buttonText, styles.kakaoText, { marginLeft: 10 }]}
           >
             카카오톡으로 계속하기
           </Text>
         </TouchableOpacity>
+        {/* <TouchableOpacity
+          style={[styles.button, styles.startButton]}
+          onPress={handleStart}
+        >
+          <Text style={styles.startText}>시작하기</Text>
+        </TouchableOpacity> */}
       </View>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -81,14 +100,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   logoContainer: {
-    flexDirection: "row",
+    flex: 1,
+    justifyContent: "flex-end",
     alignItems: "center",
-    marginBottom: 200,
-  },
-  logo: {
-    fontSize: 50,
-    fontWeight: "bold",
-    color: "#0094FF",
+    paddingVertical: 69,
+    height: VIEW_HEIGHT,
+    paddingBottom: 470,
   },
   buttonContainer: {
     position: "absolute",
@@ -107,13 +124,16 @@ const styles = StyleSheet.create({
     width: "80%",
     borderWidth: 1,
   },
-
   googleButton: {
     backgroundColor: "#fff",
     borderColor: "#ccc",
   },
   kakaoButton: {
     backgroundColor: "#FEE500",
+    borderWidth: 0,
+  },
+  startButton: {
+    backgroundColor: "#0094FF",
     borderWidth: 0,
   },
   buttonText: {
@@ -126,6 +146,11 @@ const styles = StyleSheet.create({
   kakaoText: {
     color: "#381E1E",
   },
+  startText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
 });
 
-export default LoginScreen;
+export default Login;

@@ -26,6 +26,7 @@ function Splash() {
   const navigation = useNavigation<Props>();
 
   const handleStart = () => {
+    console.log("Start button pressed!");
     navigation.navigate("Auth");
   };
 
