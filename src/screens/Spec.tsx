@@ -16,6 +16,27 @@ import SpecIntern from "@screens/SpecIntern";
 import SpecActivity from "@screens/SpecActivity";
 import SpecProject from "@screens/SpecProject";
 
+export const CATEGORY_LABEL: { [key: string]: string } = {
+  all: "전체",
+  contest: "공모전",
+  certificate: "자격증",
+  intern: "인턴",
+  activity: "대외활동",
+  project: "논문/프로젝트",
+};
+export const renderIcon = (category: string) => {
+  switch (category) {
+    case "contest":
+      return <Contest />;
+    case "certificate":
+      return <Certificate />;
+    case "intern":
+      return <Intern />;
+    case "project":
+      return <Project />;
+  }
+};
+
 type SpecScreenProps = NativeStackScreenProps<SpecScreenStackParamList, "Spec">;
 
 function Spec({ navigation }: Readonly<SpecScreenProps>) {
@@ -29,14 +50,6 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
     });
   }, [navigation]);
 
-  const CATEGORY_LABEL: { [key: string]: string } = {
-    all: "전체",
-    contest: "공모전",
-    certificate: "자격증",
-    intern: "인턴",
-    activity: "대외활동",
-    project: "논문/프로젝트",
-  };
   const MENU = Object.entries(CATEGORY_LABEL).map(([k, v]) => {
     return { category: k, label: v };
   });
@@ -108,19 +121,6 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
   ];
   const [clickedCategory, setClickedCategory] = useState("all");
   const [specList, setSpecList] = useState(specData);
-
-  const renderIcon = (category: string) => {
-    switch (category) {
-      case "contest":
-        return <Contest />;
-      case "certificate":
-        return <Certificate />;
-      case "intern":
-        return <Intern />;
-      case "project":
-        return <Project />;
-    }
-  };
 
   const navigateToSpecComponent = (category: string, id: number) => {
     switch (category) {
