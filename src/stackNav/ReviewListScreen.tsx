@@ -7,7 +7,7 @@ import ReviewAddComplete from "../screens/ReviewAddComplete";
 
 export type ReviewListScreenStackParamList = {
   ReviewList: undefined;
-  ReviewListUp: undefined;
+  ReviewListUp: { id: number };
   ReviewAdd: undefined;
   ReviewAddComplete: undefined;
 };
