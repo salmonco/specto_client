@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Pressable, ScrollView, TextInput, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import Button from "@components/Button";
-import { CATEGORY_LABEL, renderIcon } from "./Spec";
 import HorizontalSlider from "@components/HorizontalSlider";
+import { CATEGORY_LABEL, renderIcon } from "@components/SpecListItem";
 
 function ReviewAdd() {
   const completed = false;
