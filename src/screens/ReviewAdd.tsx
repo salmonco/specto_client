@@ -135,7 +135,7 @@ function ReviewAdd() {
         <Text className="font-[Inter-SemiBold] text-[#373737] mb-[8]">
           오늘의 진행상황을 체크해주세요!
         </Text>
-        <Text className="text-[#9F9F9F] mb-[30]" size={12}>
+        <Text className="text-[#9F9F9F] mb-[40]" size={12}>
           캐릭터를 진행상황에 맞게 끌어주세요!
         </Text>
         <HorizontalSlider progress={progress} setProgress={setProgress} />
