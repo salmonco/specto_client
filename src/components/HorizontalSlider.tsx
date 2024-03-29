@@ -4,8 +4,8 @@ import { CustomText as Text } from "@components/CustomText";
 import { LinearGradient } from "expo-linear-gradient";
 
 interface HorizontalSliderBase {
-  progress: number;
-  setProgress: (position: number) => void;
+  progress?: number;
+  setProgress?: (position: number) => void;
 }
 const HorizontalSlider = ({
   progress,
@@ -19,7 +19,9 @@ const HorizontalSlider = ({
       const newPosition = gestureState.moveX / SCREEN_WIDTH; // 전체 너비 대비 이동한 거리
       // 위치가 0%에서 100% 사이에 있도록 제한
       const clampedPosition = Math.max(0, Math.min(1, newPosition));
-      setProgress(clampedPosition);
+      if (setProgress) {
+        setProgress(clampedPosition);
+      }
     },
   });
 
@@ -54,10 +56,21 @@ const HorizontalSlider = ({
       </Text>
       <View
         className="absolute bottom-[-4]"
-        style={{ left: `${(progress > 0.93 ? 0.93 : progress) * 100}%` }}
+        style={{
+          left: `${Math.round(Math.min(progress ?? 0.5, 0.93) * 100)}%`,
+        }}
       >
         <Text size={25}>👩🏻‍💻</Text>
       </View>
+      <Text
+        className="absolute bottom-[25] font-[Inter-SemiBold] text-[#0094FF]"
+        style={{
+          left: `${Math.round(Math.min(progress ?? 0.5, 0.93) * 100)}%`,
+        }}
+        size={15}
+      >
+        {`${Math.round((progress ?? 0.5) * 100)}`}%
+      </Text>
     </View>
   );
 };
