@@ -6,13 +6,25 @@ import SpecListItem, {
   SPEC_MENU,
   SpecBase,
 } from "@components/SpecListItem";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { ReviewListScreenStackParamList } from "@stackNav/ReviewListScreen";
 
-function ReviewList() {
+type ReviewListScreenProps = NativeStackScreenProps<
+  ReviewListScreenStackParamList,
+  "ReviewList"
+>;
+
+function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
   const [clickedCategory, setClickedCategory] = useState("all");
   const [specList, setSpecList] = useState(SPEC_DATA);
 
+  const handleSpecClick = (id: number) => {
+    console.log(`${id}번 스펙을 클릭했습니다.`);
+    navigation.navigate("ReviewListUp", { id });
+  };
+
   const renderItem = ({ item }: { item: SpecBase }) => {
-    return <SpecListItem item={item} />;
+    return <SpecListItem item={item} callbackFn={handleSpecClick} />;
   };
 
   return (

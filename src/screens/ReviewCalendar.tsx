@@ -3,9 +3,8 @@ import { Pressable, ScrollView, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ReviewCalendarScreenStackParamList } from "@stackNav/ReviewCalendarScreen";
-import ChevronBottom from "@assets/images/chevron-bottom-black.svg";
-import ChevronRight from "@assets/images/chevron-right-white.svg";
 import useCalendar from "src/hooks/useCalendar";
+import ReviewListItem, { REVIEW_DATA } from "@components/ReviewListItem";
 
 type ReviewCalendarScreenProps = NativeStackScreenProps<
   ReviewCalendarScreenStackParamList,
@@ -13,33 +12,7 @@ type ReviewCalendarScreenProps = NativeStackScreenProps<
 >;
 
 function ReviewCalendar({ navigation }: Readonly<ReviewCalendarScreenProps>) {
-  const reviewData = [
-    {
-      reviewId: 1,
-      specId: 1,
-      specName: "정보처리기사",
-      category: "certificate",
-      date: "2024-03-06",
-      dPlusDay: "16",
-    },
-    {
-      reviewId: 2,
-      specId: 1,
-      specName: "정보처리기사",
-      category: "certificate",
-      date: "2024-03-06",
-      dPlusDay: "16",
-    },
-    {
-      reviewId: 1,
-      specId: 2,
-      specName: "SolidIT 현장실습",
-      category: "intern",
-      date: "2024-03-06",
-      dPlusDay: "16",
-    },
-  ];
-  const [reviewList, setReviewList] = useState(reviewData);
+  const [reviewList, setReviewList] = useState(REVIEW_DATA);
   const { weeks, currentDate, setPreviousMonth, setNextMonth, DAY_LIST } =
     useCalendar();
   const [clickedDate, setClickedDate] = useState(currentDate.getDate());
@@ -119,56 +92,12 @@ function ReviewCalendar({ navigation }: Readonly<ReviewCalendarScreenProps>) {
             ))}
           </View>
         </View>
-        <View className="flex-1 gap-[14] pb-[50]">
-          {reviewList.map((v) => (
-            <View
-              key={`${v.specId}-${v.reviewId}`}
-              className="justify-between gap-[7] border border-[#DEDEDE] py-[8] px-[16]"
-              style={{ borderRadius: 10 }}
-            >
-              <View>
-                <View className="flex-row items-center justify-between border-b border-[#EFEFEF] pb-[7]">
-                  <Text className="text-[#636366]" size={12.3}>
-                    {v.date}
-                  </Text>
-                  <Pressable
-                    className="justify-center items-center w-[69] h-[22] bg-[#0094FF]"
-                    style={{ borderRadius: 4 }}
-                    onPress={() => console.log("회고 기록을 클릭했습니다.")}
-                  >
-                    <View className="flex-row justify-center items-center gap-[10]">
-                      <Text
-                        className="text-white font-[Inter-SemiBold]"
-                        size={11}
-                      >
-                        회고 기록
-                      </Text>
-                      <ChevronRight />
-                    </View>
-                  </Pressable>
-                </View>
-                <View className="flex-row justify-between pt-[13]">
-                  <Text className="font-[Inter-SemiBold]" size={18}>
-                    {v.specName}
-                  </Text>
-                  <Text
-                    className="font-[Inter-Medium] text-[#0094FF]"
-                    size={18}
-                  >
-                    D+{v.dPlusDay}
-                  </Text>
-                </View>
-              </View>
-              <Pressable
-                className="flex-row items-center justify-center gap-[12]"
-                onPress={() => console.log("회고 펼쳐보기를 클릭했당께")}
-              >
-                <Text className="font-[Inter-Medium] text-[#373737]" size={12}>
-                  회고 펼쳐보기
-                </Text>
-                <ChevronBottom />
-              </Pressable>
-            </View>
+        <View className="flex-1 pb-[50]">
+          {reviewList.map((item) => (
+            <ReviewListItem
+              key={`${item.specId}-${item.reviewId}`}
+              item={item}
+            />
           ))}
         </View>
       </ScrollView>

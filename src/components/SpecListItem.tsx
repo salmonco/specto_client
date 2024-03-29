@@ -95,18 +95,20 @@ export interface SpecBase {
   endDate: string;
   completed: boolean;
 }
-export default function SpecListItem({ item }: { item: SpecBase }) {
-  // 각 스펙 클릭 이벤트 핸들러
-  const handleSpecClick = (id: number) => {
-    console.log(`${item.id}번 스펙을 클릭했습니다.`);
-  };
-
+interface SpecListItemBase {
+  item: SpecBase;
+  callbackFn?: (id: number) => void;
+}
+export default function SpecListItem({
+  item,
+  callbackFn,
+}: Readonly<SpecListItemBase>) {
   return (
     <Pressable
       key={item.id}
       className="flex-1 flex-row justify-between items-center gap-[10] border border-[#DEDEDE] p-[16] h-[78] mx-[14] my-[1]"
       style={{ borderRadius: 10 }}
-      onPress={() => handleSpecClick(item.id)}
+      onPress={() => callbackFn && callbackFn(item.id)}
     >
       <View>
         <View className="flex-row gap-[10] items-center">
