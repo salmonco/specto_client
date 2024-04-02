@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Pressable,
-  View,
-  StyleSheet,
-  ScrollView,
-  Dimensions,
-} from "react-native";
+import { Pressable, View, StyleSheet, ScrollView } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SpecScreenStackParamList } from "@stackNav/SpecScreen";
@@ -14,51 +8,10 @@ import Certificate from "@assets/images/certificate.svg";
 import Intern from "@assets/images/intern.svg";
 import Project from "@assets/images/project.svg";
 
-import Constants from "expo-constants";
-const screenWidth = Dimensions.get("window").width;
-import { LineChart } from "react-native-chart-kit";
-import { Svg, Text as TextSVG } from "react-native-svg";
-import { Circle } from "react-native-svg";
-
 type SpecDetailScreenProps = NativeStackScreenProps<
   SpecScreenStackParamList,
   "SpecDetail"
 >;
-
-const chartConfig = {
-  backgroundGradientFrom: "white",
-  backgroundGradientFromOpacity: 1,
-  backgroundGradientTo: "white",
-  backgroundGradientToOpacity: 1,
-  fillShadowGradientFromOpacity: 0,
-  fillShadowGradientToOpacity: 0,
-  // useShadowColorFromDataset: false,
-  color: (opacity = 1) => `rgba(55, 55, 55, ${opacity})`,
-  strokeWidth: 5,
-  barPercentage: 0.5,
-  propsForVerticalLabels: {
-    fontSize: 11,
-    fontWeight: "500",
-    color: "#7B7B7B",
-  },
-  // propsForDots: {
-  //   r: "6", // 점의 반지름 설정
-  //   strokeWidth: "3", // 점의 테두리 두께 설정
-  //   stroke: "#0094FF", // 점의 테두리 색상 설정
-  //   fill: "white", // 점의 내부 색상 설정
-  // },
-};
-
-const data = {
-  labels: ["1월 첫째주", "1월 둘째주", "1월 셋째주", "1월 넷째주"],
-  datasets: [
-    {
-      data: [20, 50, 80, 100], // data -> progress로 바꾸고 싶어
-      color: (opacity = 1) => `rgba(224, 224, 224, ${opacity})`,
-      strokeWidth: 3,
-    },
-  ],
-};
 
 const CATEGORY_LABEL: { [key: string]: string } = {
   all: "전체",
@@ -325,66 +278,6 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
               </Text>
             </View>
           </View>
-          <Text
-            style={{
-              width: "100%",
-              color: "#373737",
-              fontSize: 16,
-              fontFamily: "Inter-SemiBold",
-              fontWeight: "600",
-              paddingTop: 40,
-              marginLeft: 45,
-            }}
-          >
-            진행상황 히스토리
-          </Text>
-          <View style={[styles.group, { paddingHorizontal: 0 }]}>
-            <LineChart
-              data={data}
-              width={screenWidth} // 좌우 여백이 총 20이므로 screenWidth에서 20을 뺍니다.
-              height={200}
-              chartConfig={chartConfig}
-              withVerticalLines={false}
-              withHorizontalLabels={false} // 세로 축 레이블 숨기기
-              fromZero={true} // 그래프를 0부터 시작하도록 설정
-              renderDotContent={({ x, y, index }) => {
-                const dataValue = data.datasets[0].data[index];
-                let dotColor = "#FFFFFF"; // 점의 기본 내부 색상은 흰색
-                let strokeColor = "#0094FF"; // 점의 기본 테두리 색상은 파란색
-                // let strokeWidth = 3; // 점의 기본 테두리 두께는 3
-                // 데이터 값이 50보다 작거나 같으면 빨간색 테두리와 흰색 내부
-                if (dataValue <= 50) {
-                  dotColor = "#FFFFFF"; // 내부는 흰색
-                  strokeColor = "#FF0909"; // 테두리는 빨간색
-                }
-                // 점의 색상과 테두리 색상을 가진 Circle 컴포넌트를 반환
-                return (
-                  <React.Fragment>
-                    <Circle
-                      key={`circle-${index}`}
-                      cx={x}
-                      cy={y}
-                      r={6}
-                      stroke={strokeColor} // 테두리 색상 설정
-                      strokeWidth={3}
-                      fill={dotColor} // 점의 색상 설정
-                    />
-                    <TextSVG
-                      key={`text-${index}`}
-                      x={x}
-                      y={y + 20}
-                      fill="#7B7B7B"
-                      fontSize="11"
-                      fontWeight="normal"
-                      textAnchor="middle"
-                    >
-                      {data.datasets[0].data[index]}%
-                    </TextSVG>
-                  </React.Fragment>
-                );
-              }}
-            />
-          </View>
         </View>
       </View>
     </ScrollView>
@@ -392,11 +285,6 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
 };
 
 const styles = StyleSheet.create({
-  group: {
-    flex: 1,
-    justifyContent: "center",
-    paddingTop: 20,
-  },
   headerButtonText: {
     color: "#0094FF",
     fontSize: 16,

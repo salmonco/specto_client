@@ -17,7 +17,7 @@ const ContestAddScreenStack =
 
 function ContestAddScreen() {
   return (
-    <ContestAddScreenStack.Navigator screenOptions={{ headerShown: false }}>
+    <ContestAddScreenStack.Navigator screenOptions={{ title: "공모전/수상" }}>
       <ContestAddScreenStack.Screen
         name="ContestAdd1"
         component={ContestAdd1}
