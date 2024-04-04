@@ -17,7 +17,7 @@ export type RootStackParamList = {
   Splash: undefined;
   Auth: undefined;
   Main: undefined;
-  SpecDetail: { id: number }; // id 매개변수 추가
+  // SpecDetail: { id: number }; // id 매개변수 추가
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -101,7 +101,6 @@ function AppInner() {
           <Stack.Screen name="Splash" component={Splash} />
           <Stack.Screen name="Auth" component={Auth} />
           <Stack.Screen name="Main" component={Main} />
-          <Stack.Screen name="SpecDetail" component={SpecDetail} />
         </Stack.Group>
       )}
     </Stack.Navigator>

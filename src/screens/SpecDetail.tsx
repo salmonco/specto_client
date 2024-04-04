@@ -341,36 +341,33 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
           <View style={[styles.group, { paddingHorizontal: 0 }]}>
             <LineChart
               data={data}
-              width={screenWidth} // 좌우 여백이 총 20이므로 screenWidth에서 20을 뺍니다.
+              width={screenWidth}
               height={200}
               chartConfig={chartConfig}
               withVerticalLines={false}
-              withHorizontalLabels={false} // 세로 축 레이블 숨기기
-              fromZero={true} // 그래프를 0부터 시작하도록 설정
+              withHorizontalLabels={false}
+              fromZero={true}
               renderDotContent={({ x, y, index }) => {
                 const dataValue = data.datasets[0].data[index];
-                let dotColor = "#FFFFFF"; // 점의 기본 내부 색상은 흰색
-                let strokeColor = "#0094FF"; // 점의 기본 테두리 색상은 파란색
-                // let strokeWidth = 3; // 점의 기본 테두리 두께는 3
-                // 데이터 값이 50보다 작거나 같으면 빨간색 테두리와 흰색 내부
+                let dotColor = "#FFFFFF";
+                let strokeColor = "#0094FF";
                 if (dataValue <= 50) {
-                  dotColor = "#FFFFFF"; // 내부는 흰색
-                  strokeColor = "#FF0909"; // 테두리는 빨간색
+                  dotColor = "#FFFFFF";
+                  strokeColor = "#FF0909";
                 }
-                // 점의 색상과 테두리 색상을 가진 Circle 컴포넌트를 반환
                 return (
                   <React.Fragment>
                     <Circle
-                      key={`circle-${index}`}
+                      key={`circle-${data.labels[index]}`} // 레이블을 사용하여 고유한 키 생성
                       cx={x}
                       cy={y}
                       r={6}
-                      stroke={strokeColor} // 테두리 색상 설정
+                      stroke={strokeColor}
                       strokeWidth={3}
-                      fill={dotColor} // 점의 색상 설정
+                      fill={dotColor}
                     />
                     <TextSVG
-                      key={`text-${index}`}
+                      key={`text-${data.labels[index]}`} // 레이블을 사용하여 고유한 키 생성
                       x={x}
                       y={y + 20}
                       fill="#7B7B7B"

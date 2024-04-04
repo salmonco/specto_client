@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Pressable, Text, View, StyleSheet } from "react-native";
 import CloseIcon from "@assets/images/x-blue.svg";
+import { useNavigation } from "@react-navigation/native";
 
 interface SpecCategorySelectProps {
   onClose: () => void;
@@ -11,11 +12,14 @@ const SpecCategorySelect: React.FC<SpecCategorySelectProps> = ({
   onClose,
   onSelectCategory,
 }) => {
+  const navigation = useNavigation<any>(); // 내비게이션 객체 생성
+
   return (
     <View style={styles.container}>
       <Pressable
         style={styles.categoryButton}
         onPress={() => {
+          navigation.navigate("ContestAddScreen", { screen: "ContestAdd1" });
           onSelectCategory("공모전/수상");
           onClose();
         }}
@@ -25,8 +29,10 @@ const SpecCategorySelect: React.FC<SpecCategorySelectProps> = ({
       <Pressable
         style={styles.categoryButton}
         onPress={() => {
-          onSelectCategory("자격증");
+          navigation.navigate("CertificateAdd1");
+          // onSelectCategory("자격증");
           onClose();
+          // CertificateAdd1으로 내비게이션
         }}
       >
         <Text style={styles.buttonText}>자격증</Text>

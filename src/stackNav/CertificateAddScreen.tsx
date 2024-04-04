@@ -17,7 +17,7 @@ const CertificateAddScreenStack =
 
 function CertificateAddScreen() {
   return (
-    <CertificateAddScreenStack.Navigator screenOptions={{ headerShown: false }}>
+    <CertificateAddScreenStack.Navigator screenOptions={{ title: "자격증" }}>
       <CertificateAddScreenStack.Screen
         name="CertificateAdd1"
         component={CertificateAdd1}
