@@ -4,13 +4,13 @@ import { CustomText as Text } from "@components/CustomText";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SpecScreenStackParamList } from "@stackNav/SpecScreen";
 import Button from "@components/Button";
+import Contest from "@assets/images/contest.svg";
+import Certificate from "@assets/images/certificate.svg";
+import Intern from "@assets/images/intern.svg";
+import Project from "@assets/images/project.svg";
 import AddIcon from "@assets/images/add-blue.svg";
-
-import SpecContest from "@screens/SpecContest";
-import SpecCertificate from "@screens/SpecCertificate";
-import SpecIntern from "@screens/SpecIntern";
-import SpecActivity from "@screens/SpecActivity";
-import SpecProject from "@screens/SpecProject";
+import SpecCategorySelect from "@screens/SpecCategorySelect";
+import SpecDetail from "@screens/SpecDetail";
 
 type SpecScreenProps = NativeStackScreenProps<SpecScreenStackParamList, "Spec">;
 
@@ -85,8 +85,8 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
     },
     {
       id: 5,
-      name: "저쩌구 논문",
-      category: "project",
+      name: "KT Y 퓨터리스트",
+      category: "activity",
       startDate: "2024-02-01",
       endDate: "2024-05-31",
       completed: true,
@@ -124,33 +124,11 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
     }
   };
 
-  const navigateToSpecComponent = (category: string, id: number) => {
-    switch (category) {
-      case "contest":
-        navigation.navigate("SpecContest", { id });
-        break;
-      case "certificate":
-        navigation.navigate("SpecCertificate", { id });
-        break;
-      case "intern":
-        navigation.navigate("SpecIntern", { id });
-        break;
-      case "activity":
-        navigation.navigate("SpecActivity", { id });
-        break;
-      case "project":
-        navigation.navigate("SpecProject", { id });
-        break;
-      default:
-        break;
-    }
-  };
-
   // 각 스펙 클릭 이벤트 핸들러
-  const handleSpecClick = (id: number) => {
+  const handleSpecClick = (id: number, category: string) => {
     console.log(`스펙 ID ${id}를 클릭 - 개별 페이지로 이동.`);
-    // SpecDetail 스크린으로 이동하면서 id 전달
-    // navigation.navigate("SpecDetail", { id });
+    // SpecDetail 스크린으로 이동하면서 category, id 전달
+    navigation.navigate("SpecDetail", { id, category });
   };
 
   const renderItem = ({ item }: { item: Readonly<SpecBase> }) => {
@@ -161,8 +139,7 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
         style={{ borderRadius: 10 }}
         onPress={() => {
           console.log(`${item.id}번 스펙을 클릭했습니다.`);
-          // handleSpecClick(item.id);
-          navigateToSpecComponent(item.category, item.id);
+          handleSpecClick(item.id, item.category);
         }}
       >
         <View>
@@ -206,14 +183,17 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
     <View className="flex-1 relative">
       {/* 상단 바 및 메뉴 버튼 */}
       <View className="flex-row justify-between gap-[8] py-[23] px-[20] border-b border-b-[#ECEBEB]">
-        {SPEC_MENU.map((v) => (
+        {MENU.map((v) => (
           <Pressable
             className={`w-[52] h-[38] justify-center items-center ${
               v.category === clickedCategory ? "bg-[#0094FF]" : "bg-[#EAF4FF]"
             }`}
             style={{ borderRadius: 4 }}
             key={v.category}
-            onPress={() => setClickedCategory(v.category)}
+            onPress={() => {
+              setClickedCategory(v.category);
+              // navigateToSpecComponent(v.category); // 이 부분을 추가해주세요.
+            }}
           >
             <Text
               className={`font-[Inter-Medium] text-center ${

@@ -29,10 +29,11 @@ const SpecCategorySelect: React.FC<SpecCategorySelectProps> = ({
       <Pressable
         style={styles.categoryButton}
         onPress={() => {
-          navigation.navigate("CertificateAdd1");
-          // onSelectCategory("자격증");
+          navigation.navigate("CertificateAddScreen", {
+            screen: "CertificateAdd1",
+          });
           onClose();
-          // CertificateAdd1으로 내비게이션
+          onSelectCategory("자격증");
         }}
       >
         <Text style={styles.buttonText}>자격증</Text>

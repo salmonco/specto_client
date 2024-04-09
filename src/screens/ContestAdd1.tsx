@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from "react";
-import CalendarPicker from "react-native-calendar-picker";
-
+import React, { useState } from "react";
 import {
-  Pressable,
   Text,
   View,
   StyleSheet,
@@ -12,16 +9,32 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ContestAddScreenStackParamList } from "@stackNav/ContestAddScreen";
 
+const API_URL = "http://your-api-url.com"; // 여기에 백엔드 API 엔드포인트 URL을 입력해주세요.
+
 type ContestProps = NativeStackScreenProps<
   ContestAddScreenStackParamList,
   "ContestAdd1"
 >;
 
 function ContestAdd1({ navigation }: Readonly<ContestProps>) {
-  const [contestName, setContestName] = React.useState("");
+  const [name, setName] = useState("");
 
-  const handleNext = () => {
-    navigation.navigate("ContestAdd2");
+  const handleNext = async () => {
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to save contest name");
+      }
+      navigation.navigate("ContestAdd2");
+    } catch (error) {
+      console.error("Error:", error as Error);
+    }
   };
 
   return (
@@ -38,8 +51,8 @@ function ContestAdd1({ navigation }: Readonly<ContestProps>) {
         <TextInput
           style={styles.inputText}
           placeholder="공모전 이름을 입력해주세요."
-          value={contestName}
-          onChangeText={(text) => setContestName(text)}
+          value={name}
+          onChangeText={(text) => setName(text)}
         />
       </View>
       <TouchableOpacity style={styles.buttonContainer} onPress={handleNext}>
@@ -48,6 +61,7 @@ function ContestAdd1({ navigation }: Readonly<ContestProps>) {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -74,7 +88,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#D9D9D9",
     position: "absolute",
-    top: 100,
+    top: 90,
     left: 30,
     alignItems: "center",
     width: "85%",
@@ -94,13 +108,14 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: "absolute",
-    bottom: 30,
+    bottom: 10,
     backgroundColor: "#0094FF",
     padding: 16,
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
     width: "90%",
+    height: 50, // 높이 조절
   },
   buttonText: {
     color: "white",
