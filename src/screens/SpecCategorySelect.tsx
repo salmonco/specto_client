@@ -41,8 +41,11 @@ const SpecCategorySelect: React.FC<SpecCategorySelectProps> = ({
       <Pressable
         style={styles.categoryButton}
         onPress={() => {
-          onSelectCategory("인턴");
+          navigation.navigate("InternAddScreen", {
+            screen: "InternAdd1",
+          });
           onClose();
+          onSelectCategory("인턴");
         }}
       >
         <Text style={styles.buttonText}>인턴</Text>
@@ -50,6 +53,9 @@ const SpecCategorySelect: React.FC<SpecCategorySelectProps> = ({
       <Pressable
         style={styles.categoryButton}
         onPress={() => {
+          navigation.navigate("ActivityAddScreen", {
+            screen: "ActivityAdd1",
+          });
           onSelectCategory("대외활동");
           onClose();
         }}

@@ -7,16 +7,16 @@ import {
   TextInput,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { CertificateAddScreenStackParamList } from "@stackNav/CertificateAddScreen";
+import { ActivityAddScreenStackParamList } from "@stackNav/ActivityAddScreen";
 
-const API_URL = "http://your-api-url.com";
+const API_URL = "http://your-api-url.com"; // 여기에 백엔드 API 엔드포인트 URL을 입력해주세요.
 
-type CertificateProps = NativeStackScreenProps<
-  CertificateAddScreenStackParamList,
-  "CertificateAdd1"
+type ContestProps = NativeStackScreenProps<
+  ActivityAddScreenStackParamList,
+  "ActivityAdd1"
 >;
 
-function CertificateAdd1({ navigation }: Readonly<CertificateProps>) {
+function ActivityAdd1({ navigation }: Readonly<ContestProps>) {
   const [name, setName] = useState("");
 
   const handleNext = async () => {
@@ -29,9 +29,9 @@ function CertificateAdd1({ navigation }: Readonly<CertificateProps>) {
         body: JSON.stringify({ name }),
       });
       if (!response.ok) {
-        throw new Error("Failed to save Certificate name");
+        throw new Error("Failed to save contest name");
       }
-      navigation.navigate("CertificateAdd2");
+      navigation.navigate("ActivityAdd2");
     } catch (error) {
       console.error("Error:", error as Error);
     }
@@ -44,13 +44,13 @@ function CertificateAdd1({ navigation }: Readonly<CertificateProps>) {
         <Text style={styles.totalPages}>/3</Text>
       </View>
       <View style={styles.questionContainer}>
-        <Text style={styles.question}>어떤 자격증인가요?</Text>
+        <Text style={styles.question}>어떤 대외활동인가요?</Text>
       </View>
       <View style={styles.inputBox}>
-        <Text style={styles.inputLabel}>자격증 이름</Text>
+        <Text style={styles.inputLabel}>활동명</Text>
         <TextInput
           style={styles.inputText}
-          placeholder="자격증 이름을 입력해주세요."
+          placeholder="활동 이름을 입력해주세요."
           value={name}
           onChangeText={(text) => setName(text)}
         />
@@ -143,4 +143,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CertificateAdd1;
+export default ActivityAdd1;

@@ -13,7 +13,7 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ContestAddScreenStackParamList } from "@stackNav/ContestAddScreen";
 import { Dropdown } from "react-native-element-dropdown";
-import DocumentPicker from "react-native-document-picker";
+import * as DocumentPicker from "expo-document-picker";
 
 type DocumentPickerResponse = {
   uri: string;
@@ -66,20 +66,10 @@ function ContestAdd3({ navigation }: Readonly<ContestProps>) {
     }
   };
 
-  const handleUpload = async () => {
-    try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
-      });
-      if (Array.isArray(res)) {
-        const firstDocument = res[0] as DocumentPickerResponse;
-        setProofFile(firstDocument.uri);
-      }
-    } catch (err) {
-      if (!DocumentPicker.isCancel(err)) {
-        console.error("Error while picking file:", err);
-      }
-    }
+  const pickDocument = async () => {
+    const result = await DocumentPicker.getDocumentAsync({});
+    alert(result);
+    console.log(result);
   };
 
   const formatDate = (date: Date | null): string => {
@@ -197,7 +187,7 @@ function ContestAdd3({ navigation }: Readonly<ContestProps>) {
           </Text>
           <TouchableOpacity
             style={[styles.inputBox, { width: 110 }]}
-            onPress={handleUpload}
+            onPress={pickDocument}
           >
             <View>
               <Text style={styles.inputText}>파일 업로드</Text>

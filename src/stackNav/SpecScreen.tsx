@@ -4,6 +4,9 @@ import Spec from "../screens/Spec";
 import SpecDetail from "../screens/SpecDetail";
 import ContestAddScreen from "./ContestAddScreen";
 import CertificateAddScreen from "./CertificateAddScreen";
+import InternAddScreen from "./InternAddScreen";
+import ActivityAddScreen from "./ActivityAddScreen";
+// import ProjectAddScreen from "./ProjectAddScreen";
 import SpecCategorySelect from "./CertificateAddScreen";
 
 export type SpecScreenStackParamList = {
@@ -11,6 +14,9 @@ export type SpecScreenStackParamList = {
   SpecDetail: { id: number; category: string }; // id와 category 매개변수 추가
   ContestAddScreen: undefined;
   CertificateAddScreen: undefined;
+  InternAddScreen: undefined;
+  ActivityAddScreen: undefined;
+  // ProjectAddScreen: undefined;
   SpecCategorySelect: undefined;
 };
 
@@ -35,6 +41,21 @@ function SpecScreen() {
         component={CertificateAddScreen}
         options={{ headerShown: false }}
       />
+      <SpecScreenStack.Screen
+        name="InternAddScreen"
+        component={InternAddScreen}
+        options={{ headerShown: false }}
+      />
+      <SpecScreenStack.Screen
+        name="ActivityAddScreen"
+        component={ActivityAddScreen}
+        options={{ headerShown: false }}
+      />
+      {/* <SpecScreenStack.Screen
+        name="ProjectAddScreen"
+        component={ProjectAddScreen}
+        options={{ headerShown: false }}
+      /> */}
     </SpecScreenStack.Navigator>
   );
 }

@@ -7,7 +7,6 @@ import SpecAddComplete from "../screens/SpecAddComplete";
 export type InternAddScreenStackParamList = {
   InternAdd1: undefined;
   InternAdd2: undefined;
-  InternAdd3: undefined;
   SpecAddComplete: undefined;
 };
 

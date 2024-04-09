@@ -11,8 +11,9 @@ import {
   Modal,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { CertificateAddScreenStackParamList } from "@stackNav/CertificateAddScreen";
+import { ActivityAddScreenStackParamList } from "@stackNav/ActivityAddScreen";
 import { Dropdown } from "react-native-element-dropdown";
+import * as DocumentPicker from "expo-document-picker";
 
 const API_URL = "http://your-api-url.com"; // 여기에 백엔드 API 엔드포인트 URL을 입력해주세요.
 
@@ -25,22 +26,22 @@ const data = [
   { label: "IT/SW", value: "IT/SW" },
 ];
 
-type CertificateProps = NativeStackScreenProps<
-  CertificateAddScreenStackParamList,
-  "CertificateAdd2"
+type ActivityProps = NativeStackScreenProps<
+  ActivityAddScreenStackParamList,
+  "ActivityAdd2"
 >;
 
-function CertificateAdd2({ navigation }: Readonly<CertificateProps>) {
+function ActivityAdd2({ navigation }: Readonly<ActivityProps>) {
   const [host, setHost] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
     useState(false);
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
-  const [field, setField] = useState(""); // 선택된 분야
+  const [field, setField] = useState("");
   const [contents, setContents] = useState<string | null>(null);
-  const [modalVisible, setModalVisible] = useState(false); // 모달 가시성 상태
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [proofFile, setProofFile] = useState<string | null>(null);
 
   const handleNext = async () => {
     try {
@@ -55,6 +56,7 @@ function CertificateAdd2({ navigation }: Readonly<CertificateProps>) {
           endDate,
           field,
           contents,
+          proofFile,
         }),
       });
 
@@ -62,7 +64,7 @@ function CertificateAdd2({ navigation }: Readonly<CertificateProps>) {
         throw new Error("Failed to submit data");
       }
 
-      navigation.navigate("CertificateAdd3");
+      navigation.navigate("ActivityAdd3");
     } catch (error) {
       console.error("Error:", error as Error);
     }
@@ -94,14 +96,15 @@ function CertificateAdd2({ navigation }: Readonly<CertificateProps>) {
     return `${month}월 ${day}일`;
   };
 
-  const handleFieldSelection = (field: string) => {
-    setField(field);
-    setModalVisible(false);
+  const pickDocument = async () => {
+    const result = await DocumentPicker.getDocumentAsync({});
+    alert(result);
+    console.log(result);
   };
 
   return (
     <View style={styles.container}>
-      {/* 자격증 정보 입력 */}
+      {/* 대외활동 정보 입력 */}
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={styles.scrollViewContent}
@@ -113,27 +116,27 @@ function CertificateAdd2({ navigation }: Readonly<CertificateProps>) {
         </View>
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { marginTop: 45 }]}>
-            해당 자격증의 정보를 입력해주세요.
+            해당 활동의 정보를 입력해주세요.
           </Text>
         </View>
-        {/* 섹션 1: 자격증 기간 */}
+        {/* 섹션 1: 대외활동 기간 */}
         <View style={styles.section}>
           <Text style={[styles.sectionSubtitle, { marginTop: 10 }]}>
-            자격증 준비/마감 기간을 선택해주세요.
+            활동 시작/종료 날짜을 선택해주세요.
           </Text>
           <View style={styles.datePickerRow}>
             <TouchableOpacity
               onPress={() => setIsStartDatePickerVisible(true)}
               style={styles.datePicker}
             >
-              <Text style={styles.datePickerLabel}>시작~준비기간:</Text>
+              <Text style={styles.datePickerLabel}>시작날짜:</Text>
               <Text style={styles.datePickerText}>{formatDate(startDate)}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setIsEndDatePickerVisible(true)}
               style={styles.datePicker}
             >
-              <Text style={styles.datePickerLabel}>마감기간:</Text>
+              <Text style={styles.datePickerLabel}>종료날짜:</Text>
               <Text style={styles.datePickerText}>{formatDate(endDate)}</Text>
             </TouchableOpacity>
           </View>
@@ -154,10 +157,10 @@ function CertificateAdd2({ navigation }: Readonly<CertificateProps>) {
                 <CalendarPicker
                   onDateChange={(date) => {
                     if (isStartDatePickerVisible) {
-                      setStartDate(date); // Set startDate to date or null
+                      setStartDate(date);
                       setIsStartDatePickerVisible(false);
                     } else if (isEndDatePickerVisible) {
-                      setEndDate(date); // Set endDate to date or null
+                      setEndDate(date);
                       setIsEndDatePickerVisible(false);
                     }
                   }}
@@ -167,10 +170,10 @@ function CertificateAdd2({ navigation }: Readonly<CertificateProps>) {
           </Modal>
         </View>
 
-        {/* 섹션 2: 자격증 이름 및 주최기관 입력 */}
+        {/* 섹션 2: 대외활동 이름 및 주최기관 입력 */}
         <View style={styles.section}>
           <Text style={styles.sectionSubtitle}>
-            자격증 주최기관을 입력해주세요.
+            활동 주최기관을 입력해주세요.
           </Text>
           <View style={styles.inputBox}>
             <Text style={styles.inputLabel}>주최기관</Text>
@@ -183,10 +186,10 @@ function CertificateAdd2({ navigation }: Readonly<CertificateProps>) {
           </View>
         </View>
 
-        {/* 섹션 3: 자격증 분야 선택 */}
+        {/* 섹션 3: 대외활동 분야 선택 */}
         <View style={styles.section}>
           <Text style={[styles.sectionSubtitle, { marginTop: 0 }]}>
-            자격증 분야를 선택해주세요
+            활동 분야를 선택해주세요
           </Text>
           <View style={{ ...styles.inputBox, paddingVertical: 5 }}>
             <Text style={{ ...styles.inputLabel, marginTop: 7 }}>분야</Text>
@@ -204,10 +207,10 @@ function CertificateAdd2({ navigation }: Readonly<CertificateProps>) {
           </View>
         </View>
 
-        {/* 섹션 4: 자격증 상세 정보 입력 */}
+        {/* 섹션 4: 상세 내역 입력 */}
         <View style={styles.section}>
           <Text style={styles.sectionSubtitle}>
-            자격증 상세 정보를 자유롭게 입력해주세요.
+            상세 활동 내역을 입력해주세요.
           </Text>
           <View
             style={[
@@ -224,6 +227,21 @@ function CertificateAdd2({ navigation }: Readonly<CertificateProps>) {
               value={contents || ""}
               onChangeText={(text) => setContents(text)} // contents 상태 업데이트
             />
+          </View>
+
+          {/* 섹션 5: 증빙자료 업로드 */}
+          <View style={styles.section}>
+            <Text style={[styles.sectionSubtitle, { marginTop: 25 }]}>
+              증빙자료를 업로드해주세요.
+            </Text>
+            <TouchableOpacity
+              style={[styles.inputBox, { width: 110 }]}
+              onPress={pickDocument}
+            >
+              <View>
+                <Text style={styles.inputText}>파일 업로드</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -366,4 +384,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CertificateAdd2;
+export default ActivityAdd2;

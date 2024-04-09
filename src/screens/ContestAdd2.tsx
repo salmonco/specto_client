@@ -38,7 +38,7 @@ function ContestAdd2({ navigation }: Readonly<ContestProps>) {
     useState(false);
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
   const [field, setField] = useState(""); // 선택된 분야
-  const [contents, setContents] = useState("");
+  const [contents, setContents] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false); // 모달 가시성 상태
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
@@ -220,7 +220,7 @@ function ContestAdd2({ navigation }: Readonly<ContestProps>) {
               placeholder="상세정보를 입력해주세요."
               multiline={true}
               numberOfLines={4}
-              value={contents}
+              value={contents || ""}
               onChangeText={(text) => setContents(text)} // contents 상태 업데이트
             />
           </View>

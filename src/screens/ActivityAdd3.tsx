@@ -11,8 +11,9 @@ import {
   Modal,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { CertificateAddScreenStackParamList } from "@stackNav/CertificateAddScreen";
+import { ActivityAddScreenStackParamList } from "@stackNav/ActivityAddScreen";
 import { Dropdown } from "react-native-element-dropdown";
+import * as DocumentPicker from "expo-document-picker";
 
 const API_URL = "http://your-api-url.com"; // 여기에 백엔드 API 엔드포인트 URL을 입력해주세요.
 
@@ -25,21 +26,15 @@ const data = [
   { label: "IT/SW", value: "IT/SW" },
 ];
 
-type CertificateProps = NativeStackScreenProps<
-  CertificateAddScreenStackParamList,
-  "CertificateAdd2"
+type ActivityProps = NativeStackScreenProps<
+  ActivityAddScreenStackParamList,
+  "ActivityAdd3"
 >;
 
-function CertificateAdd2({ navigation }: Readonly<CertificateProps>) {
-  const [host, setHost] = useState("");
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
-  const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
-    useState(false);
-  const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
-  const [field, setField] = useState(""); // 선택된 분야
-  const [contents, setContents] = useState<string | null>(null);
-  const [modalVisible, setModalVisible] = useState(false); // 모달 가시성 상태
+function ActivityAdd3({ navigation }: Readonly<ActivityProps>) {
+  const [motivation, setMotivation] = useState<string | null>(null);
+  const [goal, setGoal] = useState<string | null>(null);
+  const [direction, setDirection] = useState<string | null>(null);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const handleNext = async () => {
@@ -50,11 +45,9 @@ function CertificateAdd2({ navigation }: Readonly<CertificateProps>) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          host,
-          startDate,
-          endDate,
-          field,
-          contents,
+          motivation,
+          goal,
+          direction,
         }),
       });
 
@@ -62,7 +55,7 @@ function CertificateAdd2({ navigation }: Readonly<CertificateProps>) {
         throw new Error("Failed to submit data");
       }
 
-      navigation.navigate("CertificateAdd3");
+      navigation.navigate("SpecAddComplete");
     } catch (error) {
       console.error("Error:", error as Error);
     }
@@ -87,142 +80,64 @@ function CertificateAdd2({ navigation }: Readonly<CertificateProps>) {
     };
   }, []);
 
-  const formatDate = (date: Date | null): string => {
-    if (!date) return "날짜 선택";
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return `${month}월 ${day}일`;
-  };
-
-  const handleFieldSelection = (field: string) => {
-    setField(field);
-    setModalVisible(false);
-  };
-
   return (
     <View style={styles.container}>
-      {/* 자격증 정보 입력 */}
+      {/* 대외활동 정보 입력 */}
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={styles.scrollViewContent}
       >
         {/* 페이지 인디케이터 */}
         <View style={styles.pageIndicator}>
-          <Text style={styles.currentPage}>2</Text>
+          <Text style={styles.currentPage}>3</Text>
           <Text style={styles.totalPages}>/3</Text>
         </View>
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { marginTop: 45 }]}>
-            해당 자격증의 정보를 입력해주세요.
+            해당 활동의 세부 정보를 입력해주세요.
           </Text>
-        </View>
-        {/* 섹션 1: 자격증 기간 */}
-        <View style={styles.section}>
-          <Text style={[styles.sectionSubtitle, { marginTop: 10 }]}>
-            자격증 준비/마감 기간을 선택해주세요.
-          </Text>
-          <View style={styles.datePickerRow}>
-            <TouchableOpacity
-              onPress={() => setIsStartDatePickerVisible(true)}
-              style={styles.datePicker}
-            >
-              <Text style={styles.datePickerLabel}>시작~준비기간:</Text>
-              <Text style={styles.datePickerText}>{formatDate(startDate)}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setIsEndDatePickerVisible(true)}
-              style={styles.datePicker}
-            >
-              <Text style={styles.datePickerLabel}>마감기간:</Text>
-              <Text style={styles.datePickerText}>{formatDate(endDate)}</Text>
-            </TouchableOpacity>
-          </View>
-          <Modal
-            visible={isStartDatePickerVisible || isEndDatePickerVisible}
-            animationType="slide"
-            transparent={true}
-          >
-            <View style={styles.modalContainer}>
-              <TouchableOpacity
-                style={styles.modalBackground}
-                onPress={() => {
-                  setIsStartDatePickerVisible(false);
-                  setIsEndDatePickerVisible(false);
-                }}
-              />
-              <View style={styles.calendarModal}>
-                <CalendarPicker
-                  onDateChange={(date) => {
-                    if (isStartDatePickerVisible) {
-                      setStartDate(date); // Set startDate to date or null
-                      setIsStartDatePickerVisible(false);
-                    } else if (isEndDatePickerVisible) {
-                      setEndDate(date); // Set endDate to date or null
-                      setIsEndDatePickerVisible(false);
-                    }
-                  }}
-                />
-              </View>
-            </View>
-          </Modal>
         </View>
 
-        {/* 섹션 2: 자격증 이름 및 주최기관 입력 */}
+        {/* 섹션 1: 대외활동 배경 입력 */}
         <View style={styles.section}>
-          <Text style={styles.sectionSubtitle}>
-            자격증 주최기관을 입력해주세요.
-          </Text>
+          <Text style={styles.sectionSubtitle}>활동 배경을 입력해주세요.</Text>
           <View style={styles.inputBox}>
-            <Text style={styles.inputLabel}>주최기관</Text>
+            <Text style={styles.inputLabel}>활동 배경</Text>
             <TextInput
               style={styles.inputText}
-              placeholder="주최기관을 입력해주세요."
-              value={host}
-              onChangeText={(text) => setHost(text)}
+              placeholder="활동 배경을 입력해주세요."
+              value={motivation || ""}
+              onChangeText={(text) => setMotivation(text)}
             />
           </View>
         </View>
 
-        {/* 섹션 3: 자격증 분야 선택 */}
+        {/* 섹션 2: 대외활동 목표 입력 */}
         <View style={styles.section}>
-          <Text style={[styles.sectionSubtitle, { marginTop: 0 }]}>
-            자격증 분야를 선택해주세요
-          </Text>
-          <View style={{ ...styles.inputBox, paddingVertical: 5 }}>
-            <Text style={{ ...styles.inputLabel, marginTop: 7 }}>분야</Text>
-            <Dropdown
-              style={{ width: "100%" }}
-              placeholderStyle={styles.inputText}
-              selectedTextStyle={[styles.inputText, { color: "#373737" }]}
-              data={data}
-              labelField="label"
-              valueField="value"
-              placeholder={"분야를 선택해주세요."}
-              value={field}
-              onChange={(item) => setField(item.value)}
+          <Text style={styles.sectionSubtitle}>활동 목표를 입력해주세요.</Text>
+          <View style={styles.inputBox}>
+            <Text style={styles.inputLabel}>활동 목표</Text>
+            <TextInput
+              style={styles.inputText}
+              placeholder="활동 목표를 입력해주세요."
+              value={goal || ""}
+              onChangeText={(text) => setGoal(text)}
             />
           </View>
         </View>
 
-        {/* 섹션 4: 자격증 상세 정보 입력 */}
+        {/* 섹션 3: 대외활동 방향성 */}
         <View style={styles.section}>
           <Text style={styles.sectionSubtitle}>
-            자격증 상세 정보를 자유롭게 입력해주세요.
+            추구하는 활동 방향성을 입력해주세요.
           </Text>
-          <View
-            style={[
-              styles.inputBox,
-              { marginBottom: keyboardHeight }, // 키보드 높이만큼 입력 박스를 올림
-            ]}
-          >
-            <Text style={styles.inputLabel}>상세정보</Text>
+          <View style={[styles.inputBox, { marginBottom: keyboardHeight }]}>
+            <Text style={styles.inputLabel}>활동 방향성</Text>
             <TextInput
               style={styles.inputText}
-              placeholder="상세정보를 입력해주세요."
-              multiline={true}
-              numberOfLines={4}
-              value={contents || ""}
-              onChangeText={(text) => setContents(text)} // contents 상태 업데이트
+              placeholder="추구하는 활동 방향성을 입력해주세요."
+              value={direction || ""}
+              onChangeText={(text) => setDirection(text)}
             />
           </View>
         </View>
@@ -366,4 +281,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CertificateAdd2;
+export default ActivityAdd3;
