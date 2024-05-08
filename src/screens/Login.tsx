@@ -9,18 +9,30 @@ import {
   Dimensions,
 } from "react-native";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native"; // 이곳으로 import
 
 import Logo from "../../assets/images/logo.svg";
+import axios from "axios";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { AuthStackParamList } from "@stackNav/Auth";
 const VIEW_HEIGHT = Dimensions.get("window").height; // 화면 세로길이
 
-const Login: React.FC = () => {
-  const navigation = useNavigation();
+type AuthProps = NativeStackScreenProps<AuthStackParamList, "Login">;
 
-  // const handleStart = () => {
-  //   console.log("Home으로 이동");
-  //   navigation.navigate("Main");
-  // };
+function Login({ navigation }: Readonly<AuthProps>) {
+  const kakaoLogin = async () => {
+    try {
+      const res = await axios.get("http://10.0.2.2:8080/login/kakao");
+      const redirectUrl = res.request.responseURL; // responseURL 추출
+      console.log(redirectUrl);
+      if (redirectUrl) {
+        navigation.navigate("LoginKakao", { url: redirectUrl });
+      } else {
+        console.error("Redirect URL not found");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const handleGoogleLogin = () => {
     Alert.alert("", "'스펙토'에서 '구글'을 열려고 합니다.", [
@@ -46,7 +58,9 @@ const Login: React.FC = () => {
       },
       {
         text: "열기",
-        onPress: () => console.log("카카오톡 열기 버튼을 눌렀습니다."),
+        onPress: () => {
+          kakaoLogin();
+        },
       },
     ]);
     // 카카오 로그인 링크로 이동하는 코드 추가
@@ -90,7 +104,7 @@ const Login: React.FC = () => {
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
