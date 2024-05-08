@@ -62,39 +62,39 @@ function AppInner() {
   }, [dispatch]);
 
   // axios interceptor 설정
-  useEffect(() => {
-    axios.interceptors.response.use(
-      (response) => {
-        return response;
-      },
-      async (error) => {
-        const {
-          config,
-          response: { status },
-        } = error;
-        if (status === 419) {
-          if (error.response.data.code === "expired") {
-            const originalRequest = config;
-            const refreshToken = await SecureStore.getItemAsync("refreshToken");
-            // refreshToken이 유효하다면, accessToken 갱신 요청 후 실패했던 api 재요청
-            const { data } = await axios.post(
-              `${Config.API_URL}/refreshToken`,
-              {},
-              { headers: { authorization: `Bearer ${refreshToken}` } }
-            );
-            dispatch(userSlice.actions.setAccessToken(data.data.accessToken));
-            originalRequest.headers.authorization = `Bearer ${data.data.accessToken}`;
-            return axios(originalRequest);
-          }
-        }
-        return Promise.reject(error);
-      }
-    );
-  }, [dispatch]);
+  // useEffect(() => {
+  //   axios.interceptors.response.use(
+  //     (response) => {
+  //       return response;
+  //     },
+  //     async (error) => {
+  //       const {
+  //         config,
+  //         response: { status },
+  //       } = error;
+  //       if (status === 419) {
+  //         if (error.response.data.code === "expired") {
+  //           const originalRequest = config;
+  //           const refreshToken = await SecureStore.getItemAsync("refreshToken");
+  //           // refreshToken이 유효하다면, accessToken 갱신 요청 후 실패했던 api 재요청
+  //           const { data } = await axios.post(
+  //             `${Config.API_URL}/refreshToken`,
+  //             {},
+  //             { headers: { authorization: `Bearer ${refreshToken}` } }
+  //           );
+  //           dispatch(userSlice.actions.setAccessToken(data.data.accessToken));
+  //           originalRequest.headers.authorization = `Bearer ${data.data.accessToken}`;
+  //           return axios(originalRequest);
+  //         }
+  //       }
+  //       return Promise.reject(error);
+  //     }
+  //   );
+  // }, [dispatch]);
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {!isLoggedIn ? (
+      {isLoggedIn ? (
         <Stack.Screen name="Main" component={Main} />
       ) : (
         <Stack.Group>

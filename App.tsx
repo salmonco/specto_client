@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import store from "./src/store";
 import AppInner from "./AppInner";
 import { useFonts } from "expo-font";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const navTheme = {
   ...DefaultTheme,
@@ -27,7 +28,9 @@ const App: React.FC = () => {
   return (
     <Provider store={store}>
       <NavigationContainer theme={navTheme}>
-        <AppInner />
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <AppInner />
+        </GestureHandlerRootView>
       </NavigationContainer>
     </Provider>
   );
