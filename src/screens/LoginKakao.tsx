@@ -33,8 +33,9 @@ export default function LoginKakao({ navigation, route }: Readonly<AuthProps>) {
   };
 
   const onShouldStartLoadWithRequest = (event: any) => {
-    const newUrl = event.url.replace("localhost", "10.0.2.2"); // "your_new_host"에 원하는 호스트를 넣으세요
-    setRedirectedUrl(newUrl);
+    // const newUrl = event.url.replace("localhost", "10.0.2.2"); // "your_new_host"에 원하는 호스트를 넣으세요
+    // setRedirectedUrl(newUrl);
+    setRedirectedUrl(event.url);
     return true; // 페이지 로드 허용
   };
 
