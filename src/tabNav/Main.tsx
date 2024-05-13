@@ -25,7 +25,7 @@ const Tab = createBottomTabNavigator();
 function Main() {
   return (
     <Tab.Navigator
-      initialRouteName="HomeScreen"
+      initialRouteName="MyPageScreen"
       screenOptions={{ headerShown: false }}
     >
       <Tab.Screen

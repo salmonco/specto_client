@@ -94,7 +94,7 @@ function AppInner() {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {isLoggedIn ? (
+      {!isLoggedIn ? (
         <Stack.Screen name="Main" component={Main} />
       ) : (
         <Stack.Group>
