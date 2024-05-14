@@ -266,7 +266,12 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
             </View>
             <Pressable
               style={styles.editButton}
-              onPress={() => console.log("내 회고로 이동 버튼을 눌렀습니다.")}
+              onPress={() =>
+                navigation.navigate("ReviewListScreen", {
+                  screen: "ReviewListUp",
+                  params: { id: 1 },
+                })
+              }
             >
               <Text style={styles.editButtonText}>내 회고 &gt;</Text>
             </Pressable>
