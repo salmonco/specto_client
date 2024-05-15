@@ -4,7 +4,6 @@ const initialState = {
   id: null,
   email: "",
   name: "",
-  accessToken: "",
 };
 const userSlice = createSlice({
   name: "user",
@@ -14,10 +13,6 @@ const userSlice = createSlice({
       state.id = action.payload.id;
       state.email = action.payload.email;
       state.name = action.payload.name;
-      state.accessToken = action.payload.accessToken;
-    },
-    setAccessToken(state, action) {
-      state.accessToken = action.payload;
     },
   },
 });

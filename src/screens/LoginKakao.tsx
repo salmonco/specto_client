@@ -3,10 +3,16 @@ import { View } from "react-native";
 import { WebView } from "react-native-webview";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "@stackNav/Auth";
+import * as SecureStore from "expo-secure-store";
+import { RootStackParamList } from "AppInner";
+import { CompositeScreenProps } from "@react-navigation/native";
+import axiosInstance from "src/api/axiosInstance";
 
 type AuthProps = NativeStackScreenProps<AuthStackParamList, "LoginKakao">;
+type RootProps = NativeStackScreenProps<RootStackParamList>;
+type Props = CompositeScreenProps<AuthProps, RootProps>;
 
-export default function LoginKakao({ navigation, route }: Readonly<AuthProps>) {
+export default function LoginKakao({ navigation, route }: Readonly<Props>) {
   const { url } = route.params;
   const [redirectedUrl, setRedirectedUrl] = useState<string | null>(null);
 
@@ -20,13 +26,12 @@ export default function LoginKakao({ navigation, route }: Readonly<AuthProps>) {
   const fetchDataFromServer = async (url: string) => {
     try {
       // 서버로부터 데이터를 요청하고 받는 작업 수행
-      const response = await fetch(url);
-      const data = await response.json();
-
-      // 받은 데이터를 로컬 저장소에 저장
-      console.log(data);
-
-      navigation.navigate("Login");
+      const res = await axiosInstance.get(url);
+      // console.log(res.data);
+      const { accessToken, refreshToken } = res.data;
+      await SecureStore.setItemAsync("accessToken", accessToken);
+      await SecureStore.setItemAsync("refreshToken", refreshToken);
+      navigation.navigate("Main");
     } catch (error) {
       console.error("Error fetching data:", error);
     }

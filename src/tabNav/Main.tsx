@@ -1,13 +1,13 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MyPageScreen from "../stackNav/MyPageScreen";
-import HomeScreen from "../stackNav/HomeScreen";
+// import HomeScreen from "../stackNav/HomeScreen";
 import SpecScreen from "../stackNav/SpecScreen";
 import ReviewScreen from "./ReviewScreen";
 import MyPageIcon from "../../assets/images/myPage.svg";
 import MyPageFocusedIcon from "../../assets/images/myPage.svg";
-import HomeIcon from "../../assets/images/home.svg";
-import HomeFocusedIcon from "../../assets/images/home.svg";
+// import HomeIcon from "../../assets/images/home.svg";
+// import HomeFocusedIcon from "../../assets/images/home.svg";
 import SpecIcon from "../../assets/images/spec.svg";
 import SpecFocusedIcon from "../../assets/images/specFocused.svg";
 import ReviewIcon from "../../assets/images/review.svg";
@@ -25,7 +25,7 @@ const Tab = createBottomTabNavigator();
 function Main() {
   return (
     <Tab.Navigator
-      initialRouteName="MyPageScreen"
+      initialRouteName="SpecScreen"
       screenOptions={{ headerShown: false }}
     >
       <Tab.Screen
@@ -37,7 +37,7 @@ function Main() {
             focused ? <MyPageFocusedIcon /> : <MyPageIcon />,
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="HomeScreen"
         component={HomeScreen}
         options={{
@@ -45,7 +45,7 @@ function Main() {
           tabBarIcon: ({ focused }) =>
             focused ? <HomeFocusedIcon /> : <HomeIcon />,
         }}
-      />
+      /> */}
       <Tab.Screen
         name="SpecScreen"
         component={SpecScreen}

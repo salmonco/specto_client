@@ -11,9 +11,10 @@ import {
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 import Logo from "../../assets/images/logo.svg";
-import axios from "axios";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "@stackNav/Auth";
+import getEnvVars from "environment";
+import axiosInstance from "src/api/axiosInstance";
 const VIEW_HEIGHT = Dimensions.get("window").height; // 화면 세로길이
 
 type AuthProps = NativeStackScreenProps<AuthStackParamList, "Login">;
@@ -21,9 +22,9 @@ type AuthProps = NativeStackScreenProps<AuthStackParamList, "Login">;
 function Login({ navigation }: Readonly<AuthProps>) {
   const kakaoLogin = async () => {
     try {
-      const res = await axios.get("http://13.210.239.98:8080/login/kakao");
+      const res = await axiosInstance.get(`/login/kakao`);
       const redirectUrl = res.request.responseURL; // responseURL 추출
-      console.log(redirectUrl);
+      // console.log(redirectUrl);
       if (redirectUrl) {
         navigation.navigate("LoginKakao", { url: redirectUrl });
       } else {
