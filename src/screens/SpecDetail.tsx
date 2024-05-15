@@ -288,10 +288,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
               {CATEGORY_DETAIL_MENU[
                 category as keyof typeof CATEGORY_DETAIL_MENU
               ].map((item: string | { key: string; label: string }) => (
-                <View
-                  style={styles.detailRow}
-                  key={typeof item === "string" ? item : item.key}
-                >
+                <View style={styles.detailRow} key={`${Math.random()}`}>
                   <Text style={styles.detailLabel}>
                     {typeof item === "string" ? DETAIL_MENU[item] : item.label}
                   </Text>
