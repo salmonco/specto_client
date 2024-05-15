@@ -17,7 +17,7 @@ const userSlice = createSlice({
       state.accessToken = action.payload.accessToken;
     },
     setAccessToken(state, action) {
-      state.accessToken = action.payload;
+      state.accessToken = action.payload.accessToken;
     },
   },
 });
