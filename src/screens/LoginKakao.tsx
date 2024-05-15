@@ -7,10 +7,14 @@ import { useAppDispatch } from "src/store";
 import userSlice from "src/slices/user";
 import * as SecureStore from "expo-secure-store";
 import axios, { AxiosError } from "axios";
+import { RootStackParamList } from "AppInner";
+import { CompositeScreenProps } from "@react-navigation/native";
 
 type AuthProps = NativeStackScreenProps<AuthStackParamList, "LoginKakao">;
+type RootProps = NativeStackScreenProps<RootStackParamList>;
+type Props = CompositeScreenProps<AuthProps, RootProps>;
 
-export default function LoginKakao({ navigation, route }: Readonly<AuthProps>) {
+export default function LoginKakao({ navigation, route }: Readonly<Props>) {
   const { url } = route.params;
   const [redirectedUrl, setRedirectedUrl] = useState<string | null>(null);
   const dispatch = useAppDispatch();
@@ -30,11 +34,11 @@ export default function LoginKakao({ navigation, route }: Readonly<AuthProps>) {
       const { accessToken, refreshToken } = res.data;
       dispatch(userSlice.actions.setAccessToken({ accessToken }));
       await SecureStore.setItemAsync("refreshToken", refreshToken);
-      navigation.navigate("Login");
+      navigation.navigate("Main");
     } catch (error) {
       console.error("Error fetching data:", error);
       if ((error as AxiosError).response?.status === 403) {
-        navigation.navigate("Login");
+        navigation.navigate("Main");
       }
     }
   };
