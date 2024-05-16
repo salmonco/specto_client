@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import { FlatList, Pressable, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
-import SpecListItem, {
-  SPEC_DATA,
-  SPEC_MENU,
-  SpecBase,
-} from "@components/SpecListItem";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ReviewListScreenStackParamList } from "@stackNav/ReviewListScreen";
+import { SPEC_DATA, SPEC_MENU, SpecBase } from "./Spec";
+import SpecListItem from "@components/SpecListItem";
 
 type ReviewListScreenProps = NativeStackScreenProps<
   ReviewListScreenStackParamList,
@@ -58,7 +55,7 @@ function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
         }}
         data={specList}
         renderItem={renderItem}
-        keyExtractor={(item) => `${item.id}`}
+        keyExtractor={(item) => `${item.specId}`}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <View className="flex-row items-center justify-end mr-[15]">

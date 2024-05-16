@@ -4,10 +4,10 @@ import { CustomText as Text } from "@components/CustomText";
 import Button from "@components/Button";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ReviewListScreenStackParamList } from "@stackNav/ReviewListScreen";
-import { CATEGORY_LABEL } from "@components/SpecListItem";
 import { REVIEW_DATA } from "@components/ReviewListItem";
 import ChevronBottom from "@assets/images/chevron-bottom-black.svg";
 import AddIcon from "@assets/images/add-blue.svg";
+import { CATEGORY_LABEL } from "./Spec";
 
 type ReviewListScreenProps = NativeStackScreenProps<
   ReviewListScreenStackParamList,

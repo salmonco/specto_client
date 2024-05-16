@@ -14,8 +14,103 @@ import axiosInstance from "src/api/axiosInstance";
 
 type SpecScreenProps = NativeStackScreenProps<SpecScreenStackParamList, "Spec">;
 
+export const CATEGORY_LABEL: { [key: string]: string } = {
+  ALL: "전체",
+  CONTEST: "공모전",
+  CERTIFICATION: "자격증",
+  INTERNSHIP: "인턴",
+  ACTIVITY: "대외활동",
+  PROJECT: "논문/프로젝트",
+};
+export const SPEC_MENU = Object.entries(CATEGORY_LABEL).map(([k, v]) => {
+  return { category: k, label: v };
+});
+export interface SpecBase {
+  specId: number;
+  name: string;
+  category: string;
+  startDate: string;
+  endDate: string;
+  completed: boolean;
+}
+export const SPEC_DATA = [
+  {
+    specId: 1,
+    name: "정보처리기사",
+    category: "certificate",
+    startDate: "2024-03-06",
+    endDate: "2024-04-10",
+    completed: false,
+  },
+  {
+    specId: 2,
+    name: "SolidIT 현장실습",
+    category: "intern",
+    startDate: "2024-02-01",
+    endDate: "2024-05-31",
+    completed: false,
+  },
+  {
+    specId: 3,
+    name: "ADSP",
+    category: "contest",
+    startDate: "2024-02-01",
+    endDate: "2024-05-31",
+    completed: true,
+  },
+  {
+    specId: 4,
+    name: "어쩌구 논문",
+    category: "project",
+    startDate: "2024-02-01",
+    endDate: "2024-05-31",
+    completed: false,
+  },
+  {
+    specId: 5,
+    name: "KT Y 퓨터리스트",
+    category: "activity",
+    startDate: "2024-02-01",
+    endDate: "2024-05-31",
+    completed: true,
+  },
+  {
+    specId: 6,
+    name: "저쩌구 논문",
+    category: "project",
+    startDate: "2024-02-01",
+    endDate: "2024-05-31",
+    completed: true,
+  },
+  {
+    specId: 7,
+    name: "저쩌구 논문",
+    category: "project",
+    startDate: "2024-02-01",
+    endDate: "2024-05-31",
+    completed: true,
+  },
+];
+
+export const renderSpecIcon = (category: string) => {
+  switch (category) {
+    case "CONTEST":
+      return <Contest />;
+    case "CERTIFICATION":
+      return <Certificate />;
+    case "INTERNSHIP":
+      return <Intern />;
+    case "ACTIVITY":
+      return <Project />; // TODO: 아이콘 교체
+    case "PROJECT":
+      return <Project />;
+  }
+};
+
 function Spec({ navigation }: Readonly<SpecScreenProps>) {
-  const [isCategorySelectOpen, setIsCategorySelectOpen] = React.useState(false);
+  const [clickedCategory, setClickedCategory] = useState(SPEC_MENU[0].category);
+  const [specList, setSpecList] = useState(SPEC_DATA);
+  const [isCategorySelectOpen, setIsCategorySelectOpen] = React.useState(false); // 스펙 추가하기 레이어 팝업
 
   const handleAddSpecPress = () => {
     setIsCategorySelectOpen(true);
@@ -31,6 +126,7 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
     });
   }, [navigation]);
 
+<<<<<<< HEAD
   const CATEGORY_LABEL: { [key: string]: string } = {
     all: "전체",
     contest: "공모전",
@@ -124,6 +220,8 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
     }
   };
 
+=======
+>>>>>>> f2226da273ea6850d7f657f0581db8e397b74d61
   // 각 스펙 클릭 이벤트 핸들러
   const handleSpecClick = (id: number, category: string) => {
     console.log(`스펙 ID ${id}를 클릭 - 개별 페이지로 이동.`);
@@ -134,30 +232,34 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
   useEffect(() => {
     const getSpecList = async () => {
       try {
-        const res = await axiosInstance.get(`/api/v1/spec?category=CONTEST`);
-        console.log("spec", res);
-        // setSpecList(res.data.content);
+        const res = await axiosInstance.get(
+          `/api/v1/spec?category=${
+            clickedCategory === "ALL" ? "" : clickedCategory
+          }`
+        );
+        console.log(`spec ${clickedCategory}`, res);
+        setSpecList(res.data.content);
       } catch (e) {
         console.log(e);
       }
     };
     getSpecList();
-  }, []);
+  }, [clickedCategory]);
 
   const renderItem = ({ item }: { item: Readonly<SpecBase> }) => {
     return (
       <Pressable
-        key={item.id}
+        key={item.specId}
         className="flex-1 flex-row justify-between items-center gap-[10] border border-[#DEDEDE] p-[16] h-[78] mx-[14] my-[1]"
         style={{ borderRadius: 10 }}
         onPress={() => {
-          console.log(`${item.id}번 스펙을 클릭했습니다.`);
-          handleSpecClick(item.id, item.category);
+          console.log(`${item.specId}번 스펙을 클릭했습니다.`);
+          handleSpecClick(item.specId, item.category);
         }}
       >
         <View>
           <View className="flex-row gap-[10] items-center">
-            {renderIcon(item.category)}
+            {renderSpecIcon(item.category)}
             <View className="flex-col justify-between">
               <View className="flex-row gap-[7.8] justify-start items-center">
                 <Text className="font-[Inter-SemiBold] h-full" size={18}>
@@ -196,7 +298,7 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
     <View className="flex-1 relative">
       {/* 상단 바 및 메뉴 버튼 */}
       <View className="flex-row justify-between gap-[8] py-[23] px-[20] border-b border-b-[#ECEBEB]">
-        {MENU.map((v) => (
+        {SPEC_MENU.map((v) => (
           <Pressable
             className={`w-[52] h-[38] justify-center items-center ${
               v.category === clickedCategory ? "bg-[#0094FF]" : "bg-[#EAF4FF]"
@@ -229,7 +331,7 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
           }}
           data={specList}
           renderItem={renderItem}
-          keyExtractor={(item) => `${item.id}`}
+          keyExtractor={(item) => `${item.specId}`}
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={
             <Button

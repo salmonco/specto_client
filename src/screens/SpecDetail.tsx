@@ -13,13 +13,14 @@ import Contest from "@assets/images/contest.svg";
 import Certificate from "@assets/images/certificate.svg";
 import Intern from "@assets/images/intern.svg";
 import Project from "@assets/images/project.svg";
-import axios from "axios";
 
 import Constants from "expo-constants";
 const screenWidth = Dimensions.get("window").width;
 import { LineChart } from "react-native-chart-kit";
 import { Svg, Text as TextSVG } from "react-native-svg";
 import { Circle } from "react-native-svg";
+import { CATEGORY_LABEL } from "./Spec";
+import axiosInstance from "src/api/axiosInstance";
 
 type SpecDetailScreenProps = NativeStackScreenProps<
   SpecScreenStackParamList,
@@ -61,6 +62,7 @@ const data = {
   ],
 };
 
+<<<<<<< HEAD
 const CATEGORY_LABEL: { [key: string]: string } = {
   all: "전체",
   contest: "공모전",
@@ -70,8 +72,10 @@ const CATEGORY_LABEL: { [key: string]: string } = {
   project: "논문/프로젝트",
 };
 
+=======
+>>>>>>> f2226da273ea6850d7f657f0581db8e397b74d61
 const CATEGORY_DETAIL_MENU = {
-  contest: [
+  CONTEST: [
     "host",
     "field",
     "awardStatus",
@@ -79,13 +83,17 @@ const CATEGORY_DETAIL_MENU = {
     { key: "date", label: "수상일자" },
     "documentation",
   ],
-  certification: [
+  CERTIFICATION: [
     "host",
     "field",
     { key: "date", label: "취득 날짜" },
     "documentation",
   ],
+<<<<<<< HEAD
   internship: [
+=======
+  INTERNSHIP: [
+>>>>>>> f2226da273ea6850d7f657f0581db8e397b74d61
     "company",
     "work",
     "motivation",
@@ -93,7 +101,11 @@ const CATEGORY_DETAIL_MENU = {
     "project",
     "documentation",
   ],
+<<<<<<< HEAD
   activity: [
+=======
+  ACTIVITY: [
+>>>>>>> f2226da273ea6850d7f657f0581db8e397b74d61
     "host",
     "field",
     { key: "motivation", label: "활동 배경" },
@@ -101,7 +113,7 @@ const CATEGORY_DETAIL_MENU = {
     "direction",
     "documentation",
   ],
-  project: [
+  PROJECT: [
     "host",
     "field",
     { key: "motivation", label: "활동 배경" },
@@ -128,33 +140,16 @@ const DETAIL_MENU: { [key: string]: string } = {
 
 const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
   const { id, category } = route.params;
+  // TODO: id로 스펙 상세조회
+  // const [progress, setProgress] = useState("50%"); // 예시로 50%로 초기화
   //const [specInfo, setSpecInfo] = useState<any>(null);
   const [specInfo, setSpecInfo] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(true);
 
-  // useEffect(() => {
-  //   const fetchSpecDetail = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://13.210.239.98:8080/api/v1/spec/${id}`
-  //       );
-  //       setSpecInfo(response.data);
-  //       setLoading(false);
-  //     } catch (error) {
-  //       console.error("Error fetching spec detail:", error);
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchSpecDetail();
-  // }, [id]);
-
   useEffect(() => {
     const fetchSpecDetail = async () => {
       try {
-        const response = await axios.get(
-          `http://13.210.239.98:8080/api/v1/spec/${id}`
-        ); // id를 1로 설정
+        const response = await axiosInstance.get(`/api/v1/spec/${id}`); // id를 1로 설정
         id;
         setSpecInfo(response.data);
         setLoading(false);
@@ -301,7 +296,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
                 return (
                   <React.Fragment>
                     <Circle
-                      key={`circle-${data.labels[index]}`}
+                      key={`circle-${Math.random()}`}
                       cx={x}
                       cy={y}
                       r={6}
@@ -310,7 +305,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
                       fill={dotColor}
                     />
                     <TextSVG
-                      key={`text-${data.labels[index]}`}
+                      key={`text-${Math.random()}`}
                       x={x}
                       y={y + 20}
                       fill="#7B7B7B"
