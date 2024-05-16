@@ -26,7 +26,7 @@ export const SPEC_MENU = Object.entries(CATEGORY_LABEL).map(([k, v]) => {
   return { category: k, label: v };
 });
 export interface SpecBase {
-  id: number;
+  specId: number;
   name: string;
   category: string;
   startDate: string;
@@ -35,7 +35,7 @@ export interface SpecBase {
 }
 export const SPEC_DATA = [
   {
-    id: 1,
+    specId: 1,
     name: "정보처리기사",
     category: "certificate",
     startDate: "2024-03-06",
@@ -43,7 +43,7 @@ export const SPEC_DATA = [
     completed: false,
   },
   {
-    id: 2,
+    specId: 2,
     name: "SolidIT 현장실습",
     category: "intern",
     startDate: "2024-02-01",
@@ -51,7 +51,7 @@ export const SPEC_DATA = [
     completed: false,
   },
   {
-    id: 3,
+    specId: 3,
     name: "ADSP",
     category: "contest",
     startDate: "2024-02-01",
@@ -59,7 +59,7 @@ export const SPEC_DATA = [
     completed: true,
   },
   {
-    id: 4,
+    specId: 4,
     name: "어쩌구 논문",
     category: "project",
     startDate: "2024-02-01",
@@ -67,7 +67,7 @@ export const SPEC_DATA = [
     completed: false,
   },
   {
-    id: 5,
+    specId: 5,
     name: "KT Y 퓨터리스트",
     category: "activity",
     startDate: "2024-02-01",
@@ -75,7 +75,7 @@ export const SPEC_DATA = [
     completed: true,
   },
   {
-    id: 6,
+    specId: 6,
     name: "저쩌구 논문",
     category: "project",
     startDate: "2024-02-01",
@@ -83,7 +83,7 @@ export const SPEC_DATA = [
     completed: true,
   },
   {
-    id: 7,
+    specId: 7,
     name: "저쩌구 논문",
     category: "project",
     startDate: "2024-02-01",
@@ -153,12 +153,12 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
   const renderItem = ({ item }: { item: Readonly<SpecBase> }) => {
     return (
       <Pressable
-        key={item.id}
+        key={item.specId}
         className="flex-1 flex-row justify-between items-center gap-[10] border border-[#DEDEDE] p-[16] h-[78] mx-[14] my-[1]"
         style={{ borderRadius: 10 }}
         onPress={() => {
-          console.log(`${item.id}번 스펙을 클릭했습니다.`);
-          handleSpecClick(item.id, item.category);
+          console.log(`${item.specId}번 스펙을 클릭했습니다.`);
+          handleSpecClick(item.specId, item.category);
         }}
       >
         <View>
@@ -235,7 +235,7 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
           }}
           data={specList}
           renderItem={renderItem}
-          keyExtractor={(item) => `${item.id}`}
+          keyExtractor={(item) => `${item.specId}`}
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={
             <Button

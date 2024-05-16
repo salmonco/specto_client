@@ -12,10 +12,10 @@ export default function SpecListItem({
 }: Readonly<SpecListItemBase>) {
   return (
     <Pressable
-      key={item.id}
+      key={item.specId}
       className="flex-1 flex-row justify-between items-center gap-[10] border border-[#DEDEDE] p-[16] h-[78] mx-[14] my-[1]"
       style={{ borderRadius: 10 }}
-      onPress={() => callbackFn && callbackFn(item.id)}
+      onPress={() => callbackFn && callbackFn(item.specId)}
     >
       <View>
         <View className="flex-row gap-[10] items-center">
