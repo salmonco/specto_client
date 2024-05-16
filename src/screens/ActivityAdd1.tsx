@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "AppInner";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAxiosInterceptor } from "src/hooks/useAxiosInterceptor";
+import axios from "axios";
 
 const API_URL = "/api/v1/spec"; // baseURL을 이미 axiosInstance에서 설정했으므로 상대 경로만 사용
 
@@ -22,19 +23,18 @@ type ContestProps = NativeStackScreenProps<
   "ActivityAdd1"
 >;
 
-const ActivityAdd1 = ({ navigation }: ContestProps) => {
+function ActivityAdd1({ navigation }: Readonly<ContestProps>) {
   const [formData, setFormData] = useState(new FormData()); // FormData 상태 생성
-  const { navigate } =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
-  useAxiosInterceptor(); // Axios 인터셉터 사용
 
   const handleNext = async () => {
     try {
       console.log("Sending request to:", API_URL);
 
       // AsyncStorage에서 accessToken 불러오기
-      const accessToken = await AsyncStorage.getItem("accessToken");
+      // const accessToken = await getAccessToken();
+
+      const formData = new FormData();
+      console.log(formData);
 
       const value = [
         {
@@ -42,11 +42,18 @@ const ActivityAdd1 = ({ navigation }: ContestProps) => {
         },
       ];
 
-      const response = await axiosInstance.post(API_URL, value, {
-        method: "POST",
+      const blob = new Blob([JSON.stringify(value)], {
+        type: "application/json",
+      });
+
+      // formData.append("data", blob);
+      formData.append("data", JSON.stringify(value));
+
+      console.log(formData);
+
+      const response = await axiosInstance.post(API_URL, formData, {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`, // 엑세스 토큰 추가
+          "Content-Type": "multipart/form-data",
         },
       });
 
@@ -91,7 +98,7 @@ const ActivityAdd1 = ({ navigation }: ContestProps) => {
       </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
