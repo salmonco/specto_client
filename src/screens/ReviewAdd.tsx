@@ -3,7 +3,7 @@ import { Pressable, ScrollView, TextInput, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import Button from "@components/Button";
 import HorizontalSlider from "@components/HorizontalSlider";
-import { CATEGORY_LABEL, renderIcon } from "@components/SpecListItem";
+import { CATEGORY_LABEL, renderSpecIcon } from "./Spec";
 
 function ReviewAdd() {
   const completed = false;
@@ -16,7 +16,7 @@ function ReviewAdd() {
       <View className="px-[35] pt-[24] pb-[29]">
         <View className="flex-row justify-between items-center mb-[11]">
           <View className="flex-row items-center gap-x-[6]">
-            {renderIcon("contest")}
+            {renderSpecIcon("contest")}
             <Text className="font-[Inter-SemiBold] text-[#0094FF]">
               {CATEGORY_LABEL["contest"]}
             </Text>
