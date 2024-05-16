@@ -65,7 +65,7 @@ const CATEGORY_LABEL: { [key: string]: string } = {
   all: "전체",
   contest: "공모전",
   certification: "자격증",
-  intern: "인턴",
+  internship: "인턴",
   activity: "대외활동",
   project: "논문/프로젝트",
 };
@@ -85,7 +85,14 @@ const CATEGORY_DETAIL_MENU = {
     { key: "date", label: "취득 날짜" },
     "documentation",
   ],
-  intern: ["company", "work", "motivation", "goal", "project", "documentation"],
+  internship: [
+    "company",
+    "work",
+    "motivation",
+    "goal",
+    "project",
+    "documentation",
+  ],
   activity: [
     "host",
     "field",
@@ -177,7 +184,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
             {category === "certification" && (
               <Certificate width={22} height={22} />
             )}
-            {category === "intern" && <Intern width={22} height={22} />}
+            {category === "internship" && <Intern width={22} height={22} />}
             {category === "project" && <Project width={22} height={22} />}
             <Text style={styles.categoryText}>{CATEGORY_LABEL[category]}</Text>
           </View>

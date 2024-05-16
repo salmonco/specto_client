@@ -34,8 +34,8 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
   const CATEGORY_LABEL: { [key: string]: string } = {
     all: "전체",
     contest: "공모전",
-    certificate: "자격증",
-    intern: "인턴",
+    certification: "자격증",
+    internship: "인턴",
     activity: "대외활동",
     project: "논문/프로젝트",
   };
@@ -54,7 +54,7 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
     {
       id: 1,
       name: "정보처리기사",
-      category: "certificate",
+      category: "certification",
       startDate: "2024-03-06",
       endDate: "2024-04-10",
       completed: false,
@@ -62,7 +62,7 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
     {
       id: 2,
       name: "SolidIT 현장실습",
-      category: "intern",
+      category: "internship",
       startDate: "2024-02-01",
       endDate: "2024-05-31",
       completed: false,
@@ -115,9 +115,9 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
     switch (category) {
       case "contest":
         return <Contest />;
-      case "certificate":
+      case "certification":
         return <Certificate />;
-      case "intern":
+      case "internship":
         return <Intern />;
       case "project":
         return <Project />;
