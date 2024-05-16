@@ -8,8 +8,10 @@ import {
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ActivityAddScreenStackParamList } from "@stackNav/ActivityAddScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
-const API_URL = "http://your-api-url.com"; // 여기에 백엔드 API 엔드포인트 URL을 입력해주세요.
+const API_URL = "http://13.210.239.98:8080/api/v1/spec";
 
 type ContestProps = NativeStackScreenProps<
   ActivityAddScreenStackParamList,
@@ -17,21 +19,53 @@ type ContestProps = NativeStackScreenProps<
 >;
 
 function ActivityAdd1({ navigation }: Readonly<ContestProps>) {
-  const [name, setName] = useState("");
+  const [formData, setFormData] = useState(new FormData()); // FormData 상태 생성
 
   const handleNext = async () => {
     try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      console.log("Sending request to:", API_URL);
+
+      // AsyncStorage에서 accessToken 불러오기
+      // 이게 뭔데 ... 토큰이 어딨어
+      const accessToken = await getAccessToken();
+
+      const formData = new FormData();
+      console.log(formData);
+
+      const value = [
+        {
+          name: "대외활동하기싫어", // 입력값
         },
-        body: JSON.stringify({ name }),
+      ];
+
+      const blob = new Blob([JSON.stringify(value)], {
+        type: "application/json",
       });
-      if (!response.ok) {
-        throw new Error("Failed to save contest name");
+
+      // formData.append("data", blob);
+      formData.append("data", JSON.stringify(value));
+
+      console.log(formData);
+
+      const response = await axios({
+        method: "POST",
+        url: API_URL,
+        // mode: "cors",
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${accessToken}`, // 엑세스 토큰 추가
+        },
+        data: formData,
+      });
+
+      console.log(response);
+
+      if (response.status >= 200 && response.status < 300) {
+        console.log("Success");
+        navigation.navigate("ActivityAdd2");
+      } else {
+        console.error("Failed to save activity");
       }
-      navigation.navigate("ActivityAdd2");
     } catch (error) {
       console.error("Error:", error as Error);
     }
@@ -51,8 +85,16 @@ function ActivityAdd1({ navigation }: Readonly<ContestProps>) {
         <TextInput
           style={styles.inputText}
           placeholder="활동 이름을 입력해주세요."
-          value={name}
-          onChangeText={(text) => setName(text)}
+          onChangeText={(text) => {
+            // name 값 업데이트
+            const value = [{ name: text }];
+            const blob = new Blob([JSON.stringify(value)], {
+              type: "application/json",
+            });
+            const formData = new FormData();
+            formData.append("data", blob);
+            setFormData(formData); // formData 상태 업데이트
+          }}
         />
       </View>
       <TouchableOpacity style={styles.buttonContainer} onPress={handleNext}>
@@ -107,8 +149,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
   },
   buttonContainer: {
-    position: "absolute",
-    bottom: 10,
+    marginTop: 20,
     backgroundColor: "#0094FF",
     padding: 16,
     borderRadius: 12,

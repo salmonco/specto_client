@@ -8,6 +8,7 @@ import InternAddScreen from "./InternAddScreen";
 import ActivityAddScreen from "./ActivityAddScreen";
 // import ProjectAddScreen from "./ProjectAddScreen";
 import SpecCategorySelect from "./CertificateAddScreen";
+import ReviewListScreen from "./ReviewListScreen";
 
 export type SpecScreenStackParamList = {
   Spec: undefined;
@@ -18,6 +19,8 @@ export type SpecScreenStackParamList = {
   ActivityAddScreen: undefined;
   // ProjectAddScreen: undefined;
   SpecCategorySelect: undefined;
+
+  ReviewListScreen: { screen: "ReviewListUp"; params: { id: number } };
 };
 
 const SpecScreenStack = createNativeStackNavigator<SpecScreenStackParamList>();
@@ -56,6 +59,11 @@ function SpecScreen() {
         component={ProjectAddScreen}
         options={{ headerShown: false }}
       /> */}
+      <SpecScreenStack.Screen
+        name="ReviewListScreen"
+        component={ReviewListScreen}
+        // options={{ headerShown: false }}
+      />
     </SpecScreenStack.Navigator>
   );
 }

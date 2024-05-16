@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Clipboard,
+} from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MyPageScreenStackParamList } from "@stackNav/MyPageScreen";

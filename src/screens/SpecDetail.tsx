@@ -13,6 +13,7 @@ import Contest from "@assets/images/contest.svg";
 import Certificate from "@assets/images/certificate.svg";
 import Intern from "@assets/images/intern.svg";
 import Project from "@assets/images/project.svg";
+import axios from "axios";
 
 import Constants from "expo-constants";
 const screenWidth = Dimensions.get("window").width;
@@ -63,7 +64,7 @@ const data = {
 const CATEGORY_LABEL: { [key: string]: string } = {
   all: "전체",
   contest: "공모전",
-  certificate: "자격증",
+  certification: "자격증",
   intern: "인턴",
   activity: "대외활동",
   project: "논문/프로젝트",
@@ -78,7 +79,7 @@ const CATEGORY_DETAIL_MENU = {
     { key: "date", label: "수상일자" },
     "documentation",
   ],
-  certificate: [
+  certification: [
     "host",
     "field",
     { key: "date", label: "취득 날짜" },
@@ -120,115 +121,51 @@ const DETAIL_MENU: { [key: string]: string } = {
 
 const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
   const { id, category } = route.params;
-  // const [progress, setProgress] = useState("50%"); // 예시로 50%로 초기화
+  //const [specInfo, setSpecInfo] = useState<any>(null);
+  const [specInfo, setSpecInfo] = useState<any>({});
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // useEffect(() => {
+  //   const fetchSpecDetail = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `http://13.210.239.98:8080/api/v1/spec/${id}`
+  //       );
+  //       setSpecInfo(response.data);
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.error("Error fetching spec detail:", error);
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchSpecDetail();
+  // }, [id]);
 
   useEffect(() => {
-    // 스크린 옵션 설정 (헤더 우측에 "수정" 버튼 표시)
-    navigation.setOptions({
-      headerRight: () => (
-        <Pressable onPress={() => console.log("수정 버튼을 눌렀습니다.")}>
-          <Text style={styles.headerButtonText}>수정</Text>
-        </Pressable>
-      ),
-    });
-  }, [navigation]);
+    const fetchSpecDetail = async () => {
+      try {
+        const response = await axios.get(
+          `http://13.210.239.98:8080/api/v1/spec/${id}`
+        ); // id를 1로 설정
+        id;
+        setSpecInfo(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching spec detail:", error);
+        setLoading(false);
+      }
+    };
 
-  // 자격증 정보 예시
-  let specInfo: any = null;
+    fetchSpecDetail();
+  }, []);
 
-  switch (category) {
-    case "certificate":
-      specInfo = {
-        name: "정보처리기사",
-        startDate: "2024.03.06",
-        endDate: "진행중",
-        completed: true,
-        contents: "정보처리기사 자격증 획득",
-        summary:
-          "정보처리기사 자격증 획득에 대한 요약 내용을 여기에 추가합니다.",
-        detail: {
-          host: "한국산업인력공단",
-          field: "정보기술",
-          date: "2024.04.22",
-          documentation: null,
-        },
-      };
-      break;
-    case "contest":
-      specInfo = {
-        name: "올해의 토목 구조물 공모전",
-        startDate: "2024.03.06",
-        endDate: "2024.03.10",
-        completed: true,
-        contents: "공모전 참가 및 수상",
-        summary:
-          "공모전 참가 및 수상 내용에 대한 요약 내용을 여기에 추가합니다.",
-        detail: {
-          host: "주최 기관",
-          field: "기획",
-          awardStatus: true,
-          awardTitle: "최우수상",
-          date: "2024.03.10",
-          documentation: null,
-        },
-      };
-      break;
-    case "intern":
-      specInfo = {
-        name: "SolidIT 현장실습",
-        startDate: "2024.03.06",
-        endDate: "2024.03.10",
-        completed: false,
-        contents: "인턴 참여",
-        summary: "인턴 참여 내용에 대한 요약 내용을 여기에 추가합니다.",
-        detail: {
-          company: "회사명",
-          work: "업무 내용",
-          motivation: "인턴 참여 동기",
-          goal: "인턴 기간 동안의 목표",
-          project: "수행한 프로젝트",
-          documentation: null,
-        },
-      };
-      break;
-    case "activity":
-      specInfo = {
-        name: "KT Y 퓨터리스트",
-        startDate: "2024.03.06",
-        endDate: "2024.03.10",
-        completed: true,
-        contents: "활동 참여",
-        summary: "활동 참여 내용에 대한 요약 내용을 여기에 추가합니다.",
-        detail: {
-          host: "주최 기관",
-          field: "기획",
-          motivation: "활동 참여 동기",
-          goal: "활동 목표",
-          direction: "활동 방향",
-          documentation: null,
-        },
-      };
-      break;
-    case "project":
-      specInfo = {
-        name: "프로젝트명",
-        startDate: "2024.03.06",
-        endDate: "2024.03.10",
-        completed: true,
-        contents: "프로젝트 진행",
-        summary: "프로젝트 진행 내용에 대한 요약 내용을 여기에 추가합니다.",
-        detail: {
-          host: "주최 기관",
-          field: "기획",
-          motivation: "프로젝트 시작 동기",
-          goal: "프로젝트 목표",
-          direction: "프로젝트 방향",
-          documentation: null,
-        },
-      };
-      break;
-    default:
-      break;
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
 
   return (
@@ -237,7 +174,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
         <View style={styles.infoContainer}>
           <View style={styles.iconContainer}>
             {category === "contest" && <Contest width={22} height={22} />}
-            {category === "certificate" && (
+            {category === "certification" && (
               <Certificate width={22} height={22} />
             )}
             {category === "intern" && <Intern width={22} height={22} />}
@@ -266,7 +203,12 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
             </View>
             <Pressable
               style={styles.editButton}
-              onPress={() => console.log("내 회고로 이동 버튼을 눌렀습니다.")}
+              onPress={() =>
+                navigation.navigate("ReviewListScreen", {
+                  screen: "ReviewListUp",
+                  params: { id: 1 },
+                })
+              }
             >
               <Text style={styles.editButtonText}>내 회고 &gt;</Text>
             </Pressable>
@@ -291,11 +233,8 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
                     {typeof item === "string" ? DETAIL_MENU[item] : item.label}
                   </Text>
                   <Text style={styles.detailText}>
-                    {typeof item === "string"
-                      ? specInfo.detail[item as keyof typeof specInfo.detail]
-                      : specInfo.detail[
-                          item.key as keyof typeof specInfo.detail
-                        ]}
+                    {specInfo.detail &&
+                      specInfo.detail[item as keyof typeof specInfo.detail]}
                   </Text>
                 </View>
               ))}
@@ -358,7 +297,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
                 return (
                   <React.Fragment>
                     <Circle
-                      key={`circle-${data.labels[index]}`} // 레이블을 사용하여 고유한 키 생성
+                      key={`circle-${data.labels[index]}`}
                       cx={x}
                       cy={y}
                       r={6}
@@ -367,7 +306,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
                       fill={dotColor}
                     />
                     <TextSVG
-                      key={`text-${data.labels[index]}`} // 레이블을 사용하여 고유한 키 생성
+                      key={`text-${data.labels[index]}`}
                       x={x}
                       y={y + 20}
                       fill="#7B7B7B"
@@ -393,6 +332,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     paddingTop: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   headerButtonText: {
     color: "#0094FF",
@@ -451,7 +395,6 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
   },
   detailContainer: {
-    // flex: 1,
     alignItems: "center",
     marginTop: 10,
   },
