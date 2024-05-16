@@ -2,6 +2,7 @@ import { Pressable, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import ChevronBottom from "@assets/images/chevron-bottom-black.svg";
 import ChevronRight from "@assets/images/chevron-right-white.svg";
+import { ReviewCalendarScreenProps } from "@screens/ReviewCalendar";
 
 interface ReviewBase {
   reviewId: number;
@@ -64,8 +65,12 @@ export const REVIEW_DATA = [
 
 interface ReviewListItemBase {
   item: ReviewBase;
+  navigation: ReviewCalendarScreenProps;
 }
-export default function ReviewListItem({ item }: Readonly<ReviewListItemBase>) {
+export default function ReviewListItem({
+  item,
+  navigation,
+}: Readonly<ReviewListItemBase>) {
   return (
     <View
       className="justify-between border border-[#DEDEDE] py-[8] px-[16] mb-[14]"
@@ -79,7 +84,11 @@ export default function ReviewListItem({ item }: Readonly<ReviewListItemBase>) {
           <Pressable
             className="justify-center items-center w-[69] h-[22] bg-[#0094FF]"
             style={{ borderRadius: 4 }}
-            onPress={() => console.log("회고 기록을 클릭했습니다.")}
+            onPress={() =>
+              navigation.navigate("ReviewListUp", {
+                id: item.reviewId,
+              })
+            }
           >
             <View className="flex-row justify-center items-center">
               <Text
