@@ -1,8 +1,7 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "AppInner";
-import { AxiosError } from "axios";
 import getEnvVars from "environment";
 import * as SecureStore from "expo-secure-store";
 import { useEffect } from "react";
@@ -18,11 +17,9 @@ export const useAxiosInterceptor = () => {
     // Request interceptor for API calls
     axiosInstance.interceptors.request.use(
       async (config) => {
-        const accessToken = await SecureStore.getItemAsync("refreshToken");
+        const accessToken = await SecureStore.getItemAsync("accessToken");
         if (accessToken) {
-          axiosInstance.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${accessToken}`;
+          config.headers["Authorization"] = `Bearer ${accessToken}`;
         }
         return config;
       },
@@ -44,8 +41,9 @@ export const useAxiosInterceptor = () => {
         ) {
           const refreshToken = await SecureStore.getItemAsync("refreshToken");
           if (!refreshToken) {
+            await SecureStore.deleteItemAsync("accessToken");
             Alert.alert("로그인이 필요한 페이지입니다.");
-            navigation.navigate("Auth", { screen: "Login" });
+            navigation.navigate("Auth");
             return;
           }
           originalRequest._retry = true;
@@ -75,8 +73,10 @@ export const useAxiosInterceptor = () => {
         return accessToken;
       } catch (error) {
         if ((error as AxiosError).response?.status === 403) {
+          await SecureStore.deleteItemAsync("accessToken");
+          await SecureStore.deleteItemAsync("refreshToken");
           Alert.alert("세션이 만료되어 로그인 페이지로 이동합니다.");
-          navigation.navigate("Auth", { screen: "Login" });
+          navigation.navigate("Auth");
           return;
         }
       }
