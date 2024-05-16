@@ -11,9 +11,7 @@ import Project from "@assets/images/project.svg";
 import AddIcon from "@assets/images/add-blue.svg";
 import SpecCategorySelect from "@screens/SpecCategorySelect";
 import axiosInstance from "src/api/axiosInstance";
-
 type SpecScreenProps = NativeStackScreenProps<SpecScreenStackParamList, "Spec">;
-
 export const CATEGORY_LABEL: { [key: string]: string } = {
   ALL: "전체",
   CONTEST: "공모전",
@@ -26,6 +24,7 @@ export const SPEC_MENU = Object.entries(CATEGORY_LABEL).map(([k, v]) => {
   return { category: k, label: v };
 });
 export interface SpecBase {
+  id: number;
   specId: number;
   name: string;
   category: string;
@@ -35,6 +34,7 @@ export interface SpecBase {
 }
 export const SPEC_DATA = [
   {
+    id: 1,
     specId: 1,
     name: "정보처리기사",
     category: "certificate",
@@ -43,6 +43,7 @@ export const SPEC_DATA = [
     completed: false,
   },
   {
+    id: 2,
     specId: 2,
     name: "SolidIT 현장실습",
     category: "intern",
@@ -51,6 +52,7 @@ export const SPEC_DATA = [
     completed: false,
   },
   {
+    id: 3,
     specId: 3,
     name: "ADSP",
     category: "contest",
@@ -59,6 +61,7 @@ export const SPEC_DATA = [
     completed: true,
   },
   {
+    id: 4,
     specId: 4,
     name: "어쩌구 논문",
     category: "project",
@@ -67,6 +70,7 @@ export const SPEC_DATA = [
     completed: false,
   },
   {
+    id: 5,
     specId: 5,
     name: "KT Y 퓨터리스트",
     category: "activity",
@@ -75,6 +79,7 @@ export const SPEC_DATA = [
     completed: true,
   },
   {
+    id: 6,
     specId: 6,
     name: "저쩌구 논문",
     category: "project",
@@ -83,6 +88,7 @@ export const SPEC_DATA = [
     completed: true,
   },
   {
+    id: 7,
     specId: 7,
     name: "저쩌구 논문",
     category: "project",
@@ -91,7 +97,6 @@ export const SPEC_DATA = [
     completed: true,
   },
 ];
-
 export const renderSpecIcon = (category: string) => {
   switch (category) {
     case "CONTEST":
@@ -106,16 +111,13 @@ export const renderSpecIcon = (category: string) => {
       return <Project />;
   }
 };
-
 function Spec({ navigation }: Readonly<SpecScreenProps>) {
   const [clickedCategory, setClickedCategory] = useState(SPEC_MENU[0].category);
   const [specList, setSpecList] = useState(SPEC_DATA);
   const [isCategorySelectOpen, setIsCategorySelectOpen] = React.useState(false); // 스펙 추가하기 레이어 팝업
-
   const handleAddSpecPress = () => {
     setIsCategorySelectOpen(true);
   };
-
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -125,110 +127,12 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
       ),
     });
   }, [navigation]);
-
-<<<<<<< HEAD
-  const CATEGORY_LABEL: { [key: string]: string } = {
-    all: "전체",
-    contest: "공모전",
-    certification: "자격증",
-    internship: "인턴",
-    activity: "대외활동",
-    project: "논문/프로젝트",
-  };
-  const MENU = Object.entries(CATEGORY_LABEL).map(([k, v]) => {
-    return { category: k, label: v };
-  });
-  interface SpecBase {
-    id: number;
-    name: string;
-    category: string;
-    startDate: string;
-    endDate: string;
-    completed: boolean;
-  }
-  const specData = [
-    {
-      id: 1,
-      name: "정보처리기사",
-      category: "certification",
-      startDate: "2024-03-06",
-      endDate: "2024-04-10",
-      completed: false,
-    },
-    {
-      id: 2,
-      name: "SolidIT 현장실습",
-      category: "internship",
-      startDate: "2024-02-01",
-      endDate: "2024-05-31",
-      completed: false,
-    },
-    {
-      id: 3,
-      name: "ADSP",
-      category: "contest",
-      startDate: "2024-02-01",
-      endDate: "2024-05-31",
-      completed: true,
-    },
-    {
-      id: 4,
-      name: "어쩌구 논문",
-      category: "project",
-      startDate: "2024-02-01",
-      endDate: "2024-05-31",
-      completed: false,
-    },
-    {
-      id: 5,
-      name: "KT Y 퓨터리스트",
-      category: "activity",
-      startDate: "2024-02-01",
-      endDate: "2024-05-31",
-      completed: true,
-    },
-    {
-      id: 6,
-      name: "저쩌구 논문",
-      category: "project",
-      startDate: "2024-02-01",
-      endDate: "2024-05-31",
-      completed: true,
-    },
-    {
-      id: 7,
-      name: "저쩌구 논문",
-      category: "project",
-      startDate: "2024-02-01",
-      endDate: "2024-05-31",
-      completed: true,
-    },
-  ];
-  const [clickedCategory, setClickedCategory] = useState("all");
-  const [specList, setSpecList] = useState(specData);
-
-  const renderIcon = (category: string) => {
-    switch (category) {
-      case "contest":
-        return <Contest />;
-      case "certification":
-        return <Certificate />;
-      case "internship":
-        return <Intern />;
-      case "project":
-        return <Project />;
-    }
-  };
-
-=======
->>>>>>> f2226da273ea6850d7f657f0581db8e397b74d61
   // 각 스펙 클릭 이벤트 핸들러
   const handleSpecClick = (id: number, category: string) => {
     console.log(`스펙 ID ${id}를 클릭 - 개별 페이지로 이동.`);
     // SpecDetail 스크린으로 이동하면서 category, id 전달
     navigation.navigate("SpecDetail", { id, category });
   };
-
   useEffect(() => {
     const getSpecList = async () => {
       try {
@@ -245,14 +149,16 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
     };
     getSpecList();
   }, [clickedCategory]);
-
   const renderItem = ({ item }: { item: Readonly<SpecBase> }) => {
     return (
       <Pressable
+        key={item.id}
         key={item.specId}
         className="flex-1 flex-row justify-between items-center gap-[10] border border-[#DEDEDE] p-[16] h-[78] mx-[14] my-[1]"
         style={{ borderRadius: 10 }}
         onPress={() => {
+          console.log(`${item.id}번 스펙을 클릭했습니다.`);
+          handleSpecClick(item.id, item.category);
           console.log(`${item.specId}번 스펙을 클릭했습니다.`);
           handleSpecClick(item.specId, item.category);
         }}
@@ -293,7 +199,6 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
       </Pressable>
     );
   };
-
   return (
     <View className="flex-1 relative">
       {/* 상단 바 및 메뉴 버튼 */}
@@ -331,6 +236,7 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
           }}
           data={specList}
           renderItem={renderItem}
+          keyExtractor={(item) => `${item.id}`}
           keyExtractor={(item) => `${item.specId}`}
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={
@@ -378,5 +284,4 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
     </View>
   );
 }
-
 export default Spec;
