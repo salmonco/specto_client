@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FlatList, Pressable, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ReviewListScreenStackParamList } from "@stackNav/ReviewListScreen";
 import { SPEC_DATA, SPEC_MENU, SpecBase } from "./Spec";
 import SpecListItem from "@components/SpecListItem";
+import axiosInstance from "src/api/axiosInstance";
+
+const SORT_MENU = [
+  { idx: 0, label: "최근 등록순", path: "recent" },
+  { idx: 1, label: "오래된 순", path: "oldest" },
+  { idx: 2, label: "조회순", path: "most" },
+];
 
 type ReviewListScreenProps = NativeStackScreenProps<
   ReviewListScreenStackParamList,
@@ -12,8 +19,11 @@ type ReviewListScreenProps = NativeStackScreenProps<
 >;
 
 function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
-  const [clickedCategory, setClickedCategory] = useState("all");
+  const [clickedCategory, setClickedCategory] = useState(SPEC_MENU[0].category);
   const [specList, setSpecList] = useState(SPEC_DATA);
+  const [selectedSort, setSelectedSort] = useState(0);
+  const [sortOpen, setSortOpen] = useState(false);
+  const sortIdx = useRef(0);
 
   const handleSpecClick = (id: number) => {
     console.log(`${id}번 스펙을 클릭했습니다.`);
@@ -23,6 +33,57 @@ function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
   const renderItem = ({ item }: { item: SpecBase }) => {
     return <SpecListItem item={item} callbackFn={handleSpecClick} />;
   };
+
+  const ToggleButton = () => {
+    return (
+      <Pressable
+        className="flex-row items-center justify-end mr-[15]"
+        onPress={() => setSortOpen((prev) => !prev)}
+      >
+        <Text className="text-[#1C1C1E] font-[Inter-Medium] mr-[5]" size={12}>
+          {SORT_MENU[selectedSort].label}
+        </Text>
+        <View
+          className={`w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-b-4 border-b-[#1C1C1E] transition-all transform ${
+            sortOpen ? "" : "rotate-180"
+          }`}
+        />
+      </Pressable>
+    );
+  };
+
+  const getSpecList = async () => {
+    try {
+      const res = await axiosInstance.get(
+        `/api/v1/spec?category=${
+          clickedCategory === "ALL" ? "" : clickedCategory
+        }&sortType=${SORT_MENU[selectedSort].path}`
+      );
+      console.log(
+        `/api/v1/spec?category=${
+          clickedCategory === "ALL" ? "" : clickedCategory
+        }&sortType=${SORT_MENU[selectedSort].path}`,
+        res
+      );
+      setSpecList(res.data.content);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getSpecList();
+  }, [clickedCategory]);
+
+  useEffect(() => {
+    if (sortOpen) return;
+    const isOn = selectedSort !== sortIdx.current;
+    if (isOn) {
+      // initPage();
+      getSpecList();
+      sortIdx.current = selectedSort;
+    }
+  }, [sortOpen]);
 
   return (
     <View className="flex-1">
@@ -57,18 +118,47 @@ function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
         renderItem={renderItem}
         keyExtractor={(item) => `${item.specId}`}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={
-          <View className="flex-row items-center justify-end mr-[15]">
-            <Text
-              className="text-[#1C1C1E] font-[Inter-Medium] mr-[5]"
-              size={12}
-            >
-              최근 등록순
-            </Text>
-            <View className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-b-4 border-b-[#1C1C1E] rotate-180" />
-          </View>
-        }
+        ListHeaderComponent={<ToggleButton />}
       />
+
+      <Pressable
+        className={`absolute top-0 left-0 w-full h-full z-20 bg-black/30 ${
+          sortOpen || "hidden"
+        }`}
+        onPress={() => setSortOpen(false)}
+      >
+        <View id="dropdown" className="absolute bottom-0 left-0 w-full">
+          <View className="flex flex-col pt-[6px] pb-[14px] h-[272px] rounded-t-[20px] bg-white shadow-t-gray">
+            <View className="self-center w-[53px] h-[4px] bg-[#D5D8DC] rounded-[2px] mb-[16px]" />
+            <View className="py-[7.5px] px-[22px]">
+              <Text
+                className="font-[Pretendard-Medium] text-[#9E9E9E]"
+                size={13}
+              >
+                정렬
+              </Text>
+            </View>
+            {SORT_MENU.map((v) => (
+              <Pressable
+                key={v.idx}
+                className={`py-[12px] px-[22px] w-full`}
+                onPress={() => setSelectedSort(v.idx)}
+              >
+                <Text
+                  className={`text-start ${
+                    selectedSort === v.idx
+                      ? "text-[#FF823C] font-[Pretendard-Bold]"
+                      : "font-[Pretendard-Medium] text-[#5A5E6A]"
+                  }`}
+                  size={14}
+                >
+                  {v.label}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+        </View>
+      </Pressable>
     </View>
   );
 }
