@@ -6,6 +6,7 @@ import { AuthStackParamList } from "@stackNav/Auth";
 import * as SecureStore from "expo-secure-store";
 import { RootStackParamList } from "AppInner";
 import { CompositeScreenProps } from "@react-navigation/native";
+import axios from "axios";
 import axiosInstance from "src/api/axiosInstance";
 
 type AuthProps = NativeStackScreenProps<AuthStackParamList, "LoginKakao">;
@@ -29,8 +30,12 @@ export default function LoginKakao({ navigation, route }: Readonly<Props>) {
       const res = await axiosInstance.get(url);
       // console.log(res.data);
       const { accessToken, refreshToken } = res.data;
+
+      // 액세스 토큰을 AsyncStorage에 저장
       await SecureStore.setItemAsync("accessToken", accessToken);
       await SecureStore.setItemAsync("refreshToken", refreshToken);
+
+      // 홈 화면으로 이동
       navigation.navigate("Main");
     } catch (error) {
       console.error("Error fetching data:", error);

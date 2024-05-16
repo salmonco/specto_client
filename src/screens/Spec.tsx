@@ -8,6 +8,7 @@ import Contest from "@assets/images/contest.svg";
 import Certificate from "@assets/images/certificate.svg";
 import Intern from "@assets/images/intern.svg";
 import Project from "@assets/images/project.svg";
+
 import AddIcon from "@assets/images/add-blue.svg";
 import SpecCategorySelect from "@screens/SpecCategorySelect";
 import axiosInstance from "src/api/axiosInstance";

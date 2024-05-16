@@ -205,15 +205,16 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
                 {specInfo.startDate} ~ {specInfo.endDate}
               </Text>
               {CATEGORY_DETAIL_MENU[
-                category as keyof typeof CATEGORY_DETAIL_MENU
+                category.toUpperCase() as keyof typeof CATEGORY_DETAIL_MENU
               ].map((item: string | { key: string; label: string }) => (
                 <View style={styles.detailRow} key={`${Math.random()}`}>
                   <Text style={styles.detailLabel}>
                     {typeof item === "string" ? DETAIL_MENU[item] : item.label}
                   </Text>
                   <Text style={styles.detailText}>
-                    {specInfo.detail &&
-                      specInfo.detail[item as keyof typeof specInfo.detail]}
+                    {typeof item === "string"
+                      ? specInfo.detail && specInfo.detail[item]
+                      : specInfo.detail && specInfo.detail[item.key]}
                   </Text>
                 </View>
               ))}
@@ -399,6 +400,7 @@ const styles = StyleSheet.create({
   },
   detailText: {
     marginBottom: 5,
+    marginRight: 90,
     fontFamily: "Inter-Regular",
     fontSize: 13,
   },

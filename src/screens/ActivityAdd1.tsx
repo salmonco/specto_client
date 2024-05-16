@@ -9,28 +9,32 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ActivityAddScreenStackParamList } from "@stackNav/ActivityAddScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
+import axiosInstance from "src/api/axiosInstance";
+import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "AppInner";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useAxiosInterceptor } from "src/hooks/useAxiosInterceptor";
 
-const API_URL = "http://13.210.239.98:8080/api/v1/spec";
+const API_URL = "/api/v1/spec"; // baseURL을 이미 axiosInstance에서 설정했으므로 상대 경로만 사용
 
 type ContestProps = NativeStackScreenProps<
   ActivityAddScreenStackParamList,
   "ActivityAdd1"
 >;
 
-function ActivityAdd1({ navigation }: Readonly<ContestProps>) {
+const ActivityAdd1 = ({ navigation }: ContestProps) => {
   const [formData, setFormData] = useState(new FormData()); // FormData 상태 생성
+  const { navigate } =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  useAxiosInterceptor(); // Axios 인터셉터 사용
 
   const handleNext = async () => {
     try {
       console.log("Sending request to:", API_URL);
 
       // AsyncStorage에서 accessToken 불러오기
-      // 이게 뭔데 ... 토큰이 어딨어
-      const accessToken = await getAccessToken();
-
-      const formData = new FormData();
-      console.log(formData);
+      const accessToken = await AsyncStorage.getItem("accessToken");
 
       const value = [
         {
@@ -38,24 +42,12 @@ function ActivityAdd1({ navigation }: Readonly<ContestProps>) {
         },
       ];
 
-      const blob = new Blob([JSON.stringify(value)], {
-        type: "application/json",
-      });
-
-      // formData.append("data", blob);
-      formData.append("data", JSON.stringify(value));
-
-      console.log(formData);
-
-      const response = await axios({
+      const response = await axiosInstance.post(API_URL, value, {
         method: "POST",
-        url: API_URL,
-        // mode: "cors",
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`, // 엑세스 토큰 추가
         },
-        data: formData,
       });
 
       console.log(response);
@@ -88,11 +80,8 @@ function ActivityAdd1({ navigation }: Readonly<ContestProps>) {
           onChangeText={(text) => {
             // name 값 업데이트
             const value = [{ name: text }];
-            const blob = new Blob([JSON.stringify(value)], {
-              type: "application/json",
-            });
             const formData = new FormData();
-            formData.append("data", blob);
+            formData.append("data", JSON.stringify(value));
             setFormData(formData); // formData 상태 업데이트
           }}
         />
@@ -102,7 +91,7 @@ function ActivityAdd1({ navigation }: Readonly<ContestProps>) {
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
