@@ -7,7 +7,7 @@ import { SPEC_DATA, SPEC_MENU, SpecBase } from "./Spec";
 import SpecListItem from "@components/SpecListItem";
 import axiosInstance from "src/api/axiosInstance";
 
-const SORT_MENU = [
+export const SORT_MENU = [
   { idx: 0, label: "최근 등록순", path: "recent" },
   { idx: 1, label: "오래된 순", path: "oldest" },
   { idx: 2, label: "조회순", path: "most" },
