@@ -24,7 +24,6 @@ export const SPEC_MENU = Object.entries(CATEGORY_LABEL).map(([k, v]) => {
   return { category: k, label: v };
 });
 export interface SpecBase {
-  id: number;
   specId: number;
   name: string;
   category: string;
@@ -152,13 +151,10 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
   const renderItem = ({ item }: { item: Readonly<SpecBase> }) => {
     return (
       <Pressable
-        key={item.id}
         key={item.specId}
         className="flex-1 flex-row justify-between items-center gap-[10] border border-[#DEDEDE] p-[16] h-[78] mx-[14] my-[1]"
         style={{ borderRadius: 10 }}
         onPress={() => {
-          console.log(`${item.id}번 스펙을 클릭했습니다.`);
-          handleSpecClick(item.id, item.category);
           console.log(`${item.specId}번 스펙을 클릭했습니다.`);
           handleSpecClick(item.specId, item.category);
         }}
@@ -236,7 +232,6 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
           }}
           data={specList}
           renderItem={renderItem}
-          keyExtractor={(item) => `${item.id}`}
           keyExtractor={(item) => `${item.specId}`}
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={
