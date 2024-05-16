@@ -9,24 +9,18 @@ import {
 import { CustomText as Text } from "@components/CustomText";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SpecScreenStackParamList } from "@stackNav/SpecScreen";
-import Contest from "@assets/images/contest.svg";
-import Certificate from "@assets/images/certificate.svg";
-import Intern from "@assets/images/intern.svg";
-import Project from "@assets/images/project.svg";
-
-import Constants from "expo-constants";
-const screenWidth = Dimensions.get("window").width;
 import { LineChart } from "react-native-chart-kit";
-import { Svg, Text as TextSVG } from "react-native-svg";
+import { Text as TextSVG } from "react-native-svg";
 import { Circle } from "react-native-svg";
-import { CATEGORY_LABEL } from "./Spec";
+import { CATEGORY_LABEL, renderSpecIcon } from "./Spec";
 import axiosInstance from "src/api/axiosInstance";
+
+const screenWidth = Dimensions.get("window").width;
 
 type SpecDetailScreenProps = NativeStackScreenProps<
   SpecScreenStackParamList,
   "SpecDetail"
 >;
-
 const chartConfig = {
   backgroundGradientFrom: "white",
   backgroundGradientFromOpacity: 1,
@@ -50,7 +44,6 @@ const chartConfig = {
   //   fill: "white", // 점의 내부 색상 설정
   // },
 };
-
 const data = {
   labels: ["1월 첫째주", "1월 둘째주", "1월 셋째주", "1월 넷째주"],
   datasets: [
@@ -61,7 +54,6 @@ const data = {
     },
   ],
 };
-
 const CATEGORY_DETAIL_MENU = {
   CONTEST: [
     "host",
@@ -102,7 +94,6 @@ const CATEGORY_DETAIL_MENU = {
     "documentation",
   ],
 };
-
 const DETAIL_MENU: { [key: string]: string } = {
   host: "주최 기관",
   field: "분야",
@@ -117,7 +108,6 @@ const DETAIL_MENU: { [key: string]: string } = {
   project: "프로젝트 내용",
   direction: "방향성",
 };
-
 const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
   const { id, category } = route.params;
   // TODO: id로 스펙 상세조회
@@ -129,8 +119,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
   useEffect(() => {
     const fetchSpecDetail = async () => {
       try {
-        const response = await axiosInstance.get(`/api/v1/spec/${id}`); // id를 1로 설정
-        id;
+        const response = await axiosInstance.get(`/api/v1/spec/${id}`);
         setSpecInfo(response.data);
         setLoading(false);
       } catch (error) {
@@ -138,7 +127,6 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
         setLoading(false);
       }
     };
-
     fetchSpecDetail();
   }, []);
 
@@ -155,12 +143,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
       <View style={styles.container}>
         <View style={styles.infoContainer}>
           <View style={styles.iconContainer}>
-            {category === "contest" && <Contest width={22} height={22} />}
-            {category === "certification" && (
-              <Certificate width={22} height={22} />
-            )}
-            {category === "intern" && <Intern width={22} height={22} />}
-            {category === "project" && <Project width={22} height={22} />}
+            {renderSpecIcon(category)}
             <Text style={styles.categoryText}>{CATEGORY_LABEL[category]}</Text>
           </View>
           <View style={styles.buttonContainer}>

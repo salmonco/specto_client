@@ -12,9 +12,7 @@ import Project from "@assets/images/project.svg";
 import AddIcon from "@assets/images/add-blue.svg";
 import SpecCategorySelect from "@screens/SpecCategorySelect";
 import axiosInstance from "src/api/axiosInstance";
-
 type SpecScreenProps = NativeStackScreenProps<SpecScreenStackParamList, "Spec">;
-
 export const CATEGORY_LABEL: { [key: string]: string } = {
   ALL: "전체",
   CONTEST: "공모전",
@@ -36,6 +34,7 @@ export interface SpecBase {
 }
 export const SPEC_DATA = [
   {
+    id: 1,
     specId: 1,
     name: "정보처리기사",
     category: "certificate",
@@ -44,6 +43,7 @@ export const SPEC_DATA = [
     completed: false,
   },
   {
+    id: 2,
     specId: 2,
     name: "SolidIT 현장실습",
     category: "intern",
@@ -52,6 +52,7 @@ export const SPEC_DATA = [
     completed: false,
   },
   {
+    id: 3,
     specId: 3,
     name: "ADSP",
     category: "contest",
@@ -60,6 +61,7 @@ export const SPEC_DATA = [
     completed: true,
   },
   {
+    id: 4,
     specId: 4,
     name: "어쩌구 논문",
     category: "project",
@@ -68,6 +70,7 @@ export const SPEC_DATA = [
     completed: false,
   },
   {
+    id: 5,
     specId: 5,
     name: "KT Y 퓨터리스트",
     category: "activity",
@@ -76,6 +79,7 @@ export const SPEC_DATA = [
     completed: true,
   },
   {
+    id: 6,
     specId: 6,
     name: "저쩌구 논문",
     category: "project",
@@ -84,6 +88,7 @@ export const SPEC_DATA = [
     completed: true,
   },
   {
+    id: 7,
     specId: 7,
     name: "저쩌구 논문",
     category: "project",
@@ -92,7 +97,6 @@ export const SPEC_DATA = [
     completed: true,
   },
 ];
-
 export const renderSpecIcon = (category: string) => {
   switch (category) {
     case "CONTEST":
@@ -107,16 +111,13 @@ export const renderSpecIcon = (category: string) => {
       return <Project />;
   }
 };
-
 function Spec({ navigation }: Readonly<SpecScreenProps>) {
   const [clickedCategory, setClickedCategory] = useState(SPEC_MENU[0].category);
   const [specList, setSpecList] = useState(SPEC_DATA);
   const [isCategorySelectOpen, setIsCategorySelectOpen] = React.useState(false); // 스펙 추가하기 레이어 팝업
-
   const handleAddSpecPress = () => {
     setIsCategorySelectOpen(true);
   };
-
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -126,14 +127,12 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
       ),
     });
   }, [navigation]);
-
   // 각 스펙 클릭 이벤트 핸들러
   const handleSpecClick = (id: number, category: string) => {
     console.log(`스펙 ID ${id}를 클릭 - 개별 페이지로 이동.`);
     // SpecDetail 스크린으로 이동하면서 category, id 전달
     navigation.navigate("SpecDetail", { id, category });
   };
-
   useEffect(() => {
     const getSpecList = async () => {
       try {
@@ -150,7 +149,6 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
     };
     getSpecList();
   }, [clickedCategory]);
-
   const renderItem = ({ item }: { item: Readonly<SpecBase> }) => {
     return (
       <Pressable
@@ -198,7 +196,6 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
       </Pressable>
     );
   };
-
   return (
     <View className="flex-1 relative">
       {/* 상단 바 및 메뉴 버튼 */}
@@ -283,5 +280,4 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
     </View>
   );
 }
-
 export default Spec;
