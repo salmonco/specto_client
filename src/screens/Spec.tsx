@@ -10,7 +10,7 @@ import Intern from "@assets/images/intern.svg";
 import Project from "@assets/images/project.svg";
 import AddIcon from "@assets/images/add-blue.svg";
 import SpecCategorySelect from "@screens/SpecCategorySelect";
-import SpecDetail from "@screens/SpecDetail";
+import axiosInstance from "src/api/axiosInstance";
 
 type SpecScreenProps = NativeStackScreenProps<SpecScreenStackParamList, "Spec">;
 
@@ -130,6 +130,19 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
     // SpecDetail 스크린으로 이동하면서 category, id 전달
     navigation.navigate("SpecDetail", { id, category });
   };
+
+  useEffect(() => {
+    const getSpecList = async () => {
+      try {
+        const res = await axiosInstance.get(`/api/v1/spec?category=CONTEST`);
+        console.log("spec", res);
+        // setSpecList(res.data.content);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getSpecList();
+  }, []);
 
   const renderItem = ({ item }: { item: Readonly<SpecBase> }) => {
     return (

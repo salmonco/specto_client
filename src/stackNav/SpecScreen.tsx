@@ -19,7 +19,6 @@ export type SpecScreenStackParamList = {
   ActivityAddScreen: undefined;
   // ProjectAddScreen: undefined;
   SpecCategorySelect: undefined;
-
   ReviewListScreen: { screen: "ReviewListUp"; params: { id: number } };
 };
 
