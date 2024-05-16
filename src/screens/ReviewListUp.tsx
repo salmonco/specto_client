@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import Button from "@components/Button";
@@ -8,6 +8,44 @@ import { REVIEW_DATA } from "@components/ReviewListItem";
 import ChevronBottom from "@assets/images/chevron-bottom-black.svg";
 import AddIcon from "@assets/images/add-blue.svg";
 import { CATEGORY_LABEL } from "./Spec";
+import axiosInstance from "src/api/axiosInstance";
+import { SORT_MENU } from "./ReviewList";
+
+interface ReviewBase {
+  reviewId: number;
+  specId: number;
+  specName: string;
+  category: string;
+  startDate: string;
+  endDate: string;
+  completed: boolean;
+  date: string;
+  dplusDay: number;
+}
+const data = [
+  {
+    reviewId: 1,
+    specId: 1,
+    specName: "정보처리기사",
+    category: "certificate",
+    startDate: "2024-03-06",
+    endDate: "2024-04-10",
+    completed: false,
+    date: "2024-03-06",
+    dplusDay: 4,
+  },
+  {
+    reviewId: 2,
+    specId: 1,
+    specName: "정보처리기사",
+    category: "certificate",
+    startDate: "2024-03-06",
+    endDate: "2024-04-10",
+    completed: false,
+    date: "2024-03-06",
+    dplusDay: 4,
+  },
+];
 
 type ReviewListScreenProps = NativeStackScreenProps<
   ReviewListScreenStackParamList,
@@ -16,15 +54,52 @@ type ReviewListScreenProps = NativeStackScreenProps<
 
 function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
   const { id } = route.params;
+  const [reviewList, setReviewList] = useState<ReviewBase[]>([]);
+  const [selectedSort, setSelectedSort] = useState(0);
+  const [sortOpen, setSortOpen] = useState(false);
+  const sortIdx = useRef(0);
 
-  const data = {
-    id: 1,
-    name: "정보처리기사",
-    category: "certificate",
-    startDate: "2024-03-06",
-    endDate: "2024-04-10",
-    completed: false,
+  const ToggleButton = () => {
+    return (
+      <Pressable
+        className="flex-row items-center justify-end mr-[15]"
+        onPress={() => setSortOpen((prev) => !prev)}
+      >
+        <Text className="text-[#1C1C1E] font-[Inter-Medium] mr-[5]" size={12}>
+          {SORT_MENU[selectedSort].label}
+        </Text>
+        <View
+          className={`w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-b-4 border-b-[#1C1C1E] transition-all transform ${
+            sortOpen ? "" : "rotate-180"
+          }`}
+        />
+      </Pressable>
+    );
   };
+
+  const getReviewList = async () => {
+    try {
+      const res = await axiosInstance.get(`/review/spec/recent/${id}`);
+      console.log(`/review/spec/${SORT_MENU[selectedSort].path}/${id}`, res);
+      setReviewList(res.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getReviewList();
+  }, []);
+
+  useEffect(() => {
+    if (sortOpen) return;
+    const isOn = selectedSort !== sortIdx.current;
+    if (isOn) {
+      // initPage();
+      getReviewList();
+      sortIdx.current = selectedSort;
+    }
+  }, [sortOpen]);
 
   return (
     <View className="flex-1 relative">
@@ -47,31 +122,31 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
                     className="font-[Inter-SemiBold] h-full mr-[6]"
                     size={18}
                   >
-                    {data.name}
+                    {reviewList[0]?.specName}
                   </Text>
                   <Text className="text-[#AEAEB2]" size={10}>
-                    {CATEGORY_LABEL[data.category]}
+                    {CATEGORY_LABEL[reviewList[0]?.category]}
                   </Text>
                 </View>
                 <Text className="text-[#636366]" size={12}>
-                  {data.startDate} ~ {data.endDate}
+                  {reviewList[0]?.startDate} ~ {reviewList[0]?.endDate}
                 </Text>
               </View>
             </View>
           </View>
           <View
             className={`justify-center items-center w-[55] h-[22] ${
-              data.completed ? "bg-[#EAF4FF]" : "bg-[#EFEFEF]"
+              reviewList[0]?.completed ? "bg-[#EAF4FF]" : "bg-[#EFEFEF]"
             }`}
             style={{ borderRadius: 4 }}
           >
             <Text
               className={`font-[Inter-SemiBold] ${
-                data.completed ? "text-[#0069CF]" : "text-[#9F9F9F]"
+                reviewList[0]?.completed ? "text-[#0069CF]" : "text-[#9F9F9F]"
               }`}
               size={12}
             >
-              {data.completed ? "완료" : "진행중"}
+              {reviewList[0]?.completed ? "완료" : "진행중"}
             </Text>
           </View>
         </View>
@@ -88,22 +163,14 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
                 나의 회고 기록
               </Text>
               <Text className="text-[#979797]" size={18}>
-                4
+                {`${reviewList.length}`}
               </Text>
             </View>
-            <View className="flex-row items-center justify-end">
-              <Text
-                className="text-[#1C1C1E] font-[Inter-Medium] mr-[5]"
-                size={12}
-              >
-                오래된 순
-              </Text>
-              <View className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-b-4 border-b-[#1C1C1E] rotate-180" />
-            </View>
+            <ToggleButton />
           </View>
 
           <View className="py-[23]">
-            {REVIEW_DATA.map((item) => (
+            {reviewList.map((item) => (
               <View
                 key={`${item.specId}-${item.reviewId}`}
                 className="justify-between border border-[#DEDEDE] pt-[17] pb-[13] px-[16] mb-[23]"
@@ -118,7 +185,7 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
                       className="font-[Inter-Medium] text-[#0094FF]"
                       size={18}
                     >
-                      D+{item.dPlusDay}
+                      D+{`${item.dplusDay}`}
                     </Text>
                   </View>
                 </View>
@@ -146,6 +213,45 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
         onPress={() => console.log("회고 추가 버튼을 눌렀습니다.")}
       >
         <AddIcon />
+      </Pressable>
+
+      <Pressable
+        className={`absolute top-0 left-0 w-full h-full z-20 bg-black/30 ${
+          sortOpen || "hidden"
+        }`}
+        onPress={() => setSortOpen(false)}
+      >
+        <View id="dropdown" className="absolute bottom-0 left-0 w-full">
+          <View className="flex flex-col pt-[6px] pb-[14px] h-[272px] rounded-t-[20px] bg-white shadow-t-gray">
+            <View className="self-center w-[53px] h-[4px] bg-[#D5D8DC] rounded-[2px] mb-[16px]" />
+            <View className="py-[7.5px] px-[22px]">
+              <Text
+                className="font-[Pretendard-Medium] text-[#9E9E9E]"
+                size={13}
+              >
+                정렬
+              </Text>
+            </View>
+            {SORT_MENU.map((v) => (
+              <Pressable
+                key={v.idx}
+                className={`py-[12px] px-[22px] w-full`}
+                onPress={() => setSelectedSort(v.idx)}
+              >
+                <Text
+                  className={`text-start ${
+                    selectedSort === v.idx
+                      ? "text-[#FF823C] font-[Pretendard-Bold]"
+                      : "font-[Pretendard-Medium] text-[#5A5E6A]"
+                  }`}
+                  size={14}
+                >
+                  {v.label}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+        </View>
       </Pressable>
     </View>
   );
