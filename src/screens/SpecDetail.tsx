@@ -13,6 +13,7 @@ import Contest from "@assets/images/contest.svg";
 import Certificate from "@assets/images/certificate.svg";
 import Intern from "@assets/images/intern.svg";
 import Project from "@assets/images/project.svg";
+import axios from "axios";
 
 import Constants from "expo-constants";
 const screenWidth = Dimensions.get("window").width;
@@ -121,20 +122,44 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
   const { id, category } = route.params;
   // TODO: id로 스펙 상세조회
   // const [progress, setProgress] = useState("50%"); // 예시로 50%로 초기화
+  //const [specInfo, setSpecInfo] = useState<any>(null);
+  const [specInfo, setSpecInfo] = useState<any>({});
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // useEffect(() => {
+  //   const fetchSpecDetail = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `http://13.210.239.98:8080/api/v1/spec/${id}`
+  //       );
+  //       setSpecInfo(response.data);
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.error("Error fetching spec detail:", error);
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchSpecDetail();
+  // }, [id]);
 
   useEffect(() => {
-    // 스크린 옵션 설정 (헤더 우측에 "수정" 버튼 표시)
-    navigation.setOptions({
-      headerRight: () => (
-        <Pressable onPress={() => console.log("수정 버튼을 눌렀습니다.")}>
-          <Text style={styles.headerButtonText}>수정</Text>
-        </Pressable>
-      ),
-    });
-  }, [navigation]);
+    const fetchSpecDetail = async () => {
+      try {
+        const response = await axios.get(
+          `http://13.210.239.98:8080/api/v1/spec/${id}`
+        ); // id를 1로 설정
+        id;
+        setSpecInfo(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching spec detail:", error);
+        setLoading(false);
+      }
+    };
 
-  // 자격증 정보 예시
-  let specInfo: any = null;
+    fetchSpecDetail();
+  }, []);
 
   switch (category) {
     case "CONTEST":
@@ -229,6 +254,13 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
       break;
     default:
       break;
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
 
   return (
@@ -237,7 +269,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
         <View style={styles.infoContainer}>
           <View style={styles.iconContainer}>
             {category === "contest" && <Contest width={22} height={22} />}
-            {category === "certificate" && (
+            {category === "certification" && (
               <Certificate width={22} height={22} />
             )}
             {category === "intern" && <Intern width={22} height={22} />}
@@ -293,11 +325,8 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
                     {typeof item === "string" ? DETAIL_MENU[item] : item.label}
                   </Text>
                   <Text style={styles.detailText}>
-                    {typeof item === "string"
-                      ? specInfo.detail[item as keyof typeof specInfo.detail]
-                      : specInfo.detail[
-                          item.key as keyof typeof specInfo.detail
-                        ]}
+                    {specInfo.detail &&
+                      specInfo.detail[item as keyof typeof specInfo.detail]}
                   </Text>
                 </View>
               ))}
@@ -360,7 +389,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
                 return (
                   <React.Fragment>
                     <Circle
-                      key={`circle-${Math.random()}`} // 레이블을 사용하여 고유한 키 생성
+                      key={`circle-${Math.random()}`}
                       cx={x}
                       cy={y}
                       r={6}
@@ -369,7 +398,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
                       fill={dotColor}
                     />
                     <TextSVG
-                      key={`text-${Math.random()}`} // 레이블을 사용하여 고유한 키 생성
+                      key={`text-${Math.random()}`}
                       x={x}
                       y={y + 20}
                       fill="#7B7B7B"
@@ -395,6 +424,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     paddingTop: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   headerButtonText: {
     color: "#0094FF",
@@ -453,7 +487,6 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
   },
   detailContainer: {
-    // flex: 1,
     alignItems: "center",
     marginTop: 10,
   },
