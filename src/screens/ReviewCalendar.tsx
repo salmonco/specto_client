@@ -1,21 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ReviewCalendarScreenStackParamList } from "@stackNav/ReviewCalendarScreen";
 import useCalendar from "src/hooks/useCalendar";
 import ReviewListItem, { REVIEW_DATA } from "@components/ReviewListItem";
+import axiosInstance from "src/api/axiosInstance";
+import getDateString from "src/utils/getDateString";
+import { useNavigation } from "@react-navigation/native";
 
-type ReviewCalendarScreenProps = NativeStackScreenProps<
+export type ReviewCalendarScreenProps = NativeStackNavigationProp<
   ReviewCalendarScreenStackParamList,
   "ReviewCalendar"
 >;
 
-function ReviewCalendar({ navigation }: Readonly<ReviewCalendarScreenProps>) {
+function ReviewCalendar() {
+  const navigation = useNavigation<ReviewCalendarScreenProps>();
   const [reviewList, setReviewList] = useState(REVIEW_DATA);
-  const { weeks, currentDate, setPreviousMonth, setNextMonth, DAY_LIST } =
-    useCalendar();
-  const [clickedDate, setClickedDate] = useState(currentDate.getDate());
+  const {
+    currentMonthCalendar,
+    currentDate,
+    setPreviousMonth,
+    setNextMonth,
+    DAY_LABEL,
+    isEqualDate,
+  } = useCalendar();
+  const [clickedDate, setClickedDate] = useState(currentDate);
+
+  useEffect(() => {
+    const getReviewList = async () => {
+      try {
+        const dateStr = getDateString(clickedDate);
+        const res = await axiosInstance.get(`/review/calendar?date=${dateStr}`);
+        console.log(`/review/calendar?date=${dateStr}`, res);
+        setReviewList(res.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getReviewList();
+  }, [clickedDate]);
 
   return (
     <View className="flex-1">
@@ -52,7 +76,7 @@ function ReviewCalendar({ navigation }: Readonly<ReviewCalendarScreenProps>) {
             </Pressable>
           </View>
           <View className="flex-row justify-between my-[9]">
-            {DAY_LIST.map((v) => (
+            {DAY_LABEL.map((v) => (
               <View
                 key={v}
                 className="w-[29] h-[29] justify-center items-center"
@@ -64,23 +88,25 @@ function ReviewCalendar({ navigation }: Readonly<ReviewCalendarScreenProps>) {
             ))}
           </View>
           <View className="gap-y-[10]">
-            {weeks.map((item) => (
+            {currentMonthCalendar.map((item) => (
               <View
                 className="flex-row justify-between w-full"
                 key={Math.random()}
               >
-                {item.map((day) => (
+                {item.map(({ date, day }) => (
                   <Pressable
-                    onPress={() => day && setClickedDate(day)}
+                    onPress={() => date && setClickedDate(date)}
                     className={`w-[29] h-[29] justify-center items-center ${
-                      clickedDate === day ? " bg-[#0094FF] rounded-full" : ""
+                      date && isEqualDate(date, clickedDate)
+                        ? " bg-[#0094FF] rounded-full"
+                        : ""
                     }
                   `}
                     key={Math.random()}
                   >
                     <Text
                       className={`${
-                        clickedDate === day
+                        date && isEqualDate(date, clickedDate)
                           ? "font-[Inter-SemiBold] text-white"
                           : "text-[#0094FF]"
                       } ${day === 0 ? "text-[#F1F8FF]" : ""}`}
@@ -97,6 +123,7 @@ function ReviewCalendar({ navigation }: Readonly<ReviewCalendarScreenProps>) {
             <ReviewListItem
               key={`${item.specId}-${item.reviewId}`}
               item={item}
+              navigation={navigation}
             />
           ))}
         </View>

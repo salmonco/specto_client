@@ -5,7 +5,7 @@ import ReviewListUp from "../screens/ReviewListUp";
 
 export type ReviewCalendarScreenStackParamList = {
   ReviewCalendar: undefined;
-  ReviewListUp: undefined;
+  ReviewListUp: { id: number };
 };
 
 const ReviewCalendarScreenStack =
