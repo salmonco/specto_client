@@ -1,100 +1,7 @@
 import { Pressable, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
-import Contest from "@assets/images/contest.svg";
-import Certificate from "@assets/images/certificate.svg";
-import Intern from "@assets/images/intern.svg";
-import Project from "@assets/images/project.svg";
+import { CATEGORY_LABEL, SpecBase, renderSpecIcon } from "@screens/Spec";
 
-export const CATEGORY_LABEL: { [key: string]: string } = {
-  all: "전체",
-  contest: "공모전",
-  certificate: "자격증",
-  intern: "인턴",
-  activity: "대외활동",
-  project: "논문/프로젝트",
-};
-export const SPEC_MENU = Object.entries(CATEGORY_LABEL).map(([k, v]) => {
-  return { category: k, label: v };
-});
-export const SPEC_DATA = [
-  {
-    id: 1,
-    name: "정보처리기사",
-    category: "certificate",
-    startDate: "2024-03-06",
-    endDate: "2024-04-10",
-    completed: false,
-  },
-  {
-    id: 2,
-    name: "SolidIT 현장실습",
-    category: "intern",
-    startDate: "2024-02-01",
-    endDate: "2024-05-31",
-    completed: false,
-  },
-  {
-    id: 3,
-    name: "ADSP",
-    category: "contest",
-    startDate: "2024-02-01",
-    endDate: "2024-05-31",
-    completed: true,
-  },
-  {
-    id: 4,
-    name: "어쩌구 논문",
-    category: "project",
-    startDate: "2024-02-01",
-    endDate: "2024-05-31",
-    completed: false,
-  },
-  {
-    id: 5,
-    name: "저쩌구 논문",
-    category: "project",
-    startDate: "2024-02-01",
-    endDate: "2024-05-31",
-    completed: true,
-  },
-  {
-    id: 6,
-    name: "저쩌구 논문",
-    category: "project",
-    startDate: "2024-02-01",
-    endDate: "2024-05-31",
-    completed: true,
-  },
-  {
-    id: 7,
-    name: "저쩌구 논문",
-    category: "project",
-    startDate: "2024-02-01",
-    endDate: "2024-05-31",
-    completed: true,
-  },
-];
-export const renderIcon = (category: string) => {
-  switch (category) {
-    case "contest":
-      return <Contest />;
-    case "certificate":
-      return <Certificate />;
-    case "intern":
-      return <Intern />;
-    case "project":
-      return <Project />;
-  }
-};
-
-export interface SpecBase {
-  id: number;
-  name: string;
-  category: string;
-  startDate: string;
-  endDate: string;
-  completed: boolean;
-}
 interface SpecListItemBase {
   item: SpecBase;
   callbackFn?: (id: number) => void;
@@ -112,7 +19,7 @@ export default function SpecListItem({
     >
       <View>
         <View className="flex-row gap-[10] items-center">
-          {renderIcon(item.category)}
+          {renderSpecIcon(item.category)}
           <View className="flex-col justify-between">
             <View className="flex-row gap-[7.8] justify-start items-center">
               <Text className="font-[Inter-SemiBold] h-full" size={18}>

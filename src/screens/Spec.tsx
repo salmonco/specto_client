@@ -14,8 +14,103 @@ import axiosInstance from "src/api/axiosInstance";
 
 type SpecScreenProps = NativeStackScreenProps<SpecScreenStackParamList, "Spec">;
 
+export const CATEGORY_LABEL: { [key: string]: string } = {
+  ALL: "전체",
+  CONTEST: "공모전",
+  CERTIFICATION: "자격증",
+  INTERNSHIP: "인턴",
+  ACTIVITY: "대외활동",
+  PROJECT: "논문/프로젝트",
+};
+export const SPEC_MENU = Object.entries(CATEGORY_LABEL).map(([k, v]) => {
+  return { category: k, label: v };
+});
+export interface SpecBase {
+  id: number;
+  name: string;
+  category: string;
+  startDate: string;
+  endDate: string;
+  completed: boolean;
+}
+export const SPEC_DATA = [
+  {
+    id: 1,
+    name: "정보처리기사",
+    category: "certificate",
+    startDate: "2024-03-06",
+    endDate: "2024-04-10",
+    completed: false,
+  },
+  {
+    id: 2,
+    name: "SolidIT 현장실습",
+    category: "intern",
+    startDate: "2024-02-01",
+    endDate: "2024-05-31",
+    completed: false,
+  },
+  {
+    id: 3,
+    name: "ADSP",
+    category: "contest",
+    startDate: "2024-02-01",
+    endDate: "2024-05-31",
+    completed: true,
+  },
+  {
+    id: 4,
+    name: "어쩌구 논문",
+    category: "project",
+    startDate: "2024-02-01",
+    endDate: "2024-05-31",
+    completed: false,
+  },
+  {
+    id: 5,
+    name: "KT Y 퓨터리스트",
+    category: "activity",
+    startDate: "2024-02-01",
+    endDate: "2024-05-31",
+    completed: true,
+  },
+  {
+    id: 6,
+    name: "저쩌구 논문",
+    category: "project",
+    startDate: "2024-02-01",
+    endDate: "2024-05-31",
+    completed: true,
+  },
+  {
+    id: 7,
+    name: "저쩌구 논문",
+    category: "project",
+    startDate: "2024-02-01",
+    endDate: "2024-05-31",
+    completed: true,
+  },
+];
+
+export const renderSpecIcon = (category: string) => {
+  switch (category) {
+    case "CONTEST":
+      return <Contest />;
+    case "CERTIFICATION":
+      return <Certificate />;
+    case "INTERNSHIP":
+      return <Intern />;
+    case "ACTIVITY":
+      return <Project />; // TODO: 아이콘 교체
+    case "PROJECT":
+      return <Project />;
+  }
+};
+
 function Spec({ navigation }: Readonly<SpecScreenProps>) {
-  const [isCategorySelectOpen, setIsCategorySelectOpen] = React.useState(false);
+  const [clickedCategory, setClickedCategory] = useState(SPEC_MENU[0].category);
+  const [specList, setSpecList] = useState(SPEC_DATA);
+  const [isCategorySelectOpen, setIsCategorySelectOpen] = React.useState(false); // 스펙 추가하기 레이어 팝업
 
   const handleAddSpecPress = () => {
     setIsCategorySelectOpen(true);
@@ -31,99 +126,6 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
     });
   }, [navigation]);
 
-  const CATEGORY_LABEL: { [key: string]: string } = {
-    all: "전체",
-    contest: "공모전",
-    certificate: "자격증",
-    intern: "인턴",
-    activity: "대외활동",
-    project: "논문/프로젝트",
-  };
-  const MENU = Object.entries(CATEGORY_LABEL).map(([k, v]) => {
-    return { category: k, label: v };
-  });
-  interface SpecBase {
-    id: number;
-    name: string;
-    category: string;
-    startDate: string;
-    endDate: string;
-    completed: boolean;
-  }
-  const specData = [
-    {
-      id: 1,
-      name: "정보처리기사",
-      category: "certificate",
-      startDate: "2024-03-06",
-      endDate: "2024-04-10",
-      completed: false,
-    },
-    {
-      id: 2,
-      name: "SolidIT 현장실습",
-      category: "intern",
-      startDate: "2024-02-01",
-      endDate: "2024-05-31",
-      completed: false,
-    },
-    {
-      id: 3,
-      name: "ADSP",
-      category: "contest",
-      startDate: "2024-02-01",
-      endDate: "2024-05-31",
-      completed: true,
-    },
-    {
-      id: 4,
-      name: "어쩌구 논문",
-      category: "project",
-      startDate: "2024-02-01",
-      endDate: "2024-05-31",
-      completed: false,
-    },
-    {
-      id: 5,
-      name: "KT Y 퓨터리스트",
-      category: "activity",
-      startDate: "2024-02-01",
-      endDate: "2024-05-31",
-      completed: true,
-    },
-    {
-      id: 6,
-      name: "저쩌구 논문",
-      category: "project",
-      startDate: "2024-02-01",
-      endDate: "2024-05-31",
-      completed: true,
-    },
-    {
-      id: 7,
-      name: "저쩌구 논문",
-      category: "project",
-      startDate: "2024-02-01",
-      endDate: "2024-05-31",
-      completed: true,
-    },
-  ];
-  const [clickedCategory, setClickedCategory] = useState("all");
-  const [specList, setSpecList] = useState(specData);
-
-  const renderIcon = (category: string) => {
-    switch (category) {
-      case "contest":
-        return <Contest />;
-      case "certificate":
-        return <Certificate />;
-      case "intern":
-        return <Intern />;
-      case "project":
-        return <Project />;
-    }
-  };
-
   // 각 스펙 클릭 이벤트 핸들러
   const handleSpecClick = (id: number, category: string) => {
     console.log(`스펙 ID ${id}를 클릭 - 개별 페이지로 이동.`);
@@ -134,15 +136,19 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
   useEffect(() => {
     const getSpecList = async () => {
       try {
-        const res = await axiosInstance.get(`/api/v1/spec?category=CONTEST`);
-        console.log("spec", res);
-        // setSpecList(res.data.content);
+        const res = await axiosInstance.get(
+          `/api/v1/spec?category=${
+            clickedCategory === "ALL" ? "" : clickedCategory
+          }`
+        );
+        console.log(`spec ${clickedCategory}`, res);
+        setSpecList(res.data.content);
       } catch (e) {
         console.log(e);
       }
     };
     getSpecList();
-  }, []);
+  }, [clickedCategory]);
 
   const renderItem = ({ item }: { item: Readonly<SpecBase> }) => {
     return (
@@ -157,7 +163,7 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
       >
         <View>
           <View className="flex-row gap-[10] items-center">
-            {renderIcon(item.category)}
+            {renderSpecIcon(item.category)}
             <View className="flex-col justify-between">
               <View className="flex-row gap-[7.8] justify-start items-center">
                 <Text className="font-[Inter-SemiBold] h-full" size={18}>
@@ -196,7 +202,7 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
     <View className="flex-1 relative">
       {/* 상단 바 및 메뉴 버튼 */}
       <View className="flex-row justify-between gap-[8] py-[23] px-[20] border-b border-b-[#ECEBEB]">
-        {MENU.map((v) => (
+        {SPEC_MENU.map((v) => (
           <Pressable
             className={`w-[52] h-[38] justify-center items-center ${
               v.category === clickedCategory ? "bg-[#0094FF]" : "bg-[#EAF4FF]"

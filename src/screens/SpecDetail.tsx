@@ -19,6 +19,7 @@ const screenWidth = Dimensions.get("window").width;
 import { LineChart } from "react-native-chart-kit";
 import { Svg, Text as TextSVG } from "react-native-svg";
 import { Circle } from "react-native-svg";
+import { CATEGORY_LABEL } from "./Spec";
 
 type SpecDetailScreenProps = NativeStackScreenProps<
   SpecScreenStackParamList,
@@ -60,17 +61,8 @@ const data = {
   ],
 };
 
-const CATEGORY_LABEL: { [key: string]: string } = {
-  all: "전체",
-  contest: "공모전",
-  certificate: "자격증",
-  intern: "인턴",
-  activity: "대외활동",
-  project: "논문/프로젝트",
-};
-
 const CATEGORY_DETAIL_MENU = {
-  contest: [
+  CONTEST: [
     "host",
     "field",
     "awardStatus",
@@ -78,14 +70,21 @@ const CATEGORY_DETAIL_MENU = {
     { key: "date", label: "수상일자" },
     "documentation",
   ],
-  certificate: [
+  CERTIFICATION: [
     "host",
     "field",
     { key: "date", label: "취득 날짜" },
     "documentation",
   ],
-  intern: ["company", "work", "motivation", "goal", "project", "documentation"],
-  activity: [
+  INTERNSHIP: [
+    "company",
+    "work",
+    "motivation",
+    "goal",
+    "project",
+    "documentation",
+  ],
+  ACTIVITY: [
     "host",
     "field",
     { key: "motivation", label: "활동 배경" },
@@ -93,7 +92,7 @@ const CATEGORY_DETAIL_MENU = {
     "direction",
     "documentation",
   ],
-  project: [
+  PROJECT: [
     "host",
     "field",
     { key: "motivation", label: "활동 배경" },
@@ -120,6 +119,7 @@ const DETAIL_MENU: { [key: string]: string } = {
 
 const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
   const { id, category } = route.params;
+  // TODO: id로 스펙 상세조회
   // const [progress, setProgress] = useState("50%"); // 예시로 50%로 초기화
 
   useEffect(() => {
@@ -137,24 +137,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
   let specInfo: any = null;
 
   switch (category) {
-    case "certificate":
-      specInfo = {
-        name: "정보처리기사",
-        startDate: "2024.03.06",
-        endDate: "진행중",
-        completed: true,
-        contents: "정보처리기사 자격증 획득",
-        summary:
-          "정보처리기사 자격증 획득에 대한 요약 내용을 여기에 추가합니다.",
-        detail: {
-          host: "한국산업인력공단",
-          field: "정보기술",
-          date: "2024.04.22",
-          documentation: null,
-        },
-      };
-      break;
-    case "contest":
+    case "CONTEST":
       specInfo = {
         name: "올해의 토목 구조물 공모전",
         startDate: "2024.03.06",
@@ -173,7 +156,24 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
         },
       };
       break;
-    case "intern":
+    case "CERTIFICATION":
+      specInfo = {
+        name: "정보처리기사",
+        startDate: "2024.03.06",
+        endDate: "진행중",
+        completed: true,
+        contents: "정보처리기사 자격증 획득",
+        summary:
+          "정보처리기사 자격증 획득에 대한 요약 내용을 여기에 추가합니다.",
+        detail: {
+          host: "한국산업인력공단",
+          field: "정보기술",
+          date: "2024.04.22",
+          documentation: null,
+        },
+      };
+      break;
+    case "INTERNSHIP":
       specInfo = {
         name: "SolidIT 현장실습",
         startDate: "2024.03.06",
@@ -191,7 +191,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
         },
       };
       break;
-    case "activity":
+    case "ACTIVITY":
       specInfo = {
         name: "KT Y 퓨터리스트",
         startDate: "2024.03.06",
@@ -209,7 +209,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
         },
       };
       break;
-    case "project":
+    case "PROJECT":
       specInfo = {
         name: "프로젝트명",
         startDate: "2024.03.06",
@@ -360,7 +360,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
                 return (
                   <React.Fragment>
                     <Circle
-                      key={`circle-${data.labels[index]}`} // 레이블을 사용하여 고유한 키 생성
+                      key={`circle-${Math.random()}`} // 레이블을 사용하여 고유한 키 생성
                       cx={x}
                       cy={y}
                       r={6}
@@ -369,7 +369,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
                       fill={dotColor}
                     />
                     <TextSVG
-                      key={`text-${data.labels[index]}`} // 레이블을 사용하여 고유한 키 생성
+                      key={`text-${Math.random()}`} // 레이블을 사용하여 고유한 키 생성
                       x={x}
                       y={y + 20}
                       fill="#7B7B7B"
