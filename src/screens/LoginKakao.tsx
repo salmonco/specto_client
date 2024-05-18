@@ -24,8 +24,11 @@ export default function LoginKakao({ navigation, route }: Readonly<Props>) {
       );
       console.log("kakao login", res); // 403 에러
       const { accessToken, refreshToken } = res.data;
-      // TODO: 토큰 저장 (SecureStore)
-      // TODO: 홈화면으로 이동
+      // 토큰 저장 (SecureStore)
+      await SecureStore.setItemAsync("accessToken", accessToken);
+      await SecureStore.setItemAsync("refreshToken", refreshToken);
+      // 홈화면으로 이동
+      navigation.navigate("Main");
     } catch (e) {
       console.log(e);
     }
@@ -40,6 +43,7 @@ export default function LoginKakao({ navigation, route }: Readonly<Props>) {
           client_id: getEnvVars()?.KAKAO_REST_API_KEY,
           redirect_url: getEnvVars()?.KAKAO_REDIRECT_URI,
           code: authorize_code,
+          client_secret: getEnvVars()?.KAKAO_CLIENT_SECRET,
         },
         {
           headers: {
