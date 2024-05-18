@@ -40,6 +40,7 @@ export default function LoginKakao({ navigation, route }: Readonly<Props>) {
           client_id: getEnvVars()?.KAKAO_REST_API_KEY,
           redirect_url: getEnvVars()?.KAKAO_REDIRECT_URI,
           code: authorize_code,
+          client_scret: getEnvVars()?.KAKAO_CLIENT_SECRET,
         },
         {
           headers: {
