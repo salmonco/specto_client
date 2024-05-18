@@ -58,8 +58,8 @@ export const useAxiosInterceptor = () => {
     const responseInterceptor = axiosInstance.interceptors.response.use(
       (response) => {
         return response;
-      },
-      errorHandler
+      }
+      // errorHandler
     );
 
     async function refreshAccessToken() {

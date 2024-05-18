@@ -2,19 +2,27 @@ import Constants from "expo-constants";
 import { Platform } from "react-native";
 
 const localhost = Platform.OS === "ios" ? "localhost:8080" : "10.0.2.2:8080";
+const KAKAO_REST_API_KEY = "9a0bd424b1cfd4144df8ad8a3a2d39db";
+const KAKAO_REDIRECT_URI = "https://auth.expo.io/@bongjs/specto-client";
 
 const ENV = {
   dev: {
     apiUrl: "http://13.210.239.98:8080",
+    KAKAO_REST_API_KEY,
+    KAKAO_REDIRECT_URI,
     // amplitudeApiKey: null,
   },
   staging: {
     apiUrl: "http://13.210.239.98:8080",
+    KAKAO_REST_API_KEY,
+    KAKAO_REDIRECT_URI,
     // amplitudeApiKey: "[Enter your key here]",
     // Add other keys you want here
   },
   prod: {
     apiUrl: "http://13.210.239.98:8080",
+    KAKAO_REST_API_KEY,
+    KAKAO_REDIRECT_URI,
     // amplitudeApiKey: "[Enter your key here]",
     // Add other keys you want here
   },

@@ -15,43 +15,18 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "@stackNav/Auth";
 import getEnvVars from "environment";
 import axiosInstance from "src/api/axiosInstance";
+import axios from "axios";
 const VIEW_HEIGHT = Dimensions.get("window").height; // 화면 세로길이
 
 type AuthProps = NativeStackScreenProps<AuthStackParamList, "Login">;
 
 function Login({ navigation }: Readonly<AuthProps>) {
-  const kakaoLogin = async () => {
-    try {
-      const res = await axiosInstance.get(`/login/kakao`);
-      const redirectUrl = res.request.responseURL;
-      if (redirectUrl) {
-        navigation.navigate("LoginKakao", {
-          url: redirectUrl,
-          social: "kakao",
-        });
-      } else {
-        console.error("Redirect URL not found");
-      }
-    } catch (e) {
-      console.log(e);
-    }
+  const kakaoLogin = () => {
+    navigation.navigate("LoginKakao");
   };
 
   const googleLogin = async () => {
-    try {
-      const res = await axiosInstance.get(`/login/google`);
-      const redirectUrl = res.request.responseURL;
-      if (redirectUrl) {
-        navigation.navigate("LoginGoogle", {
-          url: redirectUrl,
-          social: "google",
-        });
-      } else {
-        console.error("Redirect URL not found");
-      }
-    } catch (e) {
-      console.log(e);
-    }
+    navigation.navigate("LoginGoogle");
   };
 
   const handleGoogleLogin = () => {
