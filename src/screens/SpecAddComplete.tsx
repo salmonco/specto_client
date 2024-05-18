@@ -1,11 +1,24 @@
-import React, { useState } from "react";
-import { SafeAreaView, View, TextInput } from "react-native";
+import React from "react";
+import { SafeAreaView, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import Tack from "@assets/images/tack.svg";
 import Button from "@components/Button";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { ActivityAddScreenStackParamList } from "@stackNav/ActivityAddScreen";
+import { SpecScreenStackParamList } from "@stackNav/SpecScreen";
 
-function SpecAddComplete() {
-  const [name, setName] = useState(""); // name 변수 선언 및 초기화
+type ActivityProps = NativeStackScreenProps<
+  SpecScreenStackParamList,
+  "SpecAddComplete"
+>;
+
+function SpecAddComplete({ route, navigation }: Readonly<ActivityProps>) {
+  const { name } = route.params;
+
+  // Navigate to the Spec screen when the "홈으로" button is pressed
+  const goToSpecScreen = () => {
+    navigation.navigate("Spec");
+  };
 
   return (
     <SafeAreaView className="flex-1">
@@ -25,7 +38,7 @@ function SpecAddComplete() {
         </View>
         <Button
           label="홈으로"
-          callbackFn={() => console.log("홈으로 이동 버튼을 눌렀습니다.")}
+          callbackFn={goToSpecScreen} // Call goToSpecScreen function when the button is pressed
         />
       </View>
     </SafeAreaView>

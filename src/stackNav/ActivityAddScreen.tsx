@@ -7,9 +7,17 @@ import SpecAddComplete from "../screens/SpecAddComplete";
 
 export type ActivityAddScreenStackParamList = {
   ActivityAdd1: undefined;
-  ActivityAdd2: undefined;
-  ActivityAdd3: undefined;
-  SpecAddComplete: undefined;
+  ActivityAdd2: { name: string };
+  ActivityAdd3: {
+    name: string;
+    host: string;
+    startDate: Date | null;
+    endDate: Date | null;
+    field: string;
+    contents: string | null;
+    proofFile: string | null;
+  };
+  SpecAddComplete: { name: string };
 };
 
 const ActivityAddScreenStack =

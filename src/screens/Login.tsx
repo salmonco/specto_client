@@ -35,6 +35,21 @@ function Login({ navigation }: Readonly<AuthProps>) {
     }
   };
 
+  const googleLogin = async () => {
+    try {
+      const res = await axiosInstance.get(`/login/google`);
+      const redirectUrl = res.request.responseURL; // responseURL 추출
+      // console.log(redirectUrl);
+      if (redirectUrl) {
+        navigation.navigate("LoginKakao", { url: redirectUrl });
+      } else {
+        console.error("Redirect URL not found");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const handleGoogleLogin = () => {
     Alert.alert("", "'스펙토'에서 '구글'을 열려고 합니다.", [
       {

@@ -15,8 +15,6 @@ import { ActivityAddScreenStackParamList } from "@stackNav/ActivityAddScreen";
 import { Dropdown } from "react-native-element-dropdown";
 import * as DocumentPicker from "expo-document-picker";
 
-const API_URL = "http://your-api-url.com"; // 여기에 백엔드 API 엔드포인트 URL을 입력해주세요.
-
 const data = [
   { label: "기획/아이디어", value: "기획/아이디어" },
   { label: "브랜드/네이밍", value: "브랜드/네이밍" },
@@ -31,7 +29,7 @@ type ActivityProps = NativeStackScreenProps<
   "ActivityAdd2"
 >;
 
-function ActivityAdd2({ navigation }: Readonly<ActivityProps>) {
+function ActivityAdd2({ route, navigation }: Readonly<ActivityProps>) {
   const [host, setHost] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -43,31 +41,18 @@ function ActivityAdd2({ navigation }: Readonly<ActivityProps>) {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [proofFile, setProofFile] = useState<string | null>(null);
 
-  const handleNext = async () => {
-    try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          host,
-          startDate,
-          endDate,
-          field,
-          contents,
-          proofFile,
-        }),
-      });
+  const { name } = route.params;
 
-      if (!response.ok) {
-        throw new Error("Failed to submit data");
-      }
-
-      navigation.navigate("ActivityAdd3");
-    } catch (error) {
-      console.error("Error:", error as Error);
-    }
+  const handleNext = () => {
+    navigation.navigate("ActivityAdd3", {
+      name,
+      host,
+      startDate,
+      endDate,
+      field,
+      contents,
+      proofFile,
+    });
   };
 
   useEffect(() => {
@@ -98,8 +83,8 @@ function ActivityAdd2({ navigation }: Readonly<ActivityProps>) {
 
   const pickDocument = async () => {
     const result = await DocumentPicker.getDocumentAsync({});
-    alert(result);
     console.log(result);
+    alert(result);
   };
 
   return (

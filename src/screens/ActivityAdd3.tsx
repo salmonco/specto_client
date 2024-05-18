@@ -14,8 +14,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ActivityAddScreenStackParamList } from "@stackNav/ActivityAddScreen";
 import { Dropdown } from "react-native-element-dropdown";
 import * as DocumentPicker from "expo-document-picker";
-
-const API_URL = "http://your-api-url.com"; // 여기에 백엔드 API 엔드포인트 URL을 입력해주세요.
+import axios from "axios";
+import axiosInstance from "src/api/axiosInstance";
 
 const data = [
   { label: "기획/아이디어", value: "기획/아이디어" },
@@ -31,54 +31,55 @@ type ActivityProps = NativeStackScreenProps<
   "ActivityAdd3"
 >;
 
-function ActivityAdd3({ navigation }: Readonly<ActivityProps>) {
+function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
   const [motivation, setMotivation] = useState<string | null>(null);
   const [goal, setGoal] = useState<string | null>(null);
   const [direction, setDirection] = useState<string | null>(null);
+  const [files, setFiles] = useState<any[]>([]); // assuming you have a state to hold uploaded files
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  const { name, host, startDate, endDate, field, contents, proofFile } =
+    route.params;
 
   const handleNext = async () => {
     try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const formData = new FormData();
+
+      formData.append("documentation", files[0]); // assuming files[0] contains the uploaded file
+
+      const value = [
+        {
+          name: "얼렁뚱땅 대외활동",
+          host: "주최자",
+          startDate: "시작 날짜",
+          endDate: "종료 날짜",
+          field: "피일드",
+          contents: "이건 뭐지",
+          motivation: "돈 벌려고 하는 거지",
+          goal: "목표는 없어",
+          direction: "방향은 없어",
         },
-        body: JSON.stringify({
-          motivation,
-          goal,
-          direction,
-        }),
+      ];
+
+      const blob = new Blob([JSON.stringify(value)], {
+        type: "application/json",
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to submit data");
-      }
+      formData.append("specPostReq", JSON.stringify(value));
 
-      navigation.navigate("SpecAddComplete");
+      const res = await axiosInstance.post(`/api/v1/spec`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log(res);
+
+      navigation.navigate("SpecAddComplete", { name });
     } catch (error) {
       console.error("Error:", error as Error);
     }
   };
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      (event) => {
-        setKeyboardHeight(event.endCoordinates.height);
-      }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setKeyboardHeight(0);
-      }
-    );
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
 
   return (
     <View style={styles.container}>

@@ -9,6 +9,7 @@ import ActivityAddScreen from "./ActivityAddScreen";
 // import ProjectAddScreen from "./ProjectAddScreen";
 import SpecCategorySelect from "./CertificateAddScreen";
 import ReviewListScreen from "./ReviewListScreen";
+import SpecAddComplete from "../screens/SpecAddComplete";
 
 export type SpecScreenStackParamList = {
   Spec: undefined;
@@ -20,6 +21,7 @@ export type SpecScreenStackParamList = {
   // ProjectAddScreen: undefined;
   SpecCategorySelect: undefined;
   ReviewListScreen: { screen: "ReviewListUp"; params: { id: number } };
+  SpecAddComplete: { name: string };
 };
 
 const SpecScreenStack = createNativeStackNavigator<SpecScreenStackParamList>();
@@ -29,6 +31,10 @@ function SpecScreen() {
     <SpecScreenStack.Navigator screenOptions={{ title: "내 스펙" }}>
       <SpecScreenStack.Screen name="Spec" component={Spec} />
       <SpecScreenStack.Screen name="SpecDetail" component={SpecDetail} />
+      <SpecScreenStack.Screen
+        name="SpecAddComplete"
+        component={SpecAddComplete}
+      />
       <SpecScreenStack.Screen
         name="SpecCategorySelect"
         component={SpecCategorySelect}

@@ -9,12 +9,7 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ActivityAddScreenStackParamList } from "@stackNav/ActivityAddScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axiosInstance from "src/api/axiosInstance";
 import { useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "AppInner";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useAxiosInterceptor } from "src/hooks/useAxiosInterceptor";
-import axios from "axios";
 
 const API_URL = "/api/v1/spec"; // baseURL을 이미 axiosInstance에서 설정했으므로 상대 경로만 사용
 
@@ -24,50 +19,11 @@ type ContestProps = NativeStackScreenProps<
 >;
 
 function ActivityAdd1({ navigation }: Readonly<ContestProps>) {
-  const [formData, setFormData] = useState(new FormData()); // FormData 상태 생성
+  const [name, setName] = useState(""); // 활동명 상태 생성
 
-  const handleNext = async () => {
-    try {
-      console.log("Sending request to:", API_URL);
-
-      // AsyncStorage에서 accessToken 불러오기
-      // const accessToken = await getAccessToken();
-
-      const formData = new FormData();
-      console.log(formData);
-
-      const value = [
-        {
-          name: "대외활동하기싫어", // 입력값
-        },
-      ];
-
-      const blob = new Blob([JSON.stringify(value)], {
-        type: "application/json",
-      });
-
-      // formData.append("data", blob);
-      formData.append("data", JSON.stringify(value));
-
-      console.log(formData);
-
-      const response = await axiosInstance.post(API_URL, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      console.log(response);
-
-      if (response.status >= 200 && response.status < 300) {
-        console.log("Success");
-        navigation.navigate("ActivityAdd2");
-      } else {
-        console.error("Failed to save activity");
-      }
-    } catch (error) {
-      console.error("Error:", error as Error);
-    }
+  const handleNext = () => {
+    // ActivityAdd2로 이동하면서 name 값을 전달
+    navigation.navigate("ActivityAdd2", { name });
   };
 
   return (
@@ -84,13 +40,7 @@ function ActivityAdd1({ navigation }: Readonly<ContestProps>) {
         <TextInput
           style={styles.inputText}
           placeholder="활동 이름을 입력해주세요."
-          onChangeText={(text) => {
-            // name 값 업데이트
-            const value = [{ name: text }];
-            const formData = new FormData();
-            formData.append("data", JSON.stringify(value));
-            setFormData(formData); // formData 상태 업데이트
-          }}
+          onChangeText={(text) => setName(text)} // name 값 업데이트
         />
       </View>
       <TouchableOpacity style={styles.buttonContainer} onPress={handleNext}>
