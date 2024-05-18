@@ -23,10 +23,12 @@ function Login({ navigation }: Readonly<AuthProps>) {
   const kakaoLogin = async () => {
     try {
       const res = await axiosInstance.get(`/login/kakao`);
-      const redirectUrl = res.request.responseURL; // responseURL 추출
-      // console.log(redirectUrl);
+      const redirectUrl = res.request.responseURL;
       if (redirectUrl) {
-        navigation.navigate("LoginKakao", { url: redirectUrl });
+        navigation.navigate("LoginKakao", {
+          url: redirectUrl,
+          social: "kakao",
+        });
       } else {
         console.error("Redirect URL not found");
       }
@@ -38,10 +40,12 @@ function Login({ navigation }: Readonly<AuthProps>) {
   const googleLogin = async () => {
     try {
       const res = await axiosInstance.get(`/login/google`);
-      const redirectUrl = res.request.responseURL; // responseURL 추출
-      // console.log(redirectUrl);
+      const redirectUrl = res.request.responseURL;
       if (redirectUrl) {
-        navigation.navigate("LoginKakao", { url: redirectUrl });
+        navigation.navigate("LoginGoogle", {
+          url: redirectUrl,
+          social: "google",
+        });
       } else {
         console.error("Redirect URL not found");
       }
@@ -59,7 +63,9 @@ function Login({ navigation }: Readonly<AuthProps>) {
       },
       {
         text: "열기",
-        onPress: () => console.log("구글 열기 버튼을 눌렀습니다."),
+        onPress: () => {
+          googleLogin();
+        },
       },
     ]);
     // 구글 로그인 링크로 이동하는 코드 추가

@@ -6,8 +6,8 @@ import LoginGoogle from "@screens/LoginGoogle";
 
 export type AuthStackParamList = {
   Login: undefined;
-  LoginKakao: { url: string };
-  LoginGoogle: { url: string };
+  LoginKakao: { url: string; social: "kakao" };
+  LoginGoogle: { url: string; social: "google" };
 };
 
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();

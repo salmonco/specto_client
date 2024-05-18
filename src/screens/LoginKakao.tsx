@@ -14,7 +14,7 @@ type RootProps = NativeStackScreenProps<RootStackParamList>;
 type Props = CompositeScreenProps<AuthProps, RootProps>;
 
 export default function LoginKakao({ navigation, route }: Readonly<Props>) {
-  const { url } = route.params;
+  const { url, social } = route.params;
   const [redirectedUrl, setRedirectedUrl] = useState<string | null>(null);
 
   useEffect(() => {
@@ -27,7 +27,10 @@ export default function LoginKakao({ navigation, route }: Readonly<Props>) {
   const fetchDataFromServer = async (url: string) => {
     try {
       // 서버로부터 데이터를 요청하고 받는 작업 수행
-      const res = await axiosInstance.get(url);
+      const res = await axiosInstance.post("/login", {
+        id_token: url,
+        social: social,
+      });
       // console.log(res.data);
       const { accessToken, refreshToken } = res.data;
 
@@ -43,7 +46,14 @@ export default function LoginKakao({ navigation, route }: Readonly<Props>) {
   };
 
   const onShouldStartLoadWithRequest = (event: any) => {
-    setRedirectedUrl(event.url);
+    // Extracting the id_token from the redirected URL and adding it as a query parameter
+    const newUrl = new URL(event.url);
+    const idToken = newUrl.searchParams.get("id_token");
+    if (idToken) {
+      setRedirectedUrl(idToken);
+    } else {
+      setRedirectedUrl(event.url);
+    }
     return true; // 페이지 로드 허용
   };
 

@@ -9,7 +9,7 @@ export type CertificateAddScreenStackParamList = {
   CertificateAdd1: undefined;
   CertificateAdd2: undefined;
   CertificateAdd3: undefined;
-  SpecAddComplete: undefined;
+  SpecAddComplete: { name: string };
 };
 
 const CertificateAddScreenStack =
