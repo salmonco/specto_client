@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import CalendarPicker from "react-native-calendar-picker";
 import {
   Text,
   View,
@@ -8,23 +7,10 @@ import {
   TextInput,
   ScrollView,
   Keyboard,
-  Modal,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ActivityAddScreenStackParamList } from "@stackNav/ActivityAddScreen";
-import { Dropdown } from "react-native-element-dropdown";
-import * as DocumentPicker from "expo-document-picker";
-import axios from "axios";
 import axiosInstance from "src/api/axiosInstance";
-
-const data = [
-  { label: "기획/아이디어", value: "기획/아이디어" },
-  { label: "브랜드/네이밍", value: "브랜드/네이밍" },
-  { label: "사진/영상", value: "사진/영상" },
-  { label: "디자인", value: "디자인" },
-  { label: "예체능", value: "예체능" },
-  { label: "IT/SW", value: "IT/SW" },
-];
 
 type ActivityProps = NativeStackScreenProps<
   ActivityAddScreenStackParamList,
@@ -32,32 +18,33 @@ type ActivityProps = NativeStackScreenProps<
 >;
 
 function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
+  const { name, host, startDate, endDate, field, contents, proofFile } =
+    route.params || {};
   const [motivation, setMotivation] = useState<string | null>(null);
   const [goal, setGoal] = useState<string | null>(null);
   const [direction, setDirection] = useState<string | null>(null);
   const [files, setFiles] = useState<any[]>([]); // assuming you have a state to hold uploaded files
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
-  const { name, host, startDate, endDate, field, contents, proofFile } =
-    route.params;
-
   const handleNext = async () => {
     try {
       const formData = new FormData();
 
-      formData.append("documentation", files[0]); // assuming files[0] contains the uploaded file
+      if (files[0]) {
+        formData.append("documentation", files[0]);
+      }
 
       const value = [
         {
-          name: "얼렁뚱땅 대외활동",
-          host: "주최자",
-          startDate: "시작 날짜",
-          endDate: "종료 날짜",
-          field: "피일드",
-          contents: "이건 뭐지",
-          motivation: "돈 벌려고 하는 거지",
-          goal: "목표는 없어",
-          direction: "방향은 없어",
+          name: name || "기본 이름", // 기본 값 추가
+          host: host || "기본 주최자", // 기본 값 추가
+          startDate: startDate || "기본 시작 날짜", // 기본 값 추가
+          endDate: endDate || "기본 종료 날짜", // 기본 값 추가
+          field: field || "기본 분야", // 기본 값 추가
+          contents: contents || "기본 내용", // 기본 값 추가
+          motivation: motivation || "기본 동기", // 기본 값 추가
+          goal: goal || "기본 목표", // 기본 값 추가
+          direction: direction || "기본 방향", // 기본 값 추가
         },
       ];
 
@@ -65,7 +52,7 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
         type: "application/json",
       });
 
-      formData.append("specPostReq", JSON.stringify(value));
+      formData.append("specPostReq", blob);
 
       const res = await axiosInstance.post(`/api/v1/spec`, formData, {
         headers: {
@@ -77,7 +64,7 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
 
       navigation.navigate("SpecAddComplete", { name });
     } catch (error) {
-      console.error("Error:", error as Error);
+      console.error("Error:", error);
     }
   };
 
