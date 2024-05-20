@@ -29,7 +29,7 @@ type ActivityProps = NativeStackScreenProps<
   "ActivityAdd2"
 >;
 
-function ActivityAdd2({ route, navigation }: Readonly<ActivityProps>) {
+function ActivityAdd2({ route, navigation }: ActivityProps) {
   const [host, setHost] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -43,7 +43,40 @@ function ActivityAdd2({ route, navigation }: Readonly<ActivityProps>) {
 
   const { name } = route.params;
 
+  useEffect(() => {
+    console.log("ActivityAdd2 received params", { name });
+  }, [name]);
+
+  // const handleNext = () => {
+  //   console.log("ActivityAdd2 -> ActivityAdd3", {
+  //     name,
+  //     host,
+  //     startDate: startDate ? startDate.toISOString() : null, // startDate를 ISO 문자열로 변환
+  //     endDate: endDate ? endDate.toISOString() : null, // endDate도 변환
+  //     field,
+  //     contents,
+  //     proofFile,
+  //   });
+  //   navigation.navigate("ActivityAdd3", {
+  //     name,
+  //     host,
+  //     startDate: startDate ? startDate.toISOString() : null, // startDate 변환
+  //     endDate: endDate ? endDate.toISOString() : null, // endDate 변환
+  //     field,
+  //     contents,
+  //     proofFile,
+  //   });
+  // };
   const handleNext = () => {
+    console.log("ActivityAdd2 -> ActivityAdd3", {
+      name,
+      host,
+      startDate,
+      endDate,
+      field,
+      contents,
+      proofFile,
+    });
     navigation.navigate("ActivityAdd3", {
       name,
       host,
@@ -81,6 +114,21 @@ function ActivityAdd2({ route, navigation }: Readonly<ActivityProps>) {
     return `${month}월 ${day}일`;
   };
 
+  // const pickDocument = async () => {
+  //   try {
+  //     const result = await DocumentPicker.getDocumentAsync({});
+  //     if (result.type === "success") {
+  //       setProofFile(result.uri);
+  //       console.log(result.uri);
+  //       alert(`Selected file: ${result.name}`);
+  //     } else {
+  //       console.log("Document picking was canceled");
+  //     }
+  //   } catch (err) {
+  //     console.error("Error picking document:", err);
+  //   }
+  // };
+
   const pickDocument = async () => {
     const result = await DocumentPicker.getDocumentAsync({});
     console.log(result);
@@ -89,12 +137,10 @@ function ActivityAdd2({ route, navigation }: Readonly<ActivityProps>) {
 
   return (
     <View style={styles.container}>
-      {/* 대외활동 정보 입력 */}
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={styles.scrollViewContent}
       >
-        {/* 페이지 인디케이터 */}
         <View style={styles.pageIndicator}>
           <Text style={styles.currentPage}>2</Text>
           <Text style={styles.totalPages}>/3</Text>
@@ -104,7 +150,6 @@ function ActivityAdd2({ route, navigation }: Readonly<ActivityProps>) {
             해당 활동의 정보를 입력해주세요.
           </Text>
         </View>
-        {/* 섹션 1: 대외활동 기간 */}
         <View style={styles.section}>
           <Text style={[styles.sectionSubtitle, { marginTop: 10 }]}>
             활동 시작/종료 날짜을 선택해주세요.
@@ -154,8 +199,6 @@ function ActivityAdd2({ route, navigation }: Readonly<ActivityProps>) {
             </View>
           </Modal>
         </View>
-
-        {/* 섹션 2: 대외활동 이름 및 주최기관 입력 */}
         <View style={styles.section}>
           <Text style={styles.sectionSubtitle}>
             활동 주최기관을 입력해주세요.
@@ -170,8 +213,6 @@ function ActivityAdd2({ route, navigation }: Readonly<ActivityProps>) {
             />
           </View>
         </View>
-
-        {/* 섹션 3: 대외활동 분야 선택 */}
         <View style={styles.section}>
           <Text style={[styles.sectionSubtitle, { marginTop: 0 }]}>
             활동 분야를 선택해주세요
@@ -191,18 +232,11 @@ function ActivityAdd2({ route, navigation }: Readonly<ActivityProps>) {
             />
           </View>
         </View>
-
-        {/* 섹션 4: 상세 내역 입력 */}
         <View style={styles.section}>
           <Text style={styles.sectionSubtitle}>
             상세 활동 내역을 입력해주세요.
           </Text>
-          <View
-            style={[
-              styles.inputBox,
-              { marginBottom: keyboardHeight }, // 키보드 높이만큼 입력 박스를 올림
-            ]}
-          >
+          <View style={[styles.inputBox, { marginBottom: keyboardHeight }]}>
             <Text style={styles.inputLabel}>상세정보</Text>
             <TextInput
               style={styles.inputText}
@@ -210,11 +244,9 @@ function ActivityAdd2({ route, navigation }: Readonly<ActivityProps>) {
               multiline={true}
               numberOfLines={4}
               value={contents || ""}
-              onChangeText={(text) => setContents(text)} // contents 상태 업데이트
+              onChangeText={(text) => setContents(text)}
             />
           </View>
-
-          {/* 섹션 5: 증빙자료 업로드 */}
           <View style={styles.section}>
             <Text style={[styles.sectionSubtitle, { marginTop: 25 }]}>
               증빙자료를 업로드해주세요.
@@ -230,8 +262,6 @@ function ActivityAdd2({ route, navigation }: Readonly<ActivityProps>) {
           </View>
         </View>
       </ScrollView>
-
-      {/* 다음으로 버튼 */}
       <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
         <Text style={styles.nextButtonText}>다음으로</Text>
       </TouchableOpacity>
@@ -315,7 +345,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
   },
-
   inputBox: {
     paddingVertical: 12,
     padding: 16,
@@ -346,7 +375,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     width: "90%",
-    height: 50, // 높이 조절
+    height: 50,
   },
   nextButtonText: {
     color: "white",
@@ -355,17 +384,17 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     flexGrow: 1,
-    paddingBottom: 20, // 키보드가 나타날 때 입력란이 가려지지 않도록 하기 위한 여분의 공간
+    paddingBottom: 20,
   },
   modalBackground: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // 투명한 검은 배경
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   calendarModal: {
-    backgroundColor: "white", // 달력이 표시되는 박스 배경색
-    marginHorizontal: 20, // 모달 창과 달력 사이의 여백
-    borderRadius: 10, // 모달 창과 달력의 모서리를 둥글게 만듦
-    paddingBottom: 20, // 하단 여백
+    backgroundColor: "white",
+    marginHorizontal: 20,
+    borderRadius: 10,
+    paddingBottom: 20,
   },
 });
 

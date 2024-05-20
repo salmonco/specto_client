@@ -26,6 +26,8 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
   const [files, setFiles] = useState<any[]>([]); // assuming you have a state to hold uploaded files
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
+  console.log("Route params:", route.params);
+
   const handleNext = async () => {
     try {
       const formData = new FormData();
@@ -40,6 +42,8 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
           host: host || "기본 주최자", // 기본 값 추가
           startDate: startDate || "기본 시작 날짜", // 기본 값 추가
           endDate: endDate || "기본 종료 날짜", // 기본 값 추가
+          // startDate: startDate ? startDate.toISOString() : "기본 시작 날짜",
+          // endDate: endDate ? endDate.toISOString() : "기본 종료 날짜",
           field: field || "기본 분야", // 기본 값 추가
           contents: contents || "기본 내용", // 기본 값 추가
           motivation: motivation || "기본 동기", // 기본 값 추가
@@ -52,7 +56,8 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
         type: "application/json",
       });
 
-      formData.append("specPostReq", blob);
+      formData.append("specPostReq", JSON.stringify(value));
+      // formData.append("specPostReq",blob);
 
       const res = await axiosInstance.post(`/api/v1/spec`, formData, {
         headers: {

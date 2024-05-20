@@ -23,6 +23,7 @@ function ActivityAdd1({ navigation }: Readonly<ContestProps>) {
 
   const handleNext = () => {
     // ActivityAdd2로 이동하면서 name 값을 전달
+    console.log("ActivityAdd1 -> ActivityAdd2", { name });
     navigation.navigate("ActivityAdd2", { name });
   };
 

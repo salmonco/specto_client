@@ -116,6 +116,43 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
   const [specInfo, setSpecInfo] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(true);
 
+  const handleEditPress = () => {
+    // Navigate to the appropriate category screen based on the 'category' parameter
+    switch (category) {
+      case "CONTEST":
+        navigation.navigate("ContestAddScreen");
+        break;
+      case "CERTIFICATION":
+        navigation.navigate("CertificateAddScreen");
+        break;
+      case "INTERNSHIP":
+        navigation.navigate("InternAddScreen");
+        break;
+      case "ACTIVITY":
+        navigation.navigate("ActivityAddScreen");
+        break;
+      // Add cases for other categories as needed
+      default:
+        // Navigate to a default screen if the category is not recognized
+        navigation.navigate("Spec");
+        break;
+    }
+  };
+
+  useEffect(() => {
+    // 스크린 옵션 설정 (헤더 우측에 "수정" 버튼 표시)
+    navigation.setOptions({
+      headerRight: () => (
+        // <Pressable onPress={() => console.log("수정 버튼을 눌렀습니다.")}>
+        //   <Text className="text-[#0094FF]">수정</Text>
+        // </Pressable>
+        <Pressable style={styles.editButton} onPress={handleEditPress}>
+          <Text style={styles.editButtonText}>수정</Text>
+        </Pressable>
+      ),
+    });
+  }, [navigation]);
+
   useEffect(() => {
     const fetchSpecDetail = async () => {
       try {
