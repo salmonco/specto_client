@@ -20,9 +20,9 @@ export default function LoginKakao({ navigation, route }: Readonly<Props>) {
   const login = async (id_token: string) => {
     try {
       const res = await axiosInstance.get(
-        `/login?id_token=${id_token}&social=kakao`
+        `/api/v1/login?id_token=${id_token}&social=kakao`
       );
-      console.log("kakao login", res); // 403 에러
+      console.log("kakao login", res);
       const { accessToken, refreshToken } = res.data;
       // 토큰 저장 (SecureStore)
       await SecureStore.setItemAsync("accessToken", accessToken);
