@@ -67,12 +67,18 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
   //     proofFile,
   //   });
   // };
+
   const handleNext = () => {
+    const formatDateOnly = (date: Date | null): Date | null => {
+      if (!date) return null;
+      return new Date(date.getFullYear(), date.getMonth() + 1, date.getDate());
+    };
+
     console.log("ActivityAdd2 -> ActivityAdd3", {
       name,
       host,
-      startDate,
-      endDate,
+      startDate: formatDateOnly(startDate),
+      endDate: formatDateOnly(endDate),
       field,
       contents,
       proofFile,
@@ -80,8 +86,8 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
     navigation.navigate("ActivityAdd3", {
       name,
       host,
-      startDate,
-      endDate,
+      startDate: formatDateOnly(startDate),
+      endDate: formatDateOnly(endDate),
       field,
       contents,
       proofFile,

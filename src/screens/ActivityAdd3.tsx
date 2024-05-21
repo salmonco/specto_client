@@ -36,6 +36,19 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
         formData.append("documentation", files[0]);
       }
 
+      console.log("ActivityAdd3에서 db로 보내야함", {
+        name,
+        host,
+        startDate,
+        endDate,
+        field,
+        contents,
+        proofFile,
+        motivation,
+        goal,
+        direction,
+      });
+
       const value = [
         {
           name: name || "기본 이름", // 기본 값 추가
@@ -56,8 +69,8 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
         type: "application/json",
       });
 
-      formData.append("specPostReq", JSON.stringify(value));
-      // formData.append("specPostReq",blob);
+      // formData.append("specPostReq", JSON.stringify(value));
+      formData.append("specPostReq", blob);
 
       const res = await axiosInstance.post(`/api/v1/spec`, formData, {
         headers: {

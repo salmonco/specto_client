@@ -81,6 +81,7 @@ export const useAxiosInterceptor = () => {
           await SecureStore.deleteItemAsync("accessToken");
           await SecureStore.deleteItemAsync("refreshToken");
           Alert.alert("세션이 만료되어 로그인 페이지로 이동합니다.");
+
           navigation.navigate("Auth");
           return;
         }
