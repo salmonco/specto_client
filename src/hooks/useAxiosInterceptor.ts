@@ -34,7 +34,7 @@ export const useAxiosInterceptor = () => {
     const errorHandler = async (error: any) => {
       const originalRequest = error.config;
       if (
-        (error as AxiosError).response?.status === 403 &&
+        (error as AxiosError).response?.status === 401 &&
         !originalRequest._retry
       ) {
         const refreshToken = await SecureStore.getItemAsync("refreshToken");
@@ -58,8 +58,8 @@ export const useAxiosInterceptor = () => {
     const responseInterceptor = axiosInstance.interceptors.response.use(
       (response) => {
         return response;
-      }
-      // errorHandler
+      },
+      errorHandler
     );
 
     async function refreshAccessToken() {
@@ -77,7 +77,7 @@ export const useAxiosInterceptor = () => {
         await SecureStore.setItemAsync("refreshToken", refreshToken);
         return accessToken;
       } catch (error) {
-        if ((error as AxiosError).response?.status === 403) {
+        if ((error as AxiosError).response?.status === 401) {
           await SecureStore.deleteItemAsync("accessToken");
           await SecureStore.deleteItemAsync("refreshToken");
           Alert.alert("세션이 만료되어 로그인 페이지로 이동합니다.");
