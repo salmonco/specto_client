@@ -31,7 +31,9 @@ function ReviewCalendar() {
     const getReviewList = async () => {
       try {
         const dateStr = getDateString(clickedDate);
-        const res = await axiosInstance.get(`/review/calendar?date=${dateStr}`);
+        const res = await axiosInstance.get(
+          `/api/v1/review/calendar?date=${dateStr}`
+        );
         console.log(`/review/calendar?date=${dateStr}`, res);
         setReviewList(res.data);
       } catch (e) {
