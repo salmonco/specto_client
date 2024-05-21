@@ -4,7 +4,7 @@ import { CATEGORY_LABEL, SpecBase, renderSpecIcon } from "@screens/Spec";
 
 interface SpecListItemBase {
   item: SpecBase;
-  callbackFn?: (id: number) => void;
+  callbackFn?: (specItem: SpecBase) => void;
 }
 export default function SpecListItem({
   item,
@@ -15,7 +15,7 @@ export default function SpecListItem({
       key={item.specId}
       className="flex-1 flex-row justify-between items-center gap-[10] border border-[#DEDEDE] p-[16] h-[78] mx-[14] my-[1]"
       style={{ borderRadius: 10 }}
-      onPress={() => callbackFn && callbackFn(item.specId)}
+      onPress={() => callbackFn && callbackFn(item)}
     >
       <View>
         <View className="flex-row gap-[10] items-center">

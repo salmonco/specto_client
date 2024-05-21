@@ -6,11 +6,18 @@ import HorizontalSlider from "./HorizontalSlider";
 import axiosInstance from "src/api/axiosInstance";
 import { CATEGORY_LABEL } from "@screens/Spec";
 
-const SATISFACTION_OPTION: { [key: string]: string } = {
-  VERYSATISFACTION: "매우 만족",
-  SOSO: "보통",
-  DISSATISFACTION: "불만족",
+export const SATISFACTION_OPTION: {
+  [key: string]: { label: string; emoji: string };
+} = {
+  VERYSATISFACTION: { label: "매우 만족", emoji: "🙆🏻‍♀️" },
+  SOSO: { label: "보통", emoji: "🙎🏻‍♀️" },
+  DISSATISFACTION: { label: "불만족", emoji: "🤦🏻‍♀️" },
 };
+export const SATISFACTION_MENU = Object.entries(SATISFACTION_OPTION).map(
+  ([k, v]) => {
+    return { value: k, label: v.label, emoji: v.emoji };
+  }
+);
 interface ReviewDetailBase {
   specName: string;
   category: string;
@@ -82,7 +89,7 @@ export default function ReviewDetail({
             </Text>
           </View>
           <Text className="font-[Inter-Medium] text-[#0094FF]" size={18}>
-            D+{`${item?.dPlusDay ?? "16"}`}
+            D+{`${item?.dPlusDay ?? 0}`}
           </Text>
         </View>
 
@@ -91,7 +98,10 @@ export default function ReviewDetail({
             만족도
           </Text>
           <Text className="font-[Inter-SemiBold] text-[#0094FF]" size={15}>
-            {SATISFACTION_OPTION[item?.satisfaction ?? "VERYSATISFACTION"]}
+            {
+              SATISFACTION_OPTION[item?.satisfaction ?? "VERYSATISFACTION"]
+                .label
+            }
           </Text>
         </View>
 

@@ -4,36 +4,64 @@ import { CustomText as Text } from "@components/CustomText";
 import Button from "@components/Button";
 import HorizontalSlider from "@components/HorizontalSlider";
 import { CATEGORY_LABEL, renderSpecIcon } from "./Spec";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { ReviewListScreenStackParamList } from "@stackNav/ReviewListScreen";
+import { SATISFACTION_MENU } from "@components/ReviewDetail";
+import axiosInstance from "src/api/axiosInstance";
 
-function ReviewAdd() {
-  const completed = false;
+type ReviewListScreenProps = NativeStackScreenProps<
+  ReviewListScreenStackParamList,
+  "ReviewAdd"
+>;
+function ReviewAdd({ route, navigation }: Readonly<ReviewListScreenProps>) {
+  const { specItem } = route.params;
   const [progress, setProgress] = useState(0);
-  const [impressiveScene, setImpressiveScene] = useState("");
-  const [memorableExperience, setMemorableExperience] = useState("");
+  const [satisfaction, setSatisfaction] = useState("");
+  const [impression, setImpression] = useState("");
+  const [bearInMind, setBearInMind] = useState("");
+
+  const saveReview = async () => {
+    try {
+      const body = {
+        specId: specItem.specId,
+        satisfaction,
+        progress: Math.round(progress * 100),
+        impression,
+        bearInMind,
+        date: new Date(),
+      };
+      console.log("body", body);
+      const res = await axiosInstance.post(`/api/v1/review`, body);
+      console.log(`/api/v1/review`, res);
+      navigation.navigate("ReviewAddComplete");
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <ScrollView className="flex-1 py-[23]">
       <View className="px-[35] pt-[24] pb-[29]">
         <View className="flex-row justify-between items-center mb-[11]">
           <View className="flex-row items-center gap-x-[6]">
-            {renderSpecIcon("contest")}
+            {renderSpecIcon(specItem?.category)}
             <Text className="font-[Inter-SemiBold] text-[#0094FF]">
-              {CATEGORY_LABEL["contest"]}
+              {CATEGORY_LABEL[specItem?.category]}
             </Text>
           </View>
           <View
             className={`justify-center items-center w-[55] h-[22] ${
-              completed ? "bg-[#EAF4FF]" : "bg-[#EFEFEF]"
+              specItem?.completed ? "bg-[#EAF4FF]" : "bg-[#EFEFEF]"
             }`}
             style={{ borderRadius: 4 }}
           >
             <Text
               className={`font-[Inter-SemiBold] ${
-                completed ? "text-[#0069CF]" : "text-[#9F9F9F]"
+                specItem?.completed ? "text-[#0069CF]" : "text-[#9F9F9F]"
               }`}
               size={12}
             >
-              {completed ? "완료" : "진행중"}
+              {specItem?.completed ? "완료" : "진행중"}
             </Text>
           </View>
         </View>
@@ -50,10 +78,10 @@ function ReviewAdd() {
               className="font-[Inter-SemiBold] text-[#373737] mb-[8]"
               size={18}
             >
-              올해의 토목 구조물 공모전
+              {specItem?.name}
             </Text>
             <Text className="text-[#373737] mb-[8]" size={15}>
-              2024.01.02 ~ 진행 중
+              {specItem?.startDate} ~ {specItem?.endDate}
             </Text>
           </View>
           <View className="gap-y-[8]">
@@ -78,7 +106,7 @@ function ReviewAdd() {
                 마감 기한
               </Text>
               <Text className="text-[#373737]" size={13}>
-                2024.02.22
+                {specItem?.endDate}
               </Text>
             </View>
           </View>
@@ -97,36 +125,28 @@ function ReviewAdd() {
             오늘의 만족도는 어떠한가요?
           </Text>
           <View className="flex-row">
-            <Pressable className="items-center mr-[24]">
-              <View className="justify-center items-center bg-[#F5F5F5] rounded-full w-[58] h-[58] border border-[#D9D9D9] mb-[4]">
-                <Text className="font-[Inter-Medium]" size={26}>
-                  🙆🏻‍♀️
+            {SATISFACTION_MENU.map((v) => (
+              <Pressable
+                key={v.value}
+                className="items-center mr-[24]"
+                onPress={() => setSatisfaction(v.value)}
+              >
+                <View
+                  className={`justify-center items-center rounded-full w-[58] h-[58] border mb-[4] ${
+                    satisfaction === v.value
+                      ? "bg-[#5BB2F2] border-[#0094FF]"
+                      : "bg-[#F5F5F5] border-[#D9D9D9]"
+                  }`}
+                >
+                  <Text className="font-[Inter-Medium]" size={26}>
+                    {v.emoji}
+                  </Text>
+                </View>
+                <Text className="text-[#373737]" size={11}>
+                  {v.label}
                 </Text>
-              </View>
-              <Text className="text-[#373737]" size={11}>
-                매우만족
-              </Text>
-            </Pressable>
-            <Pressable className="items-center mr-[24]">
-              <View className="justify-center items-center bg-[#F5F5F5] rounded-full w-[58] h-[58] border border-[#D9D9D9] mb-[4]">
-                <Text className="font-[Inter-Medium]" size={26}>
-                  🙎🏻‍♀️
-                </Text>
-              </View>
-              <Text className="text-[#373737]" size={11}>
-                보통
-              </Text>
-            </Pressable>
-            <Pressable className="items-center">
-              <View className="justify-center items-center bg-[#F5F5F5] rounded-full w-[58] h-[58] border border-[#D9D9D9] mb-[4]">
-                <Text className="font-[Inter-Medium]" size={26}>
-                  🤦🏻‍♀️
-                </Text>
-              </View>
-              <Text className="text-[#373737]" size={11}>
-                불만족
-              </Text>
-            </Pressable>
+              </Pressable>
+            ))}
           </View>
         </View>
       </View>
@@ -150,8 +170,8 @@ function ReviewAdd() {
           style={{ borderRadius: 12 }}
           multiline={true}
           // numberOfLines={4}
-          onChangeText={(text) => setImpressiveScene(text)}
-          value={impressiveScene}
+          onChangeText={(text) => setImpression(text)}
+          value={impression}
           placeholder="ex- 공모전 기획안이 완전히 다 뒤집혀서 팀원 모두가 멘붕이 된 것.."
         />
       </View>
@@ -165,17 +185,14 @@ function ReviewAdd() {
           style={{ borderRadius: 12 }}
           multiline={true}
           // numberOfLines={4}
-          onChangeText={(text) => setMemorableExperience(text)}
-          value={memorableExperience}
+          onChangeText={(text) => setBearInMind(text)}
+          value={bearInMind}
           placeholder="ex- 공모전 기획안이 완전히 다 뒤집혀서 팀원 모두가 멘붕이 된 것.."
         />
       </View>
 
       <View className="px-[14] pb-[100]">
-        <Button
-          label="저장하기"
-          callbackFn={() => console.log("회고 저장 버튼을 눌렀습니다.")}
-        />
+        <Button label="저장하기" callbackFn={saveReview} />
       </View>
     </ScrollView>
   );

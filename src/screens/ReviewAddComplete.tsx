@@ -3,8 +3,14 @@ import { SafeAreaView, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import Tack from "@assets/images/tack.svg";
 import Button from "@components/Button";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { ReviewListScreenStackParamList } from "@stackNav/ReviewListScreen";
 
-function ReviewAddComplete() {
+type ReviewListScreenProps = NativeStackScreenProps<
+  ReviewListScreenStackParamList,
+  "ReviewAddComplete"
+>;
+function ReviewAddComplete({ navigation }: Readonly<ReviewListScreenProps>) {
   return (
     <SafeAreaView className="flex-1">
       <View className="flex-1 justify-between py-[26] pb-[44] px-[20]">
@@ -22,7 +28,7 @@ function ReviewAddComplete() {
         </View>
         <Button
           label="홈으로"
-          callbackFn={() => console.log("홈으로 이동 버튼을 눌렀습니다.")}
+          callbackFn={() => navigation.navigate("ReviewList")}
         />
       </View>
     </SafeAreaView>
