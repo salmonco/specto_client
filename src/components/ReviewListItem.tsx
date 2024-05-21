@@ -66,10 +66,14 @@ export const REVIEW_DATA = [
 interface ReviewListItemBase {
   item: ReviewBase;
   navigation: ReviewCalendarScreenProps;
+  setIsDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedReviewId: React.Dispatch<React.SetStateAction<number>>;
 }
 export default function ReviewListItem({
   item,
   navigation,
+  setIsDetailOpen,
+  setSelectedReviewId,
 }: Readonly<ReviewListItemBase>) {
   return (
     <View
@@ -113,7 +117,10 @@ export default function ReviewListItem({
 
       <Pressable
         className="flex-row items-center justify-center"
-        onPress={() => console.log("회고 펼쳐보기를 클릭했당께")}
+        onPress={() => {
+          setIsDetailOpen(true);
+          setSelectedReviewId(item.reviewId);
+        }}
       >
         <Text className="font-[Inter-Medium] text-[#373737] mr-[12]" size={12}>
           회고 펼쳐보기

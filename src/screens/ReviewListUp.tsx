@@ -4,12 +4,12 @@ import { CustomText as Text } from "@components/CustomText";
 import Button from "@components/Button";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ReviewListScreenStackParamList } from "@stackNav/ReviewListScreen";
-import { REVIEW_DATA } from "@components/ReviewListItem";
 import ChevronBottom from "@assets/images/chevron-bottom-black.svg";
 import AddIcon from "@assets/images/add-blue.svg";
 import { CATEGORY_LABEL } from "./Spec";
-import axiosInstance from "src/api/axiosInstance";
 import { SORT_MENU } from "./ReviewList";
+import ReviewDetail from "@components/ReviewDetail";
+import axiosInstance from "src/api/axiosInstance";
 
 interface ReviewBase {
   reviewId: number;
@@ -54,10 +54,12 @@ type ReviewListScreenProps = NativeStackScreenProps<
 
 function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
   const { id } = route.params;
-  const [reviewList, setReviewList] = useState<ReviewBase[]>([]);
+  const [reviewList, setReviewList] = useState<ReviewBase[]>(data);
   const [selectedSort, setSelectedSort] = useState(0);
   const [sortOpen, setSortOpen] = useState(false);
   const sortIdx = useRef(0);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [selectedReviewId, setSelectedReviewId] = useState(0);
 
   const ToggleButton = () => {
     return (
@@ -79,7 +81,7 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
 
   const getReviewList = async () => {
     try {
-      const res = await axiosInstance.get(`/review/spec/recent/${id}`);
+      const res = await axiosInstance.get(`/api/v1/review/spec/recent/${id}`);
       console.log(`/review/spec/${SORT_MENU[selectedSort].path}/${id}`, res);
       setReviewList(res.data);
     } catch (e) {
@@ -192,7 +194,10 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
 
                 <Pressable
                   className="flex-row items-center justify-center"
-                  onPress={() => console.log("회고 펼쳐보기를 클릭했당께")}
+                  onPress={() => {
+                    setIsDetailOpen(true);
+                    setSelectedReviewId(item.reviewId);
+                  }}
                 >
                   <Text
                     className="font-[Inter-Medium] text-[#373737] mr-[12]"
@@ -252,6 +257,18 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
             ))}
           </View>
         </View>
+      </Pressable>
+
+      <Pressable
+        className={`absolute top-0 left-0 w-full h-full z-20 bg-black/30 ${
+          isDetailOpen || "hidden"
+        }`}
+        onPress={() => setIsDetailOpen(false)}
+      >
+        <ReviewDetail
+          setIsDetailOpen={setIsDetailOpen}
+          reviewId={selectedReviewId}
+        />
       </Pressable>
     </View>
   );
