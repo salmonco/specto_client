@@ -8,6 +8,7 @@ import ReviewListItem, { REVIEW_DATA } from "@components/ReviewListItem";
 import axiosInstance from "src/api/axiosInstance";
 import getDateString from "src/utils/getDateString";
 import { useNavigation } from "@react-navigation/native";
+import ReviewDetail from "@components/ReviewDetail";
 
 export type ReviewCalendarScreenProps = NativeStackNavigationProp<
   ReviewCalendarScreenStackParamList,
@@ -26,6 +27,8 @@ function ReviewCalendar() {
     isEqualDate,
   } = useCalendar();
   const [clickedDate, setClickedDate] = useState(currentDate);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [selectedReviewId, setSelectedReviewId] = useState(0);
 
   useEffect(() => {
     const getReviewList = async () => {
@@ -44,7 +47,7 @@ function ReviewCalendar() {
   }, [clickedDate]);
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 relative">
       <ScrollView className="py-[26] px-[19] gap-y-[13]">
         <View className="p-[23] bg-[#F1F8FF]" style={{ borderRadius: 12 }}>
           <View className="flex-row justify-between">
@@ -126,10 +129,23 @@ function ReviewCalendar() {
               key={`${item.specId}-${item.reviewId}`}
               item={item}
               navigation={navigation}
+              setIsDetailOpen={setIsDetailOpen}
+              setSelectedReviewId={setSelectedReviewId}
             />
           ))}
         </View>
       </ScrollView>
+
+      <Pressable
+        className={`absolute top-0 left-0 w-full h-full z-20 bg-black/30 ${
+          isDetailOpen || "hidden"
+        }`}
+      >
+        <ReviewDetail
+          setIsDetailOpen={setIsDetailOpen}
+          reviewId={selectedReviewId}
+        />
+      </Pressable>
     </View>
   );
 }

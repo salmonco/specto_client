@@ -25,9 +25,8 @@ function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
   const [sortOpen, setSortOpen] = useState(false);
   const sortIdx = useRef(0);
 
-  const handleSpecClick = (id: number) => {
-    console.log(`${id}번 스펙을 클릭했습니다.`);
-    navigation.navigate("ReviewListUp", { id });
+  const handleSpecClick = (specItem: SpecBase) => {
+    navigation.navigate("ReviewListUp", { specItem });
   };
 
   const renderItem = ({ item }: { item: SpecBase }) => {

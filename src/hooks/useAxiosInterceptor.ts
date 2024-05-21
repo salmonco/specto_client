@@ -64,13 +64,16 @@ export const useAxiosInterceptor = () => {
 
     async function refreshAccessToken() {
       try {
-        const res = await axios.get(`${getEnvVars()?.apiUrl}/login/refresh`, {
-          headers: {
-            Authorization: `Bearer ${await SecureStore.getItemAsync(
-              "refreshToken"
-            )}`,
-          },
-        });
+        const res = await axios.get(
+          `${getEnvVars()?.apiUrl}/api/v1/login/refresh`,
+          {
+            headers: {
+              Authorization: `Bearer ${await SecureStore.getItemAsync(
+                "refreshToken"
+              )}`,
+            },
+          }
+        );
         console.log("refresh-token", res);
         const { accessToken, refreshToken } = res.data;
         await SecureStore.setItemAsync("accessToken", accessToken);

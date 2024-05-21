@@ -4,12 +4,12 @@ import { CustomText as Text } from "@components/CustomText";
 import Button from "@components/Button";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ReviewListScreenStackParamList } from "@stackNav/ReviewListScreen";
-import { REVIEW_DATA } from "@components/ReviewListItem";
 import ChevronBottom from "@assets/images/chevron-bottom-black.svg";
 import AddIcon from "@assets/images/add-blue.svg";
 import { CATEGORY_LABEL } from "./Spec";
-import axiosInstance from "src/api/axiosInstance";
 import { SORT_MENU } from "./ReviewList";
+import ReviewDetail from "@components/ReviewDetail";
+import axiosInstance from "src/api/axiosInstance";
 
 interface ReviewBase {
   reviewId: number;
@@ -53,11 +53,13 @@ type ReviewListScreenProps = NativeStackScreenProps<
 >;
 
 function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
-  const { id } = route.params;
-  const [reviewList, setReviewList] = useState<ReviewBase[]>([]);
+  const { specItem } = route.params;
+  const [reviewList, setReviewList] = useState<ReviewBase[]>(data);
   const [selectedSort, setSelectedSort] = useState(0);
   const [sortOpen, setSortOpen] = useState(false);
   const sortIdx = useRef(0);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [selectedReviewId, setSelectedReviewId] = useState(0);
 
   const ToggleButton = () => {
     return (
@@ -79,8 +81,13 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
 
   const getReviewList = async () => {
     try {
-      const res = await axiosInstance.get(`/review/spec/recent/${id}`);
-      console.log(`/review/spec/${SORT_MENU[selectedSort].path}/${id}`, res);
+      const res = await axiosInstance.get(
+        `/api/v1/review/spec/recent/${specItem.specId}`
+      );
+      console.log(
+        `/review/spec/${SORT_MENU[selectedSort].path}/${specItem.specId}`,
+        res
+      );
       setReviewList(res.data);
     } catch (e) {
       console.log(e);
@@ -106,9 +113,7 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
       <View className="py-[28] px-[19]">
         <Button
           label="회고 추가하기"
-          callbackFn={() =>
-            console.log(`${id}번 스펙의 회고 추가하기 버튼을 눌렀습니다.`)
-          }
+          callbackFn={() => navigation.navigate("ReviewAdd", { specItem })}
         />
       </View>
 
@@ -122,31 +127,31 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
                     className="font-[Inter-SemiBold] h-full mr-[6]"
                     size={18}
                   >
-                    {reviewList[0]?.specName}
+                    {specItem?.name}
                   </Text>
                   <Text className="text-[#AEAEB2]" size={10}>
-                    {CATEGORY_LABEL[reviewList[0]?.category]}
+                    {CATEGORY_LABEL[specItem?.category]}
                   </Text>
                 </View>
                 <Text className="text-[#636366]" size={12}>
-                  {reviewList[0]?.startDate} ~ {reviewList[0]?.endDate}
+                  {specItem?.startDate} ~ {specItem?.endDate}
                 </Text>
               </View>
             </View>
           </View>
           <View
             className={`justify-center items-center w-[55] h-[22] ${
-              reviewList[0]?.completed ? "bg-[#EAF4FF]" : "bg-[#EFEFEF]"
+              specItem?.completed ? "bg-[#EAF4FF]" : "bg-[#EFEFEF]"
             }`}
             style={{ borderRadius: 4 }}
           >
             <Text
               className={`font-[Inter-SemiBold] ${
-                reviewList[0]?.completed ? "text-[#0069CF]" : "text-[#9F9F9F]"
+                specItem?.completed ? "text-[#0069CF]" : "text-[#9F9F9F]"
               }`}
               size={12}
             >
-              {reviewList[0]?.completed ? "완료" : "진행중"}
+              {specItem?.completed ? "완료" : "진행중"}
             </Text>
           </View>
         </View>
@@ -192,7 +197,10 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
 
                 <Pressable
                   className="flex-row items-center justify-center"
-                  onPress={() => console.log("회고 펼쳐보기를 클릭했당께")}
+                  onPress={() => {
+                    setIsDetailOpen(true);
+                    setSelectedReviewId(item.reviewId);
+                  }}
                 >
                   <Text
                     className="font-[Inter-Medium] text-[#373737] mr-[12]"
@@ -210,7 +218,7 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
 
       <Pressable
         className="absolute right-[22] bottom-[22]"
-        onPress={() => console.log("회고 추가 버튼을 눌렀습니다.")}
+        onPress={() => navigation.navigate("ReviewAdd", { specItem })}
       >
         <AddIcon />
       </Pressable>
@@ -252,6 +260,17 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
             ))}
           </View>
         </View>
+      </Pressable>
+
+      <Pressable
+        className={`absolute top-0 left-0 w-full h-full z-20 bg-black/30 ${
+          isDetailOpen || "hidden"
+        }`}
+      >
+        <ReviewDetail
+          setIsDetailOpen={setIsDetailOpen}
+          reviewId={selectedReviewId}
+        />
       </Pressable>
     </View>
   );
