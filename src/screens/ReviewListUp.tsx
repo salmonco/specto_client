@@ -82,7 +82,7 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
   const getReviewList = async () => {
     try {
       const res = await axiosInstance.get(
-        `/api/v1/review/spec/recent/${specItem.specId}`
+        `/api/v1/review/spec/${SORT_MENU[selectedSort].path}/${specItem.specId}`
       );
       console.log(
         `/review/spec/${SORT_MENU[selectedSort].path}/${specItem.specId}`,
@@ -249,7 +249,7 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
                 <Text
                   className={`text-start ${
                     selectedSort === v.idx
-                      ? "text-[#FF823C] font-[Pretendard-Bold]"
+                      ? "text-[#0094FF] font-[Pretendard-Bold]"
                       : "font-[Pretendard-Medium] text-[#5A5E6A]"
                   }`}
                   size={14}
