@@ -90,7 +90,14 @@ export default function ReviewListItem({
             style={{ borderRadius: 4 }}
             onPress={() =>
               navigation.navigate("ReviewListUp", {
-                id: item.reviewId,
+                specItem: {
+                  specId: item.specId,
+                  name: item.specName,
+                  category: item.category,
+                  startDate: item.date,
+                  endDate: item.date,
+                  completed: false,
+                },
               })
             }
           >
