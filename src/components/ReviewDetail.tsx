@@ -109,7 +109,7 @@ export default function ReviewDetail({
           <Text className="text-[#9F9F9F] pb-[40]" size={12}>
             진행상황
           </Text>
-          <HorizontalSlider progress={item?.progress ?? 0.7} />
+          <HorizontalSlider progress={(item?.progress ?? 0.7) / 100} />
         </View>
 
         <View className="pt-[10] pb-[37]">
