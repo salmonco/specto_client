@@ -4,7 +4,10 @@ import { CustomText as Text } from "@components/CustomText";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ReviewCalendarScreenStackParamList } from "@stackNav/ReviewCalendarScreen";
 import useCalendar from "src/hooks/useCalendar";
-import ReviewListItem, { REVIEW_DATA } from "@components/ReviewListItem";
+import ReviewListItem, {
+  REVIEW_DATA,
+  ReviewBase,
+} from "@components/ReviewListItem";
 import axiosInstance from "src/api/axiosInstance";
 import getDateString from "src/utils/getDateString";
 import { useNavigation } from "@react-navigation/native";
@@ -17,7 +20,7 @@ export type ReviewCalendarScreenProps = NativeStackNavigationProp<
 
 function ReviewCalendar() {
   const navigation = useNavigation<ReviewCalendarScreenProps>();
-  const [reviewList, setReviewList] = useState(REVIEW_DATA);
+  const [reviewList, setReviewList] = useState<ReviewBase[]>([]);
   const {
     currentMonthCalendar,
     currentDate,
@@ -38,6 +41,7 @@ function ReviewCalendar() {
           `/api/v1/review/calendar?date=${dateStr}`
         );
         console.log(`/review/calendar?date=${dateStr}`, res);
+        // setReviewList(REVIEW_DATA);
         setReviewList(res.data);
       } catch (e) {
         console.log(e);

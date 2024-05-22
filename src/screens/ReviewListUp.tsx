@@ -54,7 +54,7 @@ type ReviewListScreenProps = NativeStackScreenProps<
 
 function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
   const { specItem } = route.params;
-  const [reviewList, setReviewList] = useState<ReviewBase[]>(data);
+  const [reviewList, setReviewList] = useState<ReviewBase[]>([]);
   const [selectedSort, setSelectedSort] = useState(0);
   const [sortOpen, setSortOpen] = useState(false);
   const sortIdx = useRef(0);
@@ -88,6 +88,7 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
         `/review/spec/${SORT_MENU[selectedSort].path}/${specItem.specId}`,
         res
       );
+      // setReviewList(data);
       setReviewList(res.data);
     } catch (e) {
       console.log(e);
