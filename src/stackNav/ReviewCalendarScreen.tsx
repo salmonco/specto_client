@@ -3,10 +3,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ReviewCalendar from "../screens/ReviewCalendar";
 import ReviewListUp from "../screens/ReviewListUp";
 import { SpecBase } from "@screens/Spec";
+import { ReviewDetailBase } from "@components/ReviewDetail";
 
 export type ReviewCalendarScreenStackParamList = {
   ReviewCalendar: undefined;
   ReviewListUp: { specItem: SpecBase };
+  ReviewAdd: { specItem: SpecBase; reviewDetailItem?: ReviewDetailBase };
 };
 
 const ReviewCalendarScreenStack =

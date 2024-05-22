@@ -14,11 +14,19 @@ type ReviewListScreenProps = NativeStackScreenProps<
   "ReviewAdd"
 >;
 function ReviewAdd({ route, navigation }: Readonly<ReviewListScreenProps>) {
-  const { specItem } = route.params;
-  const [progress, setProgress] = useState(0);
-  const [satisfaction, setSatisfaction] = useState("");
-  const [impression, setImpression] = useState("");
-  const [bearInMind, setBearInMind] = useState("");
+  const { specItem, reviewDetailItem } = route.params;
+  const [progress, setProgress] = useState(
+    (reviewDetailItem?.progress ?? 0) / 100
+  );
+  const [satisfaction, setSatisfaction] = useState(
+    reviewDetailItem?.satisfaction ?? ""
+  );
+  const [impression, setImpression] = useState(
+    reviewDetailItem?.impression ?? ""
+  );
+  const [bearInMind, setBearInMind] = useState(
+    reviewDetailItem?.bearInMind ?? ""
+  );
 
   const saveReview = async () => {
     try {
@@ -33,6 +41,26 @@ function ReviewAdd({ route, navigation }: Readonly<ReviewListScreenProps>) {
       console.log("body", body);
       const res = await axiosInstance.post(`/api/v1/review`, body);
       console.log(`/api/v1/review`, res);
+      navigation.navigate("ReviewAddComplete");
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const updateReview = async () => {
+    try {
+      const body = {
+        satisfaction,
+        progress: Math.round(progress * 100),
+        impression,
+        bearInMind,
+      };
+      console.log("body", body);
+      const res = await axiosInstance.put(
+        `/api/v1/review/${reviewDetailItem?.reviewId}`,
+        body
+      );
+      console.log(`/api/v1/review/${reviewDetailItem?.reviewId}`, res);
       navigation.navigate("ReviewAddComplete");
     } catch (e) {
       console.log(e);
@@ -192,7 +220,10 @@ function ReviewAdd({ route, navigation }: Readonly<ReviewListScreenProps>) {
       </View>
 
       <View className="px-[14] pb-[100]">
-        <Button label="저장하기" callbackFn={saveReview} />
+        <Button
+          label="저장하기"
+          callbackFn={reviewDetailItem ? updateReview : saveReview}
+        />
       </View>
     </ScrollView>
   );

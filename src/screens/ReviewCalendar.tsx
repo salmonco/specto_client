@@ -148,6 +148,10 @@ function ReviewCalendar() {
         <ReviewDetail
           setIsDetailOpen={setIsDetailOpen}
           reviewId={selectedReviewId}
+          navigation1={navigation}
+          specId={
+            reviewList.find((v) => v.reviewId === selectedReviewId)?.specId
+          }
         />
       </Pressable>
     </View>

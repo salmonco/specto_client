@@ -4,7 +4,10 @@ import { Pressable, SafeAreaView, View } from "react-native";
 import Close from "@assets/images/close.svg";
 import HorizontalSlider from "./HorizontalSlider";
 import axiosInstance from "src/api/axiosInstance";
-import { CATEGORY_LABEL } from "@screens/Spec";
+import { CATEGORY_LABEL, SpecBase } from "@screens/Spec";
+import { ReviewCalendarScreenProps } from "@screens/ReviewCalendar";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { ReviewListScreenStackParamList } from "@stackNav/ReviewListScreen";
 
 export const SATISFACTION_OPTION: {
   [key: string]: { label: string; emoji: string };
@@ -18,7 +21,8 @@ export const SATISFACTION_MENU = Object.entries(SATISFACTION_OPTION).map(
     return { value: k, label: v.label, emoji: v.emoji };
   }
 );
-interface ReviewDetailBase {
+export interface ReviewDetailBase {
+  reviewId: number;
   specName: string;
   category: string;
   dPlusDay: number;
@@ -31,19 +35,31 @@ interface ReviewDetailBase {
 type ReviewDetailProps = {
   setIsDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
   reviewId: number;
+  navigation1?: ReviewCalendarScreenProps;
+  navigation2?: NativeStackNavigationProp<
+    ReviewListScreenStackParamList,
+    "ReviewListUp",
+    undefined
+  >;
+  specId?: number;
+  specItem?: SpecBase;
 };
 export default function ReviewDetail({
   setIsDetailOpen,
   reviewId,
+  navigation1,
+  navigation2,
+  specId,
+  specItem,
 }: Readonly<ReviewDetailProps>) {
-  const [item, setItem] = useState<ReviewDetailBase | null>(null);
+  const [item, setItem] = useState<ReviewDetailBase>();
 
   useEffect(() => {
     const getItem = async () => {
       try {
         const res = await axiosInstance.get(`/api/v1/review/${reviewId}`);
         console.log(`/review/${reviewId}`, res);
-        setItem(res.data);
+        setItem({ ...res.data, reviewId });
       } catch (e) {
         console.log(e);
       }
@@ -62,7 +78,31 @@ export default function ReviewDetail({
             <Pressable
               className="justify-center items-center w-[53] h-[22] bg-[#0094FF] mr-[16]"
               style={{ borderRadius: 4 }}
-              onPress={() => console.log("수정 버튼을 클릭했습니다.")}
+              onPress={() =>
+                navigation1
+                  ? navigation1.navigate("ReviewAdd", {
+                      specItem: {
+                        specId: specId ?? 0,
+                        name: item?.specName ?? "",
+                        category: item?.category ?? "CONTEST",
+                        startDate: item?.date ?? "2024-05-22",
+                        endDate: item?.date ?? "2024-05-22",
+                        completed: false,
+                      },
+                      reviewDetailItem: item,
+                    })
+                  : navigation2?.navigate("ReviewAdd", {
+                      specItem: specItem ?? {
+                        specId: specId ?? 0,
+                        name: item?.specName ?? "",
+                        category: item?.category ?? "CONTEST",
+                        startDate: item?.date ?? "2024-05-22",
+                        endDate: item?.date ?? "2024-05-22",
+                        completed: false,
+                      },
+                      reviewDetailItem: item,
+                    })
+              }
             >
               <View className="flex-row justify-center items-center gap-[10]">
                 <Text className="text-white font-[Inter-SemiBold]" size={11}>

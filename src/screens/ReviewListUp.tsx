@@ -47,7 +47,7 @@ const data = [
   },
 ];
 
-type ReviewListScreenProps = NativeStackScreenProps<
+export type ReviewListScreenProps = NativeStackScreenProps<
   ReviewListScreenStackParamList,
   "ReviewListUp"
 >;
@@ -271,6 +271,8 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
         <ReviewDetail
           setIsDetailOpen={setIsDetailOpen}
           reviewId={selectedReviewId}
+          navigation2={navigation}
+          specItem={specItem}
         />
       </Pressable>
     </View>
