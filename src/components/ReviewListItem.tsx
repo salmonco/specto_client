@@ -4,13 +4,13 @@ import ChevronBottom from "@assets/images/chevron-bottom-black.svg";
 import ChevronRight from "@assets/images/chevron-right-white.svg";
 import { ReviewCalendarScreenProps } from "@screens/ReviewCalendar";
 
-interface ReviewBase {
+export interface ReviewBase {
   reviewId: number;
   specId: number;
   specName: string;
   category: string;
   date: string;
-  dPlusDay: string;
+  dplusDay: number;
 }
 export const REVIEW_DATA = [
   {
@@ -19,7 +19,7 @@ export const REVIEW_DATA = [
     specName: "정보처리기사",
     category: "certificate",
     date: "2024-03-06",
-    dPlusDay: "16",
+    dplusDay: 16,
   },
   {
     reviewId: 2,
@@ -27,7 +27,7 @@ export const REVIEW_DATA = [
     specName: "정보처리기사",
     category: "certificate",
     date: "2024-03-06",
-    dPlusDay: "16",
+    dplusDay: 16,
   },
   {
     reviewId: 1,
@@ -35,7 +35,7 @@ export const REVIEW_DATA = [
     specName: "SolidIT 현장실습",
     category: "intern",
     date: "2024-03-06",
-    dPlusDay: "16",
+    dplusDay: 16,
   },
   {
     reviewId: 1,
@@ -43,7 +43,7 @@ export const REVIEW_DATA = [
     specName: "어쩌고 현장실습",
     category: "intern",
     date: "2024-03-06",
-    dPlusDay: "16",
+    dplusDay: 16,
   },
   {
     reviewId: 2,
@@ -51,7 +51,7 @@ export const REVIEW_DATA = [
     specName: "어쩌고 현장실습",
     category: "intern",
     date: "2024-03-26",
-    dPlusDay: "20",
+    dplusDay: 20,
   },
   {
     reviewId: 3,
@@ -59,7 +59,7 @@ export const REVIEW_DATA = [
     specName: "어쩌고 현장실습",
     category: "intern",
     date: "2024-03-29",
-    dPlusDay: "30",
+    dplusDay: 30,
   },
 ];
 
@@ -110,7 +110,7 @@ export default function ReviewListItem({
             {item.specName}
           </Text>
           <Text className="font-[Inter-Medium] text-[#0094FF]" size={18}>
-            D+{item.dPlusDay}
+            D+{`${item.dplusDay}`}
           </Text>
         </View>
       </View>
