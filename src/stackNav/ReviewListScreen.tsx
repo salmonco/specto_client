@@ -5,11 +5,12 @@ import ReviewListUp from "../screens/ReviewListUp";
 import ReviewAdd from "../screens/ReviewAdd";
 import ReviewAddComplete from "../screens/ReviewAddComplete";
 import { SpecBase } from "@screens/Spec";
+import { ReviewDetailBase } from "@components/ReviewDetail";
 
 export type ReviewListScreenStackParamList = {
   ReviewList: undefined;
   ReviewListUp: { specItem: SpecBase };
-  ReviewAdd: { specItem: SpecBase };
+  ReviewAdd: { specItem: SpecBase; reviewDetailItem?: ReviewDetailBase };
   ReviewAddComplete: undefined;
 };
 

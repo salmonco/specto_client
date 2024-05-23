@@ -47,14 +47,14 @@ const data = [
   },
 ];
 
-type ReviewListScreenProps = NativeStackScreenProps<
+export type ReviewListScreenProps = NativeStackScreenProps<
   ReviewListScreenStackParamList,
   "ReviewListUp"
 >;
 
 function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
   const { specItem } = route.params;
-  const [reviewList, setReviewList] = useState<ReviewBase[]>(data);
+  const [reviewList, setReviewList] = useState<ReviewBase[]>([]);
   const [selectedSort, setSelectedSort] = useState(0);
   const [sortOpen, setSortOpen] = useState(false);
   const sortIdx = useRef(0);
@@ -82,12 +82,13 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
   const getReviewList = async () => {
     try {
       const res = await axiosInstance.get(
-        `/api/v1/review/spec/recent/${specItem.specId}`
+        `/api/v1/review/spec/${SORT_MENU[selectedSort].path}/${specItem.specId}`
       );
       console.log(
         `/review/spec/${SORT_MENU[selectedSort].path}/${specItem.specId}`,
         res
       );
+      // setReviewList(data);
       setReviewList(res.data);
     } catch (e) {
       console.log(e);
@@ -249,7 +250,7 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
                 <Text
                   className={`text-start ${
                     selectedSort === v.idx
-                      ? "text-[#FF823C] font-[Pretendard-Bold]"
+                      ? "text-[#0094FF] font-[Pretendard-Bold]"
                       : "font-[Pretendard-Medium] text-[#5A5E6A]"
                   }`}
                   size={14}
@@ -270,6 +271,8 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
         <ReviewDetail
           setIsDetailOpen={setIsDetailOpen}
           reviewId={selectedReviewId}
+          navigation2={navigation}
+          specItem={specItem}
         />
       </Pressable>
     </View>
