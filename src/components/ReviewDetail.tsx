@@ -25,7 +25,7 @@ export interface ReviewDetailBase {
   reviewId: number;
   specName: string;
   category: string;
-  dPlusDay: number;
+  dplusDay: number;
   satisfaction: string;
   progress: number;
   impression: string;
@@ -129,7 +129,7 @@ export default function ReviewDetail({
             </Text>
           </View>
           <Text className="font-[Inter-Medium] text-[#0094FF]" size={18}>
-            D+{`${item?.dPlusDay ?? 0}`}
+            D+{`${item?.dplusDay ?? 0}`}
           </Text>
         </View>
 
