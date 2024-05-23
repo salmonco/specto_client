@@ -54,7 +54,7 @@ const data = {
     },
   ],
 };
-const CATEGORY_DETAIL_MENU = {
+export const CATEGORY_DETAIL_MENU = {
   CONTEST: [
     "host",
     "field",
@@ -94,7 +94,7 @@ const CATEGORY_DETAIL_MENU = {
     "documentation",
   ],
 };
-const DETAIL_MENU: { [key: string]: string } = {
+export const DETAIL_MENU: { [key: string]: string } = {
   host: "주최 기관",
   field: "분야",
   awardStatus: "수상 여부",
@@ -108,6 +108,30 @@ const DETAIL_MENU: { [key: string]: string } = {
   project: "프로젝트 내용",
   direction: "방향성",
 };
+export interface SpecDetailDetailBase {
+  host: string;
+  field: string;
+  awardStatus: boolean;
+  awardTitle: string;
+  date: string;
+  documentation: string;
+  company: string;
+  work: string;
+  motivation: string;
+  goal: string;
+  project: string;
+  direction: string;
+}
+export interface SpecDetailBase {
+  name: string;
+  category: string;
+  startDate: string;
+  endDate: string;
+  completed: boolean;
+  contents: string;
+  summary: string;
+  detail: SpecDetailDetailBase;
+}
 const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
   const { id, category } = route.params;
   // TODO: id로 스펙 상세조회

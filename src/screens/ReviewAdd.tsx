@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pressable, ScrollView, TextInput, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import Button from "@components/Button";
@@ -8,6 +8,12 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ReviewListScreenStackParamList } from "@stackNav/ReviewListScreen";
 import { SATISFACTION_MENU } from "@components/ReviewDetail";
 import axiosInstance from "src/api/axiosInstance";
+import {
+  CATEGORY_DETAIL_MENU,
+  DETAIL_MENU,
+  SpecDetailBase,
+  SpecDetailDetailBase,
+} from "./SpecDetail";
 
 type ReviewListScreenProps = NativeStackScreenProps<
   ReviewListScreenStackParamList,
@@ -15,6 +21,7 @@ type ReviewListScreenProps = NativeStackScreenProps<
 >;
 function ReviewAdd({ route, navigation }: Readonly<ReviewListScreenProps>) {
   const { specItem, reviewDetailItem } = route.params;
+  const [specInfo, setSpecInfo] = useState<SpecDetailBase | null>(null);
   const [progress, setProgress] = useState(
     (reviewDetailItem?.progress ?? 0) / 100
   );
@@ -67,6 +74,50 @@ function ReviewAdd({ route, navigation }: Readonly<ReviewListScreenProps>) {
     }
   };
 
+  useEffect(() => {
+    const fetchSpecDetail = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/api/v1/spec/${specItem.specId}`
+        );
+        setSpecInfo(response.data);
+      } catch (error) {
+        console.error("Error fetching spec detail:", error);
+      }
+    };
+    fetchSpecDetail();
+  }, []);
+
+  const renderDetailInfo = (
+    item:
+      | string
+      | {
+          key: string;
+          label: string;
+        }
+  ) => {
+    return (
+      <View key={`${Math.random()}`} className="flex-row">
+        <Text className="text-[#373737] w-[80]" size={13}>
+          {typeof item === "string" ? DETAIL_MENU[item] : item.label}
+        </Text>
+        <Text className="text-[#373737] mr-[20]" size={13}>
+          {item === "awardStatus"
+            ? specInfo?.detail[item] === true
+              ? "수상"
+              : "비수상"
+            : String(
+                specInfo?.detail[
+                  (typeof item === "string"
+                    ? item
+                    : item.key) as keyof SpecDetailDetailBase
+                ]
+              )}
+        </Text>
+      </View>
+    );
+  };
+
   return (
     <ScrollView className="flex-1 py-[23]">
       <View className="px-[35] pt-[24] pb-[29]">
@@ -113,30 +164,11 @@ function ReviewAdd({ route, navigation }: Readonly<ReviewListScreenProps>) {
             </Text>
           </View>
           <View className="gap-y-[8]">
-            <View className="flex-row gap-x-[33]">
-              <Text className="text-[#373737]" size={13}>
-                공모 분야
-              </Text>
-              <Text className="text-[#373737]" size={13}>
-                건축
-              </Text>
-            </View>
-            <View className="flex-row gap-x-[33]">
-              <Text className="text-[#373737]" size={13}>
-                주최 기관
-              </Text>
-              <Text className="text-[#373737]" size={13}>
-                대한토목학회
-              </Text>
-            </View>
-            <View className="flex-row gap-x-[33]">
-              <Text className="text-[#373737]]" size={13}>
-                마감 기한
-              </Text>
-              <Text className="text-[#373737]" size={13}>
-                {specItem?.endDate}
-              </Text>
-            </View>
+            {CATEGORY_DETAIL_MENU[
+              specItem?.category as keyof typeof CATEGORY_DETAIL_MENU
+            ].map((item: string | { key: string; label: string }) =>
+              renderDetailInfo(item)
+            )}
           </View>
         </View>
       </View>
