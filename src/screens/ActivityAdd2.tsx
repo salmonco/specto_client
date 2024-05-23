@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CalendarPicker from "react-native-calendar-picker";
+import { Alert } from "react-native";
+
 import {
   Text,
   View,
@@ -43,51 +45,37 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
 
   const { name } = route.params;
 
-  useEffect(() => {
-    console.log("ActivityAdd2 received params", { name });
-  }, [name]);
-
-  // const handleNext = () => {
-  //   console.log("ActivityAdd2 -> ActivityAdd3", {
-  //     name,
-  //     host,
-  //     startDate: startDate ? startDate.toISOString() : null, // startDate를 ISO 문자열로 변환
-  //     endDate: endDate ? endDate.toISOString() : null, // endDate도 변환
-  //     field,
-  //     contents,
-  //     proofFile,
-  //   });
-  //   navigation.navigate("ActivityAdd3", {
-  //     name,
-  //     host,
-  //     startDate: startDate ? startDate.toISOString() : null, // startDate 변환
-  //     endDate: endDate ? endDate.toISOString() : null, // endDate 변환
-  //     field,
-  //     contents,
-  //     proofFile,
-  //   });
-  // };
+  // useEffect(() => {
+  //   console.log("ActivityAdd2 received params", { name });
+  // }, [name]);
 
   const handleNext = () => {
-    const formatDateOnly = (date: Date | null): Date | null => {
+    const formatDateOnly = (date: Date | null): string | null => {
       if (!date) return null;
-      return new Date(date.getFullYear(), date.getMonth() + 1, date.getDate());
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
     };
+
+    const formattedStartDate = formatDateOnly(startDate);
+    const formattedEndDate = formatDateOnly(endDate);
 
     console.log("ActivityAdd2 -> ActivityAdd3", {
       name,
       host,
-      startDate: formatDateOnly(startDate),
-      endDate: formatDateOnly(endDate),
+      startDate,
+      endDate,
       field,
       contents,
       proofFile,
     });
+
     navigation.navigate("ActivityAdd3", {
       name,
       host,
-      startDate: formatDateOnly(startDate),
-      endDate: formatDateOnly(endDate),
+      startDate,
+      endDate,
       field,
       contents,
       proofFile,
@@ -120,25 +108,38 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
     return `${month}월 ${day}일`;
   };
 
-  // const pickDocument = async () => {
-  //   try {
-  //     const result = await DocumentPicker.getDocumentAsync({});
-  //     if (result.type === "success") {
-  //       setProofFile(result.uri);
-  //       console.log(result.uri);
-  //       alert(`Selected file: ${result.name}`);
-  //     } else {
-  //       console.log("Document picking was canceled");
-  //     }
-  //   } catch (err) {
-  //     console.error("Error picking document:", err);
-  //   }
-  // };
-
   const pickDocument = async () => {
-    const result = await DocumentPicker.getDocumentAsync({});
-    console.log(result);
-    alert(result);
+    try {
+      const proofFile = await DocumentPicker.getDocumentAsync({});
+
+      if (proofFile.canceled) {
+        Alert.alert("Document selection was canceled.");
+        return null;
+      } else {
+        const document = proofFile.assets[0];
+        const { name, size, uri, mimeType } = document;
+        Alert.alert(
+          "Selected Document",
+          `Name: ${name}\nSize: ${size} bytes\nType: ${mimeType}\nURI: ${uri}`
+        );
+        console.log(proofFile);
+        // Return the selected document
+        return document;
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert("An error occurred while picking the document.");
+      return null;
+    }
+  };
+
+  const handleFileUpload = async () => {
+    const document = await pickDocument();
+    if (document !== null) {
+      console.log("Selected file:", document);
+      setProofFile(document.uri);
+      // Perform further actions with the selected file if necessary
+    }
   };
 
   return (
@@ -259,7 +260,8 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
             </Text>
             <TouchableOpacity
               style={[styles.inputBox, { width: 110 }]}
-              onPress={pickDocument}
+              // onPress={pickDocument}
+              onPress={handleFileUpload}
             >
               <View>
                 <Text style={styles.inputText}>파일 업로드</Text>

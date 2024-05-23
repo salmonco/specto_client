@@ -26,17 +26,12 @@ export const useAxiosInterceptor = () => {
     // Request interceptor for API calls
     const requestInterceptor = axiosInstance.interceptors.request.use(
       requestHandler,
-      (error: AxiosError) => {
-        Promise.reject(error);
-      }
+      (error: AxiosError) => Promise.reject(error)
     );
 
     const errorHandler = async (error: any) => {
       const originalRequest = error.config;
-      if (
-        (error as AxiosError).response?.status === 401 &&
-        !originalRequest._retry
-      ) {
+      if (error.response?.status === 401 && !originalRequest._retry) {
         const refreshToken = await SecureStore.getItemAsync("refreshToken");
         if (!refreshToken) {
           await SecureStore.deleteItemAsync("accessToken");
@@ -44,27 +39,29 @@ export const useAxiosInterceptor = () => {
           navigation.navigate("Auth");
           return;
         }
+
         originalRequest._retry = true;
-        const accessToken = await refreshAccessToken();
-        axiosInstance.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${accessToken}`;
-        return axiosInstance(originalRequest);
+        const newAccessToken = await refreshAccessToken();
+        if (newAccessToken) {
+          axiosInstance.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${newAccessToken}`;
+          originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+          return axiosInstance(originalRequest);
+        }
       }
       return Promise.reject(error);
     };
 
     // Response interceptor for API calls
     const responseInterceptor = axiosInstance.interceptors.response.use(
-      (response) => {
-        return response;
-      },
+      (response) => response,
       errorHandler
     );
 
-    async function refreshAccessToken() {
+    const refreshAccessToken = async () => {
       try {
-        const res = await axios.get(
+        const response = await axios.get(
           `${getEnvVars()?.apiUrl}/api/v1/login/refresh`,
           {
             headers: {
@@ -74,26 +71,26 @@ export const useAxiosInterceptor = () => {
             },
           }
         );
-        console.log("refresh-token", res);
-        const { accessToken, refreshToken } = res.data;
+        console.log("refresh-token", response);
+        const { accessToken, refreshToken } = response.data;
         await SecureStore.setItemAsync("accessToken", accessToken);
         await SecureStore.setItemAsync("refreshToken", refreshToken);
         return accessToken;
-      } catch (error) {
-        if ((error as AxiosError).response?.status === 401) {
+      } catch (error: any) {
+        // Explicitly typing error as any or AxiosError
+        if (error.response?.status === 401) {
           await SecureStore.deleteItemAsync("accessToken");
           await SecureStore.deleteItemAsync("refreshToken");
           Alert.alert("세션이 만료되어 로그인 페이지로 이동합니다.");
-
           navigation.navigate("Auth");
-          return;
         }
+        return null;
       }
-    }
+    };
 
     return () => {
       axiosInstance.interceptors.request.eject(requestInterceptor);
       axiosInstance.interceptors.response.eject(responseInterceptor);
     };
-  }, []);
+  }, [navigation]);
 };

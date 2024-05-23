@@ -18,8 +18,20 @@ type ActivityProps = NativeStackScreenProps<
 >;
 
 function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
+  // ActivityAdd3 컴포넌트에서 전달받은 날짜 문자열을 Date 객체로 변환
+  const parseDateOnly = (dateStr: string | null): string | null => {
+    if (!dateStr) return null;
+    const date = new Date(dateStr);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   const { name, host, startDate, endDate, field, contents, proofFile } =
     route.params || {};
+  // const parsedStartDate = parseDateOnly(startDate);
+  // const parsedEndDate = parseDateOnly(endDate);
   const [motivation, setMotivation] = useState<string | null>(null);
   const [goal, setGoal] = useState<string | null>(null);
   const [direction, setDirection] = useState<string | null>(null);
@@ -32,11 +44,18 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
     try {
       const formData = new FormData();
 
-      if (files[0]) {
-        formData.append("documentation", files[0]);
+      // if (proofFile) {
+      //   formData.append("documentation", proofFile);
+      // }
+
+      if (proofFile) {
+        // uri to blob
+        const response = await fetch(proofFile);
+        const blob = await response.blob();
+        formData.append("documentation", blob);
       }
 
-      console.log("ActivityAdd3에서 db로 보내야함", {
+      console.log("ActivityAdd3 -> DB", {
         name,
         host,
         startDate,
@@ -49,28 +68,31 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
         direction,
       });
 
-      const value = [
-        {
-          name: name || "기본 이름", // 기본 값 추가
+      const value = {
+        name: name || "기본 이름", // 기본 값 추가
+        category: "Activity",
+        startDate: startDate || new Date(), // 기본 값 추가
+        endDate: endDate || new Date(), // 기본 값 추가
+        field: field || "기본 분야", // 기본 값 추가
+        contents: contents || "기본 내용", // 기본 값 추가
+        detail: {
           host: host || "기본 주최자", // 기본 값 추가
-          startDate: startDate || "기본 시작 날짜", // 기본 값 추가
-          endDate: endDate || "기본 종료 날짜", // 기본 값 추가
-          // startDate: startDate ? startDate.toISOString() : "기본 시작 날짜",
-          // endDate: endDate ? endDate.toISOString() : "기본 종료 날짜",
-          field: field || "기본 분야", // 기본 값 추가
-          contents: contents || "기본 내용", // 기본 값 추가
           motivation: motivation || "기본 동기", // 기본 값 추가
           goal: goal || "기본 목표", // 기본 값 추가
-          direction: direction || "기본 방향", // 기본 값 추가
+          direction: direction || "기본 방향", // 기본 값 추가}
         },
-      ];
+      };
 
       const blob = new Blob([JSON.stringify(value)], {
         type: "application/json",
       });
 
+      console.log(blob);
+
       // formData.append("specPostReq", JSON.stringify(value));
       formData.append("specPostReq", blob);
+
+      console.log(formData);
 
       const res = await axiosInstance.post(`/api/v1/spec`, formData, {
         headers: {
