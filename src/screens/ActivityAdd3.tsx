@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Text,
   View,
@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  Keyboard,
+  Alert,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ActivityAddScreenStackParamList } from "@stackNav/ActivityAddScreen";
@@ -18,69 +18,43 @@ type ActivityProps = NativeStackScreenProps<
 >;
 
 function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
-  // ActivityAdd3 컴포넌트에서 전달받은 날짜 문자열을 Date 객체로 변환
-  const parseDateOnly = (dateStr: string | null): string | null => {
-    if (!dateStr) return null;
-    const date = new Date(dateStr);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
-
   const { name, host, startDate, endDate, field, contents, proofFile } =
     route.params || {};
-  // const parsedStartDate = parseDateOnly(startDate);
-  // const parsedEndDate = parseDateOnly(endDate);
   const [motivation, setMotivation] = useState<string | null>(null);
   const [goal, setGoal] = useState<string | null>(null);
   const [direction, setDirection] = useState<string | null>(null);
-  const [files, setFiles] = useState<any[]>([]); // assuming you have a state to hold uploaded files
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
-  console.log("Route params:", route.params);
-
-  const handleNext = async () => {
+  const handleNext = useCallback(async () => {
     try {
       const formData = new FormData();
 
-      // if (proofFile) {
-      //   formData.append("documentation", proofFile);
-      // }
+      enum ActivityCategory {
+        ACTIVITY = "ACTIVITY",
+        CERTIFICATION = "CERTIFICATION",
+        CONTEST = "CONTEST",
+        INTERNSHIP = "INTERNSHIP",
+        PROJECT = "PROJECT",
+      }
 
       if (proofFile) {
-        // uri to blob
         const response = await fetch(proofFile);
         const blob = await response.blob();
         formData.append("documentation", blob);
       }
 
-      console.log("ActivityAdd3 -> DB", {
-        name,
-        startDate,
-        endDate,
-        contents,
-        proofFile,
-        field,
-        host,
-        motivation,
-        goal,
-        direction,
-      });
-
       const value = {
-        name: name || "기본 이름", // 기본 값 추가
-        category: "Activity",
-        startDate: startDate || "2024-03-06", // 기본 값 추가
-        endDate: endDate || "2024-03-06", // 기본 값 추가
-        contents: contents || "기본 내용", // 기본 값 추가
+        name: name || "기본 이름",
+        category: ActivityCategory.ACTIVITY,
+        startDate: startDate || "2024-03-06",
+        endDate: endDate || "2024-03-06",
+        contents: contents || "기본 내용",
         detail: {
-          // documentation: "test.pdf",
-          host: host || "기본 주최자", // 기본 값 추가
-          field: field || "IDEATION", // 기본 값 추가
-          motivation: motivation || "기본 동기", // 기본 값 추가
-          goal: goal || "기본 목표", // 기본 값 추가
-          direction: direction || "기본 목표", // 기본 값 추가
+          host: host || "기본 주최자",
+          field: field || "IDEATION",
+          motivation: motivation || "기본 동기",
+          goal: goal || "기본 목표",
+          direction: direction || "기본 목표",
         },
       };
 
@@ -89,36 +63,43 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
       const blob = new Blob([JSON.stringify(value)], {
         type: "application/json",
       });
-
-      console.log(blob);
-
-      // formData.append("specPostReq", JSON.stringify(value));
       formData.append("specPostReq", blob);
 
-      console.log(formData);
+      console.log("블랍:", blob);
 
-      const res = await axiosInstance.post(`/api/v1/spec`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      await axiosInstance.post(`/api/v1/spec`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
-      console.log(res);
+      console.log("폼데이터:", formData);
 
       navigation.navigate("SpecAddComplete", { name });
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error 응애:", error);
+      Alert.alert(
+        "양식을 제출하는 동안 오류가 발생했습니다. 다시 시도해 주세요."
+      );
     }
-  };
+  }, [
+    name,
+    host,
+    startDate,
+    endDate,
+    field,
+    contents,
+    motivation,
+    goal,
+    direction,
+    proofFile,
+    navigation,
+  ]);
 
   return (
     <View style={styles.container}>
-      {/* 대외활동 정보 입력 */}
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={styles.scrollViewContent}
       >
-        {/* 페이지 인디케이터 */}
         <View style={styles.pageIndicator}>
           <Text style={styles.currentPage}>3</Text>
           <Text style={styles.totalPages}>/3</Text>
@@ -129,7 +110,6 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
           </Text>
         </View>
 
-        {/* 섹션 1: 대외활동 배경 입력 */}
         <View style={styles.section}>
           <Text style={styles.sectionSubtitle}>활동 배경을 입력해주세요.</Text>
           <View style={styles.inputBox}>
@@ -143,7 +123,6 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
           </View>
         </View>
 
-        {/* 섹션 2: 대외활동 목표 입력 */}
         <View style={styles.section}>
           <Text style={styles.sectionSubtitle}>활동 목표를 입력해주세요.</Text>
           <View style={styles.inputBox}>
@@ -157,7 +136,6 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
           </View>
         </View>
 
-        {/* 섹션 3: 대외활동 방향성 */}
         <View style={styles.section}>
           <Text style={styles.sectionSubtitle}>
             추구하는 활동 방향성을 입력해주세요.
@@ -174,7 +152,6 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
         </View>
       </ScrollView>
 
-      {/* 다음으로 버튼 */}
       <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
         <Text style={styles.nextButtonText}>다음으로</Text>
       </TouchableOpacity>
@@ -195,11 +172,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 20,
     right: 10,
-  },
-  pageText: {
-    color: "#0094FF",
-    fontSize: 14,
-    fontWeight: "600",
   },
   currentPage: {
     color: "#0094FF",
@@ -228,37 +200,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginBottom: 15,
   },
-  datePickerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  datePicker: {
-    flex: 1,
-    padding: 13,
-    backgroundColor: "white",
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: "#D9D9D9",
-    marginRight: 10,
-  },
-  datePickerLabel: {
-    color: "#9F9F9F",
-    fontSize: 10,
-    fontWeight: "400",
-  },
-  datePickerText: {
-    marginTop: 5,
-    color: "#C1C1C1",
-    fontSize: 16,
-    fontWeight: "400",
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-  },
-
   inputBox: {
     paddingVertical: 12,
     padding: 16,
@@ -289,7 +230,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     width: "90%",
-    height: 50, // 높이 조절
+    height: 50,
   },
   nextButtonText: {
     color: "white",
@@ -298,17 +239,7 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     flexGrow: 1,
-    paddingBottom: 20, // 키보드가 나타날 때 입력란이 가려지지 않도록 하기 위한 여분의 공간
-  },
-  modalBackground: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // 투명한 검은 배경
-  },
-  calendarModal: {
-    backgroundColor: "white", // 달력이 표시되는 박스 배경색
-    marginHorizontal: 20, // 모달 창과 달력 사이의 여백
-    borderRadius: 10, // 모달 창과 달력의 모서리를 둥글게 만듦
-    paddingBottom: 20, // 하단 여백
+    paddingBottom: 20,
   },
 });
 
