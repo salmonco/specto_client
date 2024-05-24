@@ -18,12 +18,13 @@ import { Dropdown } from "react-native-element-dropdown";
 import * as DocumentPicker from "expo-document-picker";
 
 const data = [
-  { label: "기획/아이디어", value: "기획/아이디어" },
-  { label: "브랜드/네이밍", value: "브랜드/네이밍" },
-  { label: "사진/영상", value: "사진/영상" },
-  { label: "디자인", value: "디자인" },
-  { label: "예체능", value: "예체능" },
-  { label: "IT/SW", value: "IT/SW" },
+  { label: "기획/아이디어", value: "IDEATION" },
+  { label: "브랜드/네이밍", value: "BRANDING" },
+  { label: "광고/마케팅", value: "MARKETING" },
+  { label: "사진/영상", value: "PHOTOGRAPYH" },
+  { label: "디자인", value: "DESIGN" },
+  { label: "예체능", value: "PERFORMINGARTS" },
+  { label: "IT/SW", value: "IT" },
 ];
 
 type ActivityProps = NativeStackScreenProps<
@@ -50,16 +51,16 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
   // }, [name]);
 
   const handleNext = () => {
-    const formatDateOnly = (date: Date | null): string | null => {
-      if (!date) return null;
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const day = String(date.getDate()).padStart(2, "0");
-      return `${year}-${month}-${day}`;
-    };
+    // const formatDateOnly = (date: Date | null): string | null => {
+    //   if (!date) return null;
+    //   const year = date.getFullYear();
+    //   const month = String(date.getMonth() + 1).padStart(2, "0");
+    //   const day = String(date.getDate()).padStart(2, "0");
+    //   return `${year}-${month}-${day}`;
+    // };
 
-    const formattedStartDate = formatDateOnly(startDate);
-    const formattedEndDate = formatDateOnly(endDate);
+    // const formattedStartDate = formatDateOnly(startDate);
+    // const formattedEndDate = formatDateOnly(endDate);
 
     console.log("ActivityAdd2 -> ActivityAdd3", {
       name,

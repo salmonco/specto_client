@@ -57,12 +57,12 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
 
       console.log("ActivityAdd3 -> DB", {
         name,
-        host,
         startDate,
         endDate,
-        field,
         contents,
         proofFile,
+        field,
+        host,
         motivation,
         goal,
         direction,
@@ -71,17 +71,20 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
       const value = {
         name: name || "기본 이름", // 기본 값 추가
         category: "Activity",
-        startDate: startDate || new Date(), // 기본 값 추가
-        endDate: endDate || new Date(), // 기본 값 추가
-        field: field || "기본 분야", // 기본 값 추가
+        startDate: startDate || "2024-03-06", // 기본 값 추가
+        endDate: endDate || "2024-03-06", // 기본 값 추가
         contents: contents || "기본 내용", // 기본 값 추가
         detail: {
+          // documentation: "test.pdf",
           host: host || "기본 주최자", // 기본 값 추가
+          field: field || "IDEATION", // 기본 값 추가
           motivation: motivation || "기본 동기", // 기본 값 추가
           goal: goal || "기본 목표", // 기본 값 추가
-          direction: direction || "기본 방향", // 기본 값 추가}
+          direction: direction || "기본 목표", // 기본 값 추가
         },
       };
+
+      console.log(value);
 
       const blob = new Blob([JSON.stringify(value)], {
         type: "application/json",
