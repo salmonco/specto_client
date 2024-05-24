@@ -65,7 +65,7 @@ export const useAxiosInterceptor = () => {
           `${getEnvVars()?.apiUrl}/api/v1/login/refresh`,
           {
             headers: {
-              Authorization: `Bearer ${await SecureStore.getItemAsync(
+              refresh: `Bearer ${await SecureStore.getItemAsync(
                 "refreshToken"
               )}`,
             },
