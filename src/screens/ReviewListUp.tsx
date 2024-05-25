@@ -234,10 +234,7 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
           <View className="flex flex-col pt-[6px] pb-[14px] h-[272px] rounded-t-[20px] bg-white shadow-t-gray">
             <View className="self-center w-[53px] h-[4px] bg-[#D5D8DC] rounded-[2px] mb-[16px]" />
             <View className="py-[7.5px] px-[22px]">
-              <Text
-                className="font-[Pretendard-Medium] text-[#9E9E9E]"
-                size={13}
-              >
+              <Text className="font-[Inter-Medium] text-[#9E9E9E]" size={13}>
                 정렬
               </Text>
             </View>
@@ -250,8 +247,8 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
                 <Text
                   className={`text-start ${
                     selectedSort === v.idx
-                      ? "text-[#0094FF] font-[Pretendard-Bold]"
-                      : "font-[Pretendard-Medium] text-[#5A5E6A]"
+                      ? "text-[#0094FF] font-[Inter-SemiBold]"
+                      : "font-[Inter-Medium] text-[#5A5E6A]"
                   }`}
                   size={14}
                 >
