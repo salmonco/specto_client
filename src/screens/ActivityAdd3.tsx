@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ActivityAddScreenStackParamList } from "@stackNav/ActivityAddScreen";
-import axiosInstance from "src/api/axiosInstance";
+import getEnvVars from "environment";
 
 type ActivityProps = NativeStackScreenProps<
   ActivityAddScreenStackParamList,
@@ -26,52 +26,64 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const handleNext = useCallback(async () => {
+    const formData = new FormData();
+
+    enum ActivityCategory {
+      ACTIVITY = "ACTIVITY",
+      CERTIFICATION = "CERTIFICATION",
+      CONTEST = "CONTEST",
+      INTERNSHIP = "INTERNSHIP",
+      PROJECT = "PROJECT",
+    }
+
+    if (proofFile) {
+      const response = await fetch(proofFile);
+      const blob = await response.blob();
+      formData.append("documentation", blob);
+    }
+
+    const value = {
+      name: name || "기본 이름",
+      category: ActivityCategory.ACTIVITY,
+      startDate: startDate || "2024-03-06",
+      endDate: endDate || "2024-03-06",
+      contents: contents || "기본 내용",
+      detail: {
+        host: host || "기본 주최자",
+        field: field || "IDEATION",
+        motivation: motivation || "기본 동기",
+        goal: goal || "기본 목표",
+        direction: direction || "기본 목표",
+      },
+    };
+
+    console.log(value);
+
+    const blob = new Blob([JSON.stringify(value)], {
+      type: "application/json",
+    });
+    formData.append("specPostReq", blob);
+
+    console.log("블랍:", blob);
+    console.log("폼데이터:", formData);
+
     try {
-      const formData = new FormData();
-
-      enum ActivityCategory {
-        ACTIVITY = "ACTIVITY",
-        CERTIFICATION = "CERTIFICATION",
-        CONTEST = "CONTEST",
-        INTERNSHIP = "INTERNSHIP",
-        PROJECT = "PROJECT",
-      }
-
-      if (proofFile) {
-        const response = await fetch(proofFile);
-        const blob = await response.blob();
-        formData.append("documentation", blob);
-      }
-
-      const value = {
-        name: name || "기본 이름",
-        category: ActivityCategory.ACTIVITY,
-        startDate: startDate || "2024-03-06",
-        endDate: endDate || "2024-03-06",
-        contents: contents || "기본 내용",
-        detail: {
-          host: host || "기본 주최자",
-          field: field || "IDEATION",
-          motivation: motivation || "기본 동기",
-          goal: goal || "기본 목표",
-          direction: direction || "기본 목표",
+      // await axiosInstance.post(`/api/v1/spec`, formData, {
+      //   headers: {
+      //     // "Content-Type": "multipart/form-data; boundary='boundary'",
+      //     "Content-Type": "multipart/form-data",
+      //   },
+      //   transformRequest: (data, headers) => {
+      //     return data;
+      //   },
+      // });
+      await fetch(`${getEnvVars()?.apiUrl}/api/v1/spec`, {
+        method: "POST",
+        body: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-      };
-
-      console.log(value);
-
-      const blob = new Blob([JSON.stringify(value)], {
-        type: "application/json",
       });
-      formData.append("specPostReq", blob);
-
-      console.log("블랍:", blob);
-
-      await axiosInstance.post(`/api/v1/spec`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      console.log("폼데이터:", formData);
 
       navigation.navigate("SpecAddComplete", { name });
     } catch (error) {
