@@ -144,7 +144,7 @@ function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
                 <Text
                   className={`text-start ${
                     selectedSort === v.idx
-                      ? "text-[#FF823C] font-[Inter-SemiBold]"
+                      ? "text-[#0094FF] font-[Inter-SemiBold]"
                       : "font-[Inter-Medium] text-[#5A5E6A]"
                   }`}
                   size={14}
