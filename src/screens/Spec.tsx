@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, Pressable, View } from "react-native";
+import { FlatList, Image, Pressable, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SpecScreenStackParamList } from "@stackNav/SpecScreen";
@@ -12,6 +12,7 @@ import Project from "@assets/images/project.svg";
 import AddIcon from "@assets/images/add-blue.svg";
 import SpecCategorySelect from "@screens/SpecCategorySelect";
 import axiosInstance from "src/api/axiosInstance";
+
 type SpecScreenProps = NativeStackScreenProps<SpecScreenStackParamList, "Spec">;
 export const CATEGORY_LABEL: { [key: string]: string } = {
   ALL: "전체",
@@ -112,6 +113,7 @@ export const renderSpecIcon = (category: string) => {
   }
 };
 function Spec({ navigation }: Readonly<SpecScreenProps>) {
+  const [loading, setLoading] = useState(true);
   const [clickedCategory, setClickedCategory] = useState(SPEC_MENU[0].category);
   const [specList, setSpecList] = useState(SPEC_DATA);
   const [isCategorySelectOpen, setIsCategorySelectOpen] = React.useState(false); // 스펙 추가하기 레이어 팝업
@@ -136,6 +138,7 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
   useEffect(() => {
     const getSpecList = async () => {
       try {
+        setLoading(true);
         const res = await axiosInstance.get(
           `/api/v1/spec?category=${
             clickedCategory === "ALL" ? "" : clickedCategory
@@ -145,6 +148,8 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
         setSpecList(res.data.content);
       } catch (e) {
         console.log(e);
+      } finally {
+        setLoading(false);
       }
     };
     getSpecList();
@@ -225,23 +230,37 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
       </View>
       {/* 스펙 목록 */}
       <View style={{ flex: 1 }}>
-        <FlatList
-          contentContainerStyle={{
-            gap: 15,
-            paddingVertical: 20,
-            paddingHorizontal: 20,
-          }}
-          data={specList}
-          renderItem={renderItem}
-          keyExtractor={(item) => `${item.specId}`}
-          showsVerticalScrollIndicator={false}
-          ListHeaderComponent={
-            <Button
-              label="스펙 추가하기"
-              callbackFn={() => setIsCategorySelectOpen(true)}
+        {loading ? (
+          <View className="flex-1 items-center justify-center">
+            <Image
+              source={require("@assets/images/loader-spinner.gif")}
+              style={{ width: 100, height: 100 }}
             />
-          }
-        />
+          </View>
+        ) : specList.length === 0 ? (
+          <View className="flex-1 items-center justify-center">
+            <Text size={14}>아직 스펙이 없습니다.</Text>
+          </View>
+        ) : (
+          <FlatList
+            contentContainerStyle={{
+              gap: 15,
+              paddingVertical: 20,
+              paddingHorizontal: 20,
+            }}
+            data={specList}
+            renderItem={renderItem}
+            keyExtractor={(item) => `${item.specId}`}
+            showsVerticalScrollIndicator={false}
+            ListHeaderComponent={
+              <Button
+                label="스펙 추가하기"
+                callbackFn={() => setIsCategorySelectOpen(true)}
+              />
+            }
+          />
+        )}
+
         {/* 스펙 추가 버튼 */}
         <Pressable
           style={{

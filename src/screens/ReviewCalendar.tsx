@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Pressable, ScrollView, View } from "react-native";
+import { Image, Pressable, ScrollView, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ReviewCalendarScreenStackParamList } from "@stackNav/ReviewCalendarScreen";
@@ -19,6 +19,7 @@ export type ReviewCalendarScreenProps = NativeStackNavigationProp<
 >;
 
 function ReviewCalendar() {
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation<ReviewCalendarScreenProps>();
   const [reviewList, setReviewList] = useState<ReviewBase[]>([]);
   const {
@@ -36,6 +37,7 @@ function ReviewCalendar() {
   useEffect(() => {
     const getReviewList = async () => {
       try {
+        setLoading(true);
         const dateStr = getDateString(clickedDate);
         const res = await axiosInstance.get(
           `/api/v1/review/calendar?date=${dateStr}`
@@ -45,6 +47,8 @@ function ReviewCalendar() {
         setReviewList(res.data);
       } catch (e) {
         console.log(e);
+      } finally {
+        setLoading(false);
       }
     };
     getReviewList();
@@ -128,15 +132,28 @@ function ReviewCalendar() {
           </View>
         </View>
         <View className="flex-1 pb-[50]">
-          {reviewList.map((item) => (
-            <ReviewListItem
-              key={`${item.specId}-${item.reviewId}`}
-              item={item}
-              navigation={navigation}
-              setIsDetailOpen={setIsDetailOpen}
-              setSelectedReviewId={setSelectedReviewId}
-            />
-          ))}
+          {loading ? (
+            <View className="items-center py-[50]">
+              <Image
+                source={require("@assets/images/loader-spinner.gif")}
+                style={{ width: 100, height: 100 }}
+              />
+            </View>
+          ) : reviewList.length === 0 ? (
+            <View className="items-center py-[50]">
+              <Text size={14}>아직 회고가 없습니다.</Text>
+            </View>
+          ) : (
+            reviewList.map((item) => (
+              <ReviewListItem
+                key={`${item.specId}-${item.reviewId}`}
+                item={item}
+                navigation={navigation}
+                setIsDetailOpen={setIsDetailOpen}
+                setSelectedReviewId={setSelectedReviewId}
+              />
+            ))
+          )}
         </View>
       </ScrollView>
 

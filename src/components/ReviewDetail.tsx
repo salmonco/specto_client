@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CustomText as Text } from "@components/CustomText";
-import { Pressable, SafeAreaView, View } from "react-native";
+import { Image, Pressable, SafeAreaView, View } from "react-native";
 import Close from "@assets/images/close.svg";
 import HorizontalSlider from "./HorizontalSlider";
 import axiosInstance from "src/api/axiosInstance";
@@ -52,16 +52,20 @@ export default function ReviewDetail({
   specId,
   specItem,
 }: Readonly<ReviewDetailProps>) {
+  const [loading, setLoading] = useState(true);
   const [item, setItem] = useState<ReviewDetailBase>();
 
   useEffect(() => {
     const getItem = async () => {
       try {
+        setLoading(true);
         const res = await axiosInstance.get(`/api/v1/review/${reviewId}`);
         console.log(`/review/${reviewId}`, res);
         setItem({ ...res.data, reviewId });
       } catch (e) {
         console.log(e);
+      } finally {
+        setLoading(false);
       }
     };
     getItem();
@@ -69,7 +73,7 @@ export default function ReviewDetail({
 
   return (
     <SafeAreaView>
-      <View className="pt-[20] pb-[37] px-[34] bg-white">
+      <View className="pt-[20] pb-[37] px-[34] bg-white h-full">
         <View className="flex-row justify-between items-center pb-[10] border-b border-b-[#EFEFEF]">
           <Text className="text-[#636366]" size={13}>
             {item?.date ?? "2024.03.28"}
@@ -160,21 +164,32 @@ export default function ReviewDetail({
             className="bg-[#F1F1F1] h-[242] py-[12] px-[19]"
             style={{ borderRadius: 7 }}
           >
-            <Text
-              className="font-[Inter-Medium] text-[#373737] leading-6"
-              size={13}
-            >
-              {item?.impression ??
-                `오늘 공부에서 가장 인상 깊었던 부분은 바로 0000가 00000했다는 점이다. 0000한 부분이 되게 신기했고, 0000한 부분을 집중적으로 공부해 보아야 겠다고 생각했다.`}
-            </Text>
-            <View className="bg-[#E0DDDD] h-[1] my-[13]" />
-            <Text
-              className="font-[Inter-Medium] text-[#373737] leading-6"
-              size={13}
-            >
-              {item?.bearInMind ??
-                `오늘 공부에서 가장 인상 깊었던 부분은 바로 0000가 00000했다는 점이다. 0000한 부분이 되게 신기했고, 0000한 부분을 집중적으로 공부해 보아야 겠다고 생각했다.`}
-            </Text>
+            {loading ? (
+              <View className="flex-1 items-center justify-center">
+                <Image
+                  source={require("@assets/images/loader-spinner.gif")}
+                  style={{ width: 100, height: 100 }}
+                />
+              </View>
+            ) : (
+              <View>
+                <Text
+                  className="font-[Inter-Medium] text-[#373737] leading-6"
+                  size={13}
+                >
+                  {item?.impression ??
+                    `오늘 공부에서 가장 인상 깊었던 부분은 바로 0000가 00000했다는 점이다. 0000한 부분이 되게 신기했고, 0000한 부분을 집중적으로 공부해 보아야 겠다고 생각했다.`}
+                </Text>
+                <View className="bg-[#E0DDDD] h-[1] my-[13]" />
+                <Text
+                  className="font-[Inter-Medium] text-[#373737] leading-6"
+                  size={13}
+                >
+                  {item?.bearInMind ??
+                    `오늘 공부에서 가장 인상 깊었던 부분은 바로 0000가 00000했다는 점이다. 0000한 부분이 되게 신기했고, 0000한 부분을 집중적으로 공부해 보아야 겠다고 생각했다.`}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
       </View>

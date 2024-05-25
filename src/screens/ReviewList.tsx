@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FlatList, Pressable, View } from "react-native";
+import { FlatList, Image, Pressable, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ReviewListScreenStackParamList } from "@stackNav/ReviewListScreen";
@@ -19,6 +19,7 @@ type ReviewListScreenProps = NativeStackScreenProps<
 >;
 
 function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
+  const [loading, setLoading] = useState(true);
   const [clickedCategory, setClickedCategory] = useState(SPEC_MENU[0].category);
   const [specList, setSpecList] = useState<SpecBase[]>([]);
   const [selectedSort, setSelectedSort] = useState(0);
@@ -53,6 +54,7 @@ function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
 
   const getSpecList = async () => {
     try {
+      setLoading(true);
       const res = await axiosInstance.get(
         `/api/v1/spec?category=${
           clickedCategory === "ALL" ? "" : clickedCategory
@@ -68,6 +70,8 @@ function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
       setSpecList(res.data.content);
     } catch (e) {
       console.log(e);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -108,18 +112,31 @@ function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
           </Pressable>
         ))}
       </View>
-      <FlatList
-        contentContainerStyle={{
-          gap: 15,
-          paddingVertical: 20,
-          paddingHorizontal: 20,
-        }}
-        data={specList}
-        renderItem={renderItem}
-        keyExtractor={(item) => `${item.specId}`}
-        showsVerticalScrollIndicator={false}
-        ListHeaderComponent={<ToggleButton />}
-      />
+      {loading ? (
+        <View className="flex-1 items-center justify-center">
+          <Image
+            source={require("@assets/images/loader-spinner.gif")}
+            style={{ width: 100, height: 100 }}
+          />
+        </View>
+      ) : specList.length === 0 ? (
+        <View className="flex-1 items-center justify-center">
+          <Text size={14}>아직 회고가 없습니다.</Text>
+        </View>
+      ) : (
+        <FlatList
+          contentContainerStyle={{
+            gap: 15,
+            paddingVertical: 20,
+            paddingHorizontal: 20,
+          }}
+          data={specList}
+          renderItem={renderItem}
+          keyExtractor={(item) => `${item.specId}`}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={<ToggleButton />}
+        />
+      )}
 
       <Pressable
         className={`absolute top-0 left-0 w-full h-full z-20 bg-black/30 ${
@@ -131,10 +148,7 @@ function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
           <View className="flex flex-col pt-[6px] pb-[14px] h-[272px] rounded-t-[20px] bg-white shadow-t-gray">
             <View className="self-center w-[53px] h-[4px] bg-[#D5D8DC] rounded-[2px] mb-[16px]" />
             <View className="py-[7.5px] px-[22px]">
-              <Text
-                className="font-[Pretendard-Medium] text-[#9E9E9E]"
-                size={13}
-              >
+              <Text className="font-[Inter-Medium] text-[#9E9E9E]" size={13}>
                 정렬
               </Text>
             </View>
@@ -147,8 +161,8 @@ function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
                 <Text
                   className={`text-start ${
                     selectedSort === v.idx
-                      ? "text-[#FF823C] font-[Pretendard-Bold]"
-                      : "font-[Pretendard-Medium] text-[#5A5E6A]"
+                      ? "text-[#0094FF] font-[Inter-SemiBold]"
+                      : "font-[Inter-Medium] text-[#5A5E6A]"
                   }`}
                   size={14}
                 >

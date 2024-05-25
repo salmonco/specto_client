@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Pressable, ScrollView, View } from "react-native";
+import { Image, Pressable, ScrollView, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import Button from "@components/Button";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -53,6 +53,7 @@ export type ReviewListScreenProps = NativeStackScreenProps<
 >;
 
 function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
+  const [loading, setLoading] = useState(true);
   const { specItem } = route.params;
   const [reviewList, setReviewList] = useState<ReviewBase[]>([]);
   const [selectedSort, setSelectedSort] = useState(0);
@@ -81,6 +82,7 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
 
   const getReviewList = async () => {
     try {
+      setLoading(true);
       const res = await axiosInstance.get(
         `/api/v1/review/spec/${SORT_MENU[selectedSort].path}/${specItem.specId}`
       );
@@ -92,6 +94,8 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
       setReviewList(res.data);
     } catch (e) {
       console.log(e);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -176,43 +180,56 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
           </View>
 
           <View className="py-[23]">
-            {reviewList.map((item) => (
-              <View
-                key={`${item.specId}-${item.reviewId}`}
-                className="justify-between border border-[#DEDEDE] pt-[17] pb-[13] px-[16] mb-[23]"
-                style={{ borderRadius: 10 }}
-              >
-                <View className="mb-[7]">
-                  <View className="flex-row items-center justify-between border-b border-[#EFEFEF] pb-[7]">
-                    <Text className="text-[#636366]" size={12.3}>
-                      {item.date}
-                    </Text>
-                    <Text
-                      className="font-[Inter-Medium] text-[#0094FF]"
-                      size={18}
-                    >
-                      D+{`${item.dplusDay}`}
-                    </Text>
-                  </View>
-                </View>
-
-                <Pressable
-                  className="flex-row items-center justify-center"
-                  onPress={() => {
-                    setIsDetailOpen(true);
-                    setSelectedReviewId(item.reviewId);
-                  }}
-                >
-                  <Text
-                    className="font-[Inter-Medium] text-[#373737] mr-[12]"
-                    size={12}
-                  >
-                    회고 펼쳐보기
-                  </Text>
-                  <ChevronBottom />
-                </Pressable>
+            {loading ? (
+              <View className="items-center py-[50]">
+                <Image
+                  source={require("@assets/images/loader-spinner.gif")}
+                  style={{ width: 100, height: 100 }}
+                />
               </View>
-            ))}
+            ) : reviewList.length === 0 ? (
+              <View className="items-center py-[50]">
+                <Text size={14}>아직 회고가 없습니다.</Text>
+              </View>
+            ) : (
+              reviewList.map((item) => (
+                <View
+                  key={`${item.specId}-${item.reviewId}`}
+                  className="justify-between border border-[#DEDEDE] pt-[17] pb-[13] px-[16] mb-[23]"
+                  style={{ borderRadius: 10 }}
+                >
+                  <View className="mb-[7]">
+                    <View className="flex-row items-center justify-between border-b border-[#EFEFEF] pb-[7]">
+                      <Text className="text-[#636366]" size={12.3}>
+                        {item.date}
+                      </Text>
+                      <Text
+                        className="font-[Inter-Medium] text-[#0094FF]"
+                        size={18}
+                      >
+                        D+{`${item.dplusDay}`}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <Pressable
+                    className="flex-row items-center justify-center"
+                    onPress={() => {
+                      setIsDetailOpen(true);
+                      setSelectedReviewId(item.reviewId);
+                    }}
+                  >
+                    <Text
+                      className="font-[Inter-Medium] text-[#373737] mr-[12]"
+                      size={12}
+                    >
+                      회고 펼쳐보기
+                    </Text>
+                    <ChevronBottom />
+                  </Pressable>
+                </View>
+              ))
+            )}
           </View>
         </View>
       </ScrollView>
@@ -234,10 +251,7 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
           <View className="flex flex-col pt-[6px] pb-[14px] h-[272px] rounded-t-[20px] bg-white shadow-t-gray">
             <View className="self-center w-[53px] h-[4px] bg-[#D5D8DC] rounded-[2px] mb-[16px]" />
             <View className="py-[7.5px] px-[22px]">
-              <Text
-                className="font-[Pretendard-Medium] text-[#9E9E9E]"
-                size={13}
-              >
+              <Text className="font-[Inter-Medium] text-[#9E9E9E]" size={13}>
                 정렬
               </Text>
             </View>
@@ -250,8 +264,8 @@ function ReviewListUp({ route, navigation }: Readonly<ReviewListScreenProps>) {
                 <Text
                   className={`text-start ${
                     selectedSort === v.idx
-                      ? "text-[#0094FF] font-[Pretendard-Bold]"
-                      : "font-[Pretendard-Medium] text-[#5A5E6A]"
+                      ? "text-[#0094FF] font-[Inter-SemiBold]"
+                      : "font-[Inter-Medium] text-[#5A5E6A]"
                   }`}
                   size={14}
                 >
