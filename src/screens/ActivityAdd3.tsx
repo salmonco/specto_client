@@ -11,6 +11,7 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ActivityAddScreenStackParamList } from "@stackNav/ActivityAddScreen";
 import axiosInstance from "src/api/axiosInstance";
+import * as SecureStore from "expo-secure-store"; // 추가
 
 type ActivityProps = NativeStackScreenProps<
   ActivityAddScreenStackParamList,
@@ -60,22 +61,24 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
 
       console.log(value);
 
+      console.log("폼데이터 위에:", formData);
+
       const blob = new Blob([JSON.stringify(value)], {
         type: "application/json",
       });
       formData.append("specPostReq", blob);
 
-      console.log("블랍:", blob);
-
       await axiosInstance.post(`/api/v1/spec`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      console.log("폼데이터:", formData);
+      console.log("폼데이터 밑에:", formData);
 
       navigation.navigate("SpecAddComplete", { name });
     } catch (error) {
-      console.error("Error 응애:", error);
+      console.error("Error 에러:", error);
       Alert.alert(
         "양식을 제출하는 동안 오류가 발생했습니다. 다시 시도해 주세요."
       );
@@ -91,7 +94,6 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
     goal,
     direction,
     proofFile,
-    navigation,
   ]);
 
   return (

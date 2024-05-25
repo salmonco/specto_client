@@ -22,11 +22,17 @@ export default function LoginKakao({ navigation, route }: Readonly<Props>) {
       const res = await axiosInstance.get(
         `/api/v1/login?id_token=${id_token}&social=kakao`
       );
-      console.log("kakao login", res);
+      console.log("kakao login 입니다잉", res);
       const { accessToken, refreshToken } = res.data;
+
+      // // Delete existing tokens before setting new ones
+      // await SecureStore.deleteItemAsync("accessToken");
+      // await SecureStore.deleteItemAsync("refreshToken");
+
       // 토큰 저장 (SecureStore)
       await SecureStore.setItemAsync("accessToken", accessToken);
       await SecureStore.setItemAsync("refreshToken", refreshToken);
+
       // 홈화면으로 이동
       navigation.navigate("Main");
     } catch (e) {
