@@ -71,7 +71,7 @@ export const useAxiosInterceptor = () => {
             },
           }
         );
-        console.log("refresh-token", response);
+        // console.log("refresh-token", response);
         const { accessToken, refreshToken } = response.data;
         await SecureStore.setItemAsync("accessToken", accessToken);
         await SecureStore.setItemAsync("refreshToken", refreshToken);

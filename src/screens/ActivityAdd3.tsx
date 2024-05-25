@@ -87,7 +87,7 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
 
       navigation.navigate("SpecAddComplete", { name });
     } catch (error) {
-      console.error("Error 응애:", error);
+      console.error("Error 에러:", error);
       Alert.alert(
         "양식을 제출하는 동안 오류가 발생했습니다. 다시 시도해 주세요."
       );
@@ -103,7 +103,6 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
     goal,
     direction,
     proofFile,
-    navigation,
   ]);
 
   return (
