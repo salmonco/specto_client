@@ -128,15 +128,21 @@ function ReviewCalendar() {
           </View>
         </View>
         <View className="flex-1 pb-[50]">
-          {reviewList.map((item) => (
-            <ReviewListItem
-              key={`${item.specId}-${item.reviewId}`}
-              item={item}
-              navigation={navigation}
-              setIsDetailOpen={setIsDetailOpen}
-              setSelectedReviewId={setSelectedReviewId}
-            />
-          ))}
+          {reviewList.length ? (
+            reviewList.map((item) => (
+              <ReviewListItem
+                key={`${item.specId}-${item.reviewId}`}
+                item={item}
+                navigation={navigation}
+                setIsDetailOpen={setIsDetailOpen}
+                setSelectedReviewId={setSelectedReviewId}
+              />
+            ))
+          ) : (
+            <View className="items-center py-[50]">
+              <Text size={14}>아직 회고가 없습니다.</Text>
+            </View>
+          )}
         </View>
       </ScrollView>
 

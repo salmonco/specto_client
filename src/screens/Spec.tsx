@@ -225,23 +225,30 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
       </View>
       {/* 스펙 목록 */}
       <View style={{ flex: 1 }}>
-        <FlatList
-          contentContainerStyle={{
-            gap: 15,
-            paddingVertical: 20,
-            paddingHorizontal: 20,
-          }}
-          data={specList}
-          renderItem={renderItem}
-          keyExtractor={(item) => `${item.specId}`}
-          showsVerticalScrollIndicator={false}
-          ListHeaderComponent={
-            <Button
-              label="스펙 추가하기"
-              callbackFn={() => setIsCategorySelectOpen(true)}
-            />
-          }
-        />
+        {specList.length ? (
+          <FlatList
+            contentContainerStyle={{
+              gap: 15,
+              paddingVertical: 20,
+              paddingHorizontal: 20,
+            }}
+            data={specList}
+            renderItem={renderItem}
+            keyExtractor={(item) => `${item.specId}`}
+            showsVerticalScrollIndicator={false}
+            ListHeaderComponent={
+              <Button
+                label="스펙 추가하기"
+                callbackFn={() => setIsCategorySelectOpen(true)}
+              />
+            }
+          />
+        ) : (
+          <View className="flex-1 items-center justify-center">
+            <Text size={14}>아직 스펙이 없습니다.</Text>
+          </View>
+        )}
+
         {/* 스펙 추가 버튼 */}
         <Pressable
           style={{

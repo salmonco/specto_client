@@ -108,18 +108,24 @@ function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
           </Pressable>
         ))}
       </View>
-      <FlatList
-        contentContainerStyle={{
-          gap: 15,
-          paddingVertical: 20,
-          paddingHorizontal: 20,
-        }}
-        data={specList}
-        renderItem={renderItem}
-        keyExtractor={(item) => `${item.specId}`}
-        showsVerticalScrollIndicator={false}
-        ListHeaderComponent={<ToggleButton />}
-      />
+      {specList.length ? (
+        <FlatList
+          contentContainerStyle={{
+            gap: 15,
+            paddingVertical: 20,
+            paddingHorizontal: 20,
+          }}
+          data={specList}
+          renderItem={renderItem}
+          keyExtractor={(item) => `${item.specId}`}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={<ToggleButton />}
+        />
+      ) : (
+        <View className="flex-1 items-center justify-center">
+          <Text size={14}>아직 회고가 없습니다.</Text>
+        </View>
+      )}
 
       <Pressable
         className={`absolute top-0 left-0 w-full h-full z-20 bg-black/30 ${
