@@ -12,6 +12,7 @@ import SpecIcon from "../../assets/images/spec.svg";
 import SpecFocusedIcon from "../../assets/images/specFocused.svg";
 import ReviewIcon from "../../assets/images/review.svg";
 import ReviewFocusedIcon from "../../assets/images/reviewFocused.svg";
+import { Platform } from "react-native";
 
 export type MainParamList = {
   MyPageScreen: undefined;
@@ -26,7 +27,11 @@ function Main() {
   return (
     <Tab.Navigator
       initialRouteName="SpecScreen"
-      screenOptions={{ headerShown: false }}
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: { height: Platform.OS === "ios" ? 76 : 56 },
+        tabBarItemStyle: { marginVertical: Platform.OS === "ios" ? 3 : 7.5 },
+      }}
     >
       <Tab.Screen
         name="MyPageScreen"
