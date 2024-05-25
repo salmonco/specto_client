@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FlatList, Pressable, View } from "react-native";
+import { FlatList, Image, Pressable, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ReviewListScreenStackParamList } from "@stackNav/ReviewListScreen";
@@ -19,6 +19,7 @@ type ReviewListScreenProps = NativeStackScreenProps<
 >;
 
 function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
+  const [loading, setLoading] = useState(true);
   const [clickedCategory, setClickedCategory] = useState(SPEC_MENU[0].category);
   const [specList, setSpecList] = useState<SpecBase[]>([]);
   const [selectedSort, setSelectedSort] = useState(0);
@@ -53,6 +54,7 @@ function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
 
   const getSpecList = async () => {
     try {
+      setLoading(true);
       const res = await axiosInstance.get(
         `/api/v1/spec?category=${
           clickedCategory === "ALL" ? "" : clickedCategory
@@ -68,6 +70,8 @@ function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
       setSpecList(res.data.content);
     } catch (e) {
       console.log(e);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -108,7 +112,18 @@ function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
           </Pressable>
         ))}
       </View>
-      {specList.length ? (
+      {loading ? (
+        <View className="flex-1 items-center justify-center">
+          <Image
+            source={require("@assets/images/loader-spinner.gif")}
+            style={{ width: 100, height: 100 }}
+          />
+        </View>
+      ) : specList.length === 0 ? (
+        <View className="flex-1 items-center justify-center">
+          <Text size={14}>아직 회고가 없습니다.</Text>
+        </View>
+      ) : (
         <FlatList
           contentContainerStyle={{
             gap: 15,
@@ -121,10 +136,6 @@ function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={<ToggleButton />}
         />
-      ) : (
-        <View className="flex-1 items-center justify-center">
-          <Text size={14}>아직 회고가 없습니다.</Text>
-        </View>
       )}
 
       <Pressable
