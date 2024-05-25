@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "black",
     fontSize: 16,
-    fontFamily: "Inter",
+    fontFamily: "Inter-Regular",
     fontWeight: "400",
     marginTop: 67,
   },
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   greetingText: {
     color: "#373737",
     fontSize: 18,
-    fontFamily: "Inter",
+    fontFamily: "Inter-SemiBold",
     fontWeight: "600",
   },
   profileInfoContainer: {
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
   profileText: {
     color: "white",
     fontSize: 14,
-    fontFamily: "Inter",
+    fontFamily: "Inter-SemiBold",
     fontWeight: "600",
     lineHeight: 22,
     textAlign: "center",
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   menuItemText: {
     color: "#373737",
     fontSize: 14,
-    fontFamily: "Inter",
+    fontFamily: "Inter-Medium",
     fontWeight: "500",
     position: "absolute",
   },
@@ -273,14 +273,14 @@ const styles = StyleSheet.create({
   emailText: {
     color: "white",
     fontSize: 12,
-    fontFamily: "Inter",
+    fontFamily: "Inter-Medium",
     fontWeight: "500",
     lineHeight: 22,
   },
   title: {
     color: "black",
     fontSize: 13,
-    fontFamily: "Inter",
+    fontFamily: "Inter-SemiBold",
     fontWeight: "600",
     textAlign: "center", // Center the text
     flex: 1, // Take up available space in the row
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "black",
     fontSize: 13, // Increased font size for better visibility
-    fontFamily: "Inter",
+    fontFamily: "Inter-Regular",
     fontWeight: "400",
     marginTop: 20, // Added margin top for spacing
     marginBottom: 10,
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: "black",
     fontSize: 16,
-    fontFamily: "Inter",
+    fontFamily: "Inter-Medium",
     fontWeight: "600",
   },
   buttonContainer: {
@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontSize: 11,
-    fontFamily: "Inter",
+    fontFamily: "Inter-Medium",
     fontWeight: "600",
   },
 });
