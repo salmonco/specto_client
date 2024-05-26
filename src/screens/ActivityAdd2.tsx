@@ -32,6 +32,11 @@ type ActivityProps = NativeStackScreenProps<
   "ActivityAdd2"
 >;
 
+export interface ProofFileBase {
+  uri: string;
+  name: string;
+}
+
 function ActivityAdd2({ route, navigation }: ActivityProps) {
   const [host, setHost] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -42,7 +47,7 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
   const [field, setField] = useState("");
   const [contents, setContents] = useState<string | null>(null);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const [proofFile, setProofFile] = useState<string | null>(null);
+  const [proofFile, setProofFile] = useState<ProofFileBase | null>(null);
 
   const { name } = route.params;
 
@@ -138,7 +143,7 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
     const document = await pickDocument();
     if (document !== null) {
       console.log("Selected file:", document);
-      setProofFile(document.uri);
+      setProofFile({ uri: document.uri, name: document.name });
       // Perform further actions with the selected file if necessary
     }
   };
