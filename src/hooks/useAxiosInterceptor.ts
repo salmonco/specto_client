@@ -37,7 +37,7 @@ export const useAxiosInterceptor = () => {
           await SecureStore.deleteItemAsync("accessToken");
           Alert.alert("로그인이 필요한 페이지입니다.");
           navigation.navigate("Auth");
-          return;
+          return Promise.reject(error);
         }
 
         originalRequest._retry = true;
