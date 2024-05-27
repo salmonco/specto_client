@@ -8,6 +8,7 @@ const {
 
 const config = {
   transformer: {
+    assetPlugins: ["expo-asset/tools/hashAssetFiles"],
     getTransformOptions: async () => ({
       transform: {
         experimentalImportSupport: false,
