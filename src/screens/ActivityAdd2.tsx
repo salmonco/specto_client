@@ -260,7 +260,7 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
               onChangeText={(text) => setContents(text)}
             />
           </View>
-          <View style={styles.section}>
+          {/* <View style={styles.section}>
             <Text style={[styles.sectionSubtitle, { marginTop: 25 }]}>
               증빙자료를 업로드해주세요.
             </Text>
@@ -273,7 +273,7 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
                 <Text style={styles.inputText}>파일 업로드</Text>
               </View>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
       <TouchableOpacity style={styles.nextButton} onPress={handleNext}>

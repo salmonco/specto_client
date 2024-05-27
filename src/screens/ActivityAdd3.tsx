@@ -30,7 +30,7 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const handleNext = useCallback(async () => {
-    // const formData = new FormData();
+    const formData = new FormData();
 
     enum ActivityCategory {
       ACTIVITY = "ACTIVITY",
@@ -49,21 +49,22 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
     // } else {
     //   documentation = null;
     // }
-    let fileBase64: string;
-    let fileUri: string;
-    let fileName: string;
-    if (proofFile) {
-      const base64 = await FileSystem.readAsStringAsync(proofFile.uri, {
-        encoding: "base64",
-      });
-      fileBase64 = base64;
-      fileUri = proofFile.uri;
-      fileName = proofFile.name;
-    } else {
-      fileBase64 = "";
-      fileUri = "";
-      fileName = "";
-    }
+
+    // let fileBase64: string;
+    // let fileUri: string;
+    // let fileName: string;
+    // if (proofFile) {
+    //   const base64 = await FileSystem.readAsStringAsync(proofFile.uri, {
+    //     encoding: "base64",
+    //   });
+    //   fileBase64 = base64;
+    //   fileUri = proofFile.uri;
+    //   fileName = proofFile.name;
+    // } else {
+    //   fileBase64 = "";
+    //   fileUri = "";
+    //   fileName = "";
+    // }
 
     const value = {
       name: name || "기본 이름",
@@ -79,12 +80,12 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
         direction: direction || "기본 목표",
       },
     };
-    navigation.navigate("SpecSend", {
-      specPostReq: value,
-      // fileBase64,
-      fileUri,
-      fileName,
-    });
+    // navigation.navigate("SpecSend", {
+    //   specPostReq: value,
+    //   // fileBase64,
+    //   fileUri,
+    //   fileName,
+    // });
     // console.log(value);
 
     // const blob = new Blob([JSON.stringify(value)], {
@@ -128,8 +129,11 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
       //     )}`,
       //   },
       // });
-      // console.log(`/api/v1/spec`, res);
-      // navigation.navigate("SpecAddComplete", { name });
+
+      const res = await axiosInstance.post(`/api/v1/spec/json`, value);
+
+      console.log(`/api/v1/spec`, res);
+      navigation.navigate("SpecAddComplete", { name });
     } catch (error) {
       console.error("Error 에러:", error);
       Alert.alert(
