@@ -319,7 +319,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
                   strokeColor = "#FF0909";
                 }
                 return (
-                  <React.Fragment>
+                  <View key={`${Math.random()}`}>
                     <Circle
                       key={`circle-${Math.random()}`}
                       cx={x}
@@ -340,7 +340,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
                     >
                       {data.datasets[0].data[index]}%
                     </TextSVG>
-                  </React.Fragment>
+                  </View>
                 );
               }}
             />
