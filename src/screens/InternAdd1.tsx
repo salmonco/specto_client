@@ -13,8 +13,7 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { InternAddScreenStackParamList } from "@stackNav/InternAddScreen";
 import { Dropdown } from "react-native-element-dropdown";
-
-const API_URL = "http://your-api-url.com"; // 여기에 백엔드 API 엔드포인트 URL을 입력해주세요.
+import getDateString from "src/utils/getDateString";
 
 type InternProps = NativeStackScreenProps<
   InternAddScreenStackParamList,
@@ -34,29 +33,23 @@ function InternAdd1({ navigation }: Readonly<InternProps>) {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const handleNext = async () => {
-    try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          company,
-          work,
-          startDate,
-          endDate,
-          contents,
-        }),
-      });
+    console.log("InternAdd1 -> InternAdd2", {
+      name: `${company} 인턴`,
+      company,
+      work,
+      startDate: startDate ? getDateString(startDate) : "",
+      endDate: endDate ? getDateString(endDate) : "",
+      contents,
+    });
 
-      if (!response.ok) {
-        throw new Error("Failed to submit data");
-      }
-
-      navigation.navigate("InternAdd2");
-    } catch (error) {
-      console.error("Error:", error as Error);
-    }
+    navigation.navigate("InternAdd2", {
+      name: `${company} 인턴`,
+      company,
+      work,
+      startDate: startDate ? getDateString(startDate) : "",
+      endDate: endDate ? getDateString(endDate) : "",
+      contents,
+    });
   };
 
   useEffect(() => {

@@ -9,10 +9,12 @@ import {
   ScrollView,
   Keyboard,
   Modal,
+  Alert,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { InternAddScreenStackParamList } from "@stackNav/InternAddScreen";
 import * as DocumentPicker from "expo-document-picker";
+import axiosInstance from "src/api/axiosInstance";
 
 const pickDocument = async () => {
   const result = await DocumentPicker.getDocumentAsync({});
@@ -20,14 +22,14 @@ const pickDocument = async () => {
   console.log(result);
 };
 
-const API_URL = "http://your-api-url.com"; // 여기에 백엔드 API 엔드포인트 URL을 입력해주세요.
-
 type InternProps = NativeStackScreenProps<
   InternAddScreenStackParamList,
   "InternAdd2"
 >;
 
-function InternAdd2({ navigation }: Readonly<InternProps>) {
+function InternAdd2({ route, navigation }: Readonly<InternProps>) {
+  const { name, company, work, startDate, endDate, contents } =
+    route.params || {};
   const [motivation, setMotivation] = useState<string | null>(null);
   const [goal, setGoal] = useState<string | null>(null);
   const [project, setProject] = useState<string | null>(null);
@@ -35,27 +37,30 @@ function InternAdd2({ navigation }: Readonly<InternProps>) {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const handleNext = async () => {
+    const value = {
+      name: name || "기본 이름",
+      category: "INTERNSHIP",
+      startDate: startDate || "2024-03-06",
+      endDate: endDate || "2024-10-06",
+      contents: contents || "기본 내용",
+      detail: {
+        company: company || "기본 회사",
+        work: work || "기본 부서",
+        motivation: motivation || "기본 경로",
+        goal: goal || "기본 목표",
+        project: project || "프로젝트 내용",
+      },
+    };
+
     try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          motivation,
-          goal,
-          project,
-          proofFile,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to submit data");
-      }
-
-      navigation.navigate("SpecAddComplete");
+      const res = await axiosInstance.post(`/api/v1/spec/json`, value);
+      console.log(`/api/v1/spec`, res);
+      navigation.navigate("SpecAddComplete", { name });
     } catch (error) {
-      console.error("Error:", error as Error);
+      console.error("Error 에러:", error);
+      Alert.alert(
+        "양식을 제출하는 동안 오류가 발생했습니다. 다시 시도해 주세요."
+      );
     }
   };
 
@@ -146,7 +151,7 @@ function InternAdd2({ navigation }: Readonly<InternProps>) {
           </View>
         </View>
         {/* 섹션 4: 증빙자료 업로드 */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={[styles.sectionSubtitle, { marginTop: 10 }]}>
             증빙자료를 업로드해주세요.
           </Text>
@@ -158,7 +163,7 @@ function InternAdd2({ navigation }: Readonly<InternProps>) {
               <Text style={styles.inputText}>파일 업로드</Text>
             </View>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </ScrollView>
 
       {/* 다음으로 버튼 */}
