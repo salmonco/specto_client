@@ -6,7 +6,7 @@ import ContestAddScreen from "./ContestAddScreen";
 import CertificateAddScreen from "./CertificateAddScreen";
 import InternAddScreen from "./InternAddScreen";
 import ActivityAddScreen from "./ActivityAddScreen";
-// import ProjectAddScreen from "./ProjectAddScreen";
+import ProjectAddScreen from "./ProjectAddScreen";
 import SpecCategorySelect from "./CertificateAddScreen";
 import ReviewListScreen from "./ReviewListScreen";
 import SpecAddComplete from "../screens/SpecAddComplete";
@@ -18,7 +18,7 @@ export type SpecScreenStackParamList = {
   CertificateAddScreen: undefined;
   InternAddScreen: undefined;
   ActivityAddScreen: undefined;
-  // ProjectAddScreen: undefined;
+  ProjectAddScreen: undefined;
   SpecCategorySelect: undefined;
   ReviewListScreen: { screen: "ReviewListUp"; params: { specItem: SpecBase } };
   SpecAddComplete: { name: string };
@@ -59,11 +59,11 @@ function SpecScreen() {
         component={ActivityAddScreen}
         options={{ headerShown: false }}
       />
-      {/* <SpecScreenStack.Screen
+      <SpecScreenStack.Screen
         name="ProjectAddScreen"
         component={ProjectAddScreen}
         options={{ headerShown: false }}
-      /> */}
+      />
       <SpecScreenStack.Screen
         name="ReviewListScreen"
         component={ReviewListScreen}
