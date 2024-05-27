@@ -232,7 +232,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
               onPress={() =>
                 navigation.navigate("ReviewListScreen", {
                   screen: "ReviewListUp",
-                  params: { id: 1 },
+                  params: { specItem: specInfo },
                 })
               }
             >

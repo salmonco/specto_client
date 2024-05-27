@@ -1,6 +1,6 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Spec from "../screens/Spec";
+import Spec, { SpecBase } from "../screens/Spec";
 import SpecDetail from "../screens/SpecDetail";
 import ContestAddScreen from "./ContestAddScreen";
 import CertificateAddScreen from "./CertificateAddScreen";
@@ -20,7 +20,7 @@ export type SpecScreenStackParamList = {
   ActivityAddScreen: undefined;
   // ProjectAddScreen: undefined;
   SpecCategorySelect: undefined;
-  ReviewListScreen: { screen: "ReviewListUp"; params: { id: number } };
+  ReviewListScreen: { screen: "ReviewListUp"; params: { specItem: SpecBase } };
   SpecAddComplete: { name: string };
 };
 
