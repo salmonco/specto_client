@@ -7,8 +7,15 @@ import SpecAddComplete from "../screens/SpecAddComplete";
 
 export type CertificateAddScreenStackParamList = {
   CertificateAdd1: undefined;
-  CertificateAdd2: undefined;
-  CertificateAdd3: undefined;
+  CertificateAdd2: { name: string };
+  CertificateAdd3: {
+    name: string;
+    host: string;
+    startDate: string | null;
+    endDate: string | null;
+    field: string;
+    contents: string | null;
+  };
   SpecAddComplete: { name: string };
 };
 

@@ -9,8 +9,6 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { CertificateAddScreenStackParamList } from "@stackNav/CertificateAddScreen";
 
-const API_URL = "http://your-api-url.com";
-
 type CertificateProps = NativeStackScreenProps<
   CertificateAddScreenStackParamList,
   "CertificateAdd1"
@@ -19,22 +17,9 @@ type CertificateProps = NativeStackScreenProps<
 function CertificateAdd1({ navigation }: Readonly<CertificateProps>) {
   const [name, setName] = useState("");
 
-  const handleNext = async () => {
-    try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name }),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to save Certificate name");
-      }
-      navigation.navigate("CertificateAdd2");
-    } catch (error) {
-      console.error("Error:", error as Error);
-    }
+  const handleNext = () => {
+    console.log("CertificateAdd1 -> CertificateAdd2", { name });
+    navigation.navigate("CertificateAdd2", { name });
   };
 
   return (

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import CalendarPicker from "react-native-calendar-picker";
-import { Alert } from "react-native";
 
 import {
   Text,
@@ -11,13 +10,24 @@ import {
   ScrollView,
   Keyboard,
   Modal,
+  Alert,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ActivityAddScreenStackParamList } from "@stackNav/ActivityAddScreen";
 import { Dropdown } from "react-native-element-dropdown";
 import * as DocumentPicker from "expo-document-picker";
 
-const data = [
+// export const FIELD_LABEL = {
+//   "기획/아이디어": "IDEATION",
+//   "브랜드/네이밍": "BRANDING",
+//   "광고/마케팅": "MARKETING",
+//   "사진/영상": "PHOTOGRAPYH",
+//   디자인: "DESIGN",
+//   예체능: "PERFORMINGARTS",
+//   "IT/SW": "IT",
+// };
+
+export const FIELD_MENU = [
   { label: "기획/아이디어", value: "IDEATION" },
   { label: "브랜드/네이밍", value: "BRANDING" },
   { label: "광고/마케팅", value: "MARKETING" },
@@ -236,7 +246,7 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
               style={{ width: "100%" }}
               placeholderStyle={styles.inputText}
               selectedTextStyle={[styles.inputText, { color: "#373737" }]}
-              data={data}
+              data={FIELD_MENU}
               labelField="label"
               valueField="value"
               placeholder={"분야를 선택해주세요."}
