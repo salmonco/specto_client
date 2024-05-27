@@ -6,8 +6,15 @@ import SpecAddComplete from "../screens/SpecAddComplete";
 
 export type InternAddScreenStackParamList = {
   InternAdd1: undefined;
-  InternAdd2: undefined;
-  SpecAddComplete: undefined;
+  InternAdd2: {
+    name: string;
+    company: string;
+    work: string;
+    startDate: string | null;
+    endDate: string | null;
+    contents: string | null;
+  };
+  SpecAddComplete: { name: string };
 };
 
 const InternAddScreenStack =

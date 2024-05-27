@@ -15,6 +15,7 @@ import * as SecureStore from "expo-secure-store";
 import axiosInstance from "src/api/axiosInstance";
 import axios from "axios";
 import * as FileSystem from "expo-file-system";
+import SpecLetter from "@assets/images/specLetter.svg";
 
 type ActivityProps = NativeStackScreenProps<
   ActivityAddScreenStackParamList,
@@ -208,6 +209,10 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
               onChangeText={(text) => setDirection(text)}
             />
           </View>
+        </View>
+
+        <View className="mt-[37] items-center">
+          <SpecLetter />
         </View>
       </ScrollView>
 

@@ -65,6 +65,9 @@ const SpecCategorySelect: React.FC<SpecCategorySelectProps> = ({
       <Pressable
         style={styles.categoryButton}
         onPress={() => {
+          navigation.navigate("ProjectAddScreen", {
+            screen: "ProjectAdd1",
+          });
           onSelectCategory("논문/프로젝트");
           onClose();
         }}
