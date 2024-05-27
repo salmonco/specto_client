@@ -11,6 +11,10 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ActivityAddScreenStackParamList } from "@stackNav/ActivityAddScreen";
 import getEnvVars from "environment";
+import * as SecureStore from "expo-secure-store";
+import axiosInstance from "src/api/axiosInstance";
+import axios from "axios";
+import * as FileSystem from "expo-file-system";
 
 type ActivityProps = NativeStackScreenProps<
   ActivityAddScreenStackParamList,
@@ -26,7 +30,7 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const handleNext = useCallback(async () => {
-    const formData = new FormData();
+    // const formData = new FormData();
 
     enum ActivityCategory {
       ACTIVITY = "ACTIVITY",
@@ -36,11 +40,31 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
       PROJECT = "PROJECT",
     }
 
-    if (proofFile) {
-      const response = await fetch(proofFile);
-      const blob = await response.blob();
-      formData.append("documentation", blob);
-    }
+    // let documentation: Blob | null;
+    // if (proofFile) {
+    //   const response = await fetch(proofFile);
+    //   const blob = await response.blob();
+    //   // formData.append("documentation", blob);
+    //   documentation = blob;
+    // } else {
+    //   documentation = null;
+    // }
+
+    // let fileBase64: string;
+    // let fileUri: string;
+    // let fileName: string;
+    // if (proofFile) {
+    //   const base64 = await FileSystem.readAsStringAsync(proofFile.uri, {
+    //     encoding: "base64",
+    //   });
+    //   fileBase64 = base64;
+    //   fileUri = proofFile.uri;
+    //   fileName = proofFile.name;
+    // } else {
+    //   fileBase64 = "";
+    //   fileUri = "";
+    //   fileName = "";
+    // }
 
     const value = {
       name: name || "기본 이름",
@@ -56,19 +80,24 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
         direction: direction || "기본 목표",
       },
     };
+    // navigation.navigate("SpecSend", {
+    //   specPostReq: value,
+    //   // fileBase64,
+    //   fileUri,
+    //   fileName,
+    // });
+    // console.log(value);
 
-    console.log(value);
+    // const blob = new Blob([JSON.stringify(value)], {
+    //   type: "application/json",
+    // });
+    // formData.append("specPostReq", blob);
 
-    const blob = new Blob([JSON.stringify(value)], {
-      type: "application/json",
-    });
-    formData.append("specPostReq", blob);
-
-    console.log("블랍:", blob);
-    console.log("폼데이터:", formData);
+    // console.log("블랍:", blob);
+    // console.log("폼데이터:", formData);
 
     try {
-      // await axiosInstance.post(`/api/v1/spec`, formData, {
+      // const res = await axiosInstance.post(`/api/v1/spec`, formData, {
       //   headers: {
       //     // "Content-Type": "multipart/form-data; boundary='boundary'",
       //     "Content-Type": "multipart/form-data",
@@ -77,14 +106,33 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
       //     return data;
       //   },
       // });
-      await fetch(`${getEnvVars()?.apiUrl}/api/v1/spec`, {
-        method: "POST",
-        body: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      // const res = await axios.post(
+      //   `${getEnvVars()?.apiUrl}/api/v1/spec`,
+      //   formData,
+      //   {
+      //     headers: {
+      //       // "Content-Type": "multipart/form-data; boundary='boundary'",
+      //       "Content-Type": "multipart/form-data",
+      //       Authorization: `Bearer ${await SecureStore.getItemAsync(
+      //         "accessToken"
+      //       )}`,
+      //     },
+      //   }
+      // );
+      // const res = await fetch(`${getEnvVars()?.apiUrl}/api/v1/spec`, {
+      //   method: "POST",
+      //   body: formData,
+      //   headers: {
+      //     // "Content-Type": "multipart/form-data",
+      //     Authorization: `Bearer ${await SecureStore.getItemAsync(
+      //       "accessToken"
+      //     )}`,
+      //   },
+      // });
 
+      const res = await axiosInstance.post(`/api/v1/spec/json`, value);
+
+      console.log(`/api/v1/spec`, res);
       navigation.navigate("SpecAddComplete", { name });
     } catch (error) {
       console.error("Error 에러:", error);

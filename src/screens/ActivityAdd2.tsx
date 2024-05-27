@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import CalendarPicker from "react-native-calendar-picker";
-import { Alert } from "react-native";
 
 import {
   Text,
@@ -11,13 +10,25 @@ import {
   ScrollView,
   Keyboard,
   Modal,
+  Alert,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ActivityAddScreenStackParamList } from "@stackNav/ActivityAddScreen";
 import { Dropdown } from "react-native-element-dropdown";
 import * as DocumentPicker from "expo-document-picker";
+import getDateString from "src/utils/getDateString";
 
-const data = [
+// export const FIELD_LABEL = {
+//   "기획/아이디어": "IDEATION",
+//   "브랜드/네이밍": "BRANDING",
+//   "광고/마케팅": "MARKETING",
+//   "사진/영상": "PHOTOGRAPYH",
+//   디자인: "DESIGN",
+//   예체능: "PERFORMINGARTS",
+//   "IT/SW": "IT",
+// };
+
+export const FIELD_MENU = [
   { label: "기획/아이디어", value: "IDEATION" },
   { label: "브랜드/네이밍", value: "BRANDING" },
   { label: "광고/마케팅", value: "MARKETING" },
@@ -32,6 +43,11 @@ type ActivityProps = NativeStackScreenProps<
   "ActivityAdd2"
 >;
 
+export interface ProofFileBase {
+  uri: string;
+  name: string;
+}
+
 function ActivityAdd2({ route, navigation }: ActivityProps) {
   const [host, setHost] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -42,7 +58,7 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
   const [field, setField] = useState("");
   const [contents, setContents] = useState<string | null>(null);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const [proofFile, setProofFile] = useState<string | null>(null);
+  const [proofFile, setProofFile] = useState<ProofFileBase | null>(null);
 
   const { name } = route.params;
 
@@ -65,8 +81,8 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
     console.log("ActivityAdd2 -> ActivityAdd3", {
       name,
       host,
-      startDate,
-      endDate,
+      startDate: startDate ? getDateString(startDate) : "",
+      endDate: endDate ? getDateString(endDate) : "",
       field,
       contents,
       proofFile,
@@ -75,8 +91,8 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
     navigation.navigate("ActivityAdd3", {
       name,
       host,
-      startDate,
-      endDate,
+      startDate: startDate ? getDateString(startDate) : "",
+      endDate: endDate ? getDateString(endDate) : "",
       field,
       contents,
       proofFile,
@@ -138,7 +154,7 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
     const document = await pickDocument();
     if (document !== null) {
       console.log("Selected file:", document);
-      setProofFile(document.uri);
+      setProofFile({ uri: document.uri, name: document.name });
       // Perform further actions with the selected file if necessary
     }
   };
@@ -231,7 +247,7 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
               style={{ width: "100%" }}
               placeholderStyle={styles.inputText}
               selectedTextStyle={[styles.inputText, { color: "#373737" }]}
-              data={data}
+              data={FIELD_MENU}
               labelField="label"
               valueField="value"
               placeholder={"분야를 선택해주세요."}
@@ -255,7 +271,7 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
               onChangeText={(text) => setContents(text)}
             />
           </View>
-          <View style={styles.section}>
+          {/* <View style={styles.section}>
             <Text style={[styles.sectionSubtitle, { marginTop: 25 }]}>
               증빙자료를 업로드해주세요.
             </Text>
@@ -268,7 +284,7 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
                 <Text style={styles.inputText}>파일 업로드</Text>
               </View>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
       <TouchableOpacity style={styles.nextButton} onPress={handleNext}>

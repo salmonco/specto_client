@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Pressable, ScrollView, TextInput, View } from "react-native";
+import { Alert, Pressable, ScrollView, TextInput, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import Button from "@components/Button";
 import HorizontalSlider from "@components/HorizontalSlider";
@@ -48,6 +48,7 @@ function ReviewAdd({ route, navigation }: Readonly<ReviewListScreenProps>) {
       console.log("body", body);
       const res = await axiosInstance.post(`/api/v1/review`, body);
       console.log(`/api/v1/review`, res);
+      Alert.alert(res.data);
       navigation.navigate("ReviewAddComplete");
     } catch (e) {
       console.log(e);

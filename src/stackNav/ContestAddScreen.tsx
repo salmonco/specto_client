@@ -7,9 +7,16 @@ import SpecAddComplete from "../screens/SpecAddComplete";
 
 export type ContestAddScreenStackParamList = {
   ContestAdd1: undefined;
-  ContestAdd2: undefined;
-  ContestAdd3: undefined;
-  SpecAddComplete: undefined;
+  ContestAdd2: { name: string };
+  ContestAdd3: {
+    name: string;
+    host: string;
+    startDate: string | null;
+    endDate: string | null;
+    field: string;
+    contents: string | null;
+  };
+  SpecAddComplete: { name: string };
 };
 
 const ContestAddScreenStack =

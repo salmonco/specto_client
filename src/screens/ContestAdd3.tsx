@@ -9,11 +9,13 @@ import {
   ScrollView,
   Keyboard,
   Modal,
+  Alert,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ContestAddScreenStackParamList } from "@stackNav/ContestAddScreen";
 import { Dropdown } from "react-native-element-dropdown";
 import * as DocumentPicker from "expo-document-picker";
+import axiosInstance from "src/api/axiosInstance";
 
 type DocumentPickerResponse = {
   uri: string;
@@ -22,14 +24,14 @@ type DocumentPickerResponse = {
   size: number;
 };
 
-const API_URL = "http://your-api-url.com"; // 여기에 백엔드 API 엔드포인트 URL을 입력해주세요.
-
 type ContestProps = NativeStackScreenProps<
   ContestAddScreenStackParamList,
   "ContestAdd3"
 >;
 
-function ContestAdd3({ navigation }: Readonly<ContestProps>) {
+function ContestAdd3({ route, navigation }: Readonly<ContestProps>) {
+  const { name, host, startDate, endDate, field, contents } =
+    route.params || {};
   const [awardTitle, setawardTitle] = useState("");
   const [date, setDate] = useState<Date | null>(null);
   const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
@@ -41,28 +43,30 @@ function ContestAdd3({ navigation }: Readonly<ContestProps>) {
   // const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const handleNext = async () => {
+    const value = {
+      name: name || "기본 이름",
+      category: "CONTEST",
+      startDate: startDate || "2024-03-06",
+      endDate: endDate || "2024-10-06",
+      contents: contents || "기본 내용",
+      detail: {
+        host: host || "기본 주최자",
+        field: field || "IDEATION",
+        awardStatus: awardStatus || false,
+        awardTitle: awardTitle || "기본 상이름",
+        date: date || "2024-07-06",
+      },
+    };
+
     try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          awardTitle,
-          date,
-          awardStatus,
-          proofFile,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to save data");
-      }
-
-      navigation.navigate("SpecAddComplete");
+      const res = await axiosInstance.post(`/api/v1/spec/json`, value);
+      console.log(`/api/v1/spec`, res);
+      navigation.navigate("SpecAddComplete", { name });
     } catch (error) {
-      console.error("Error:", error);
-      // 에러 처리 로직 추가
+      console.error("Error 에러:", error);
+      Alert.alert(
+        "양식을 제출하는 동안 오류가 발생했습니다. 다시 시도해 주세요."
+      );
     }
   };
 
@@ -181,7 +185,7 @@ function ContestAdd3({ navigation }: Readonly<ContestProps>) {
         </View>
 
         {/* 섹션 4: 증빙자료 업로드 */}
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={[styles.sectionSubtitle, { marginTop: 10 }]}>
             증빙자료를 업로드해주세요.
           </Text>
@@ -193,7 +197,7 @@ function ContestAdd3({ navigation }: Readonly<ContestProps>) {
               <Text style={styles.inputText}>파일 업로드</Text>
             </View>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </ScrollView>
       {/* 다음으로 버튼 */}
       <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
