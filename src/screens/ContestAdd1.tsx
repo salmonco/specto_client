@@ -9,8 +9,6 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ContestAddScreenStackParamList } from "@stackNav/ContestAddScreen";
 
-const API_URL = "http://your-api-url.com"; // 여기에 백엔드 API 엔드포인트 URL을 입력해주세요.
-
 type ContestProps = NativeStackScreenProps<
   ContestAddScreenStackParamList,
   "ContestAdd1"
@@ -20,21 +18,8 @@ function ContestAdd1({ navigation }: Readonly<ContestProps>) {
   const [name, setName] = useState("");
 
   const handleNext = async () => {
-    try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name }),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to save contest name");
-      }
-      navigation.navigate("ContestAdd2");
-    } catch (error) {
-      console.error("Error:", error as Error);
-    }
+    console.log("ContestAdd1 -> ContestAdd2", { name });
+    navigation.navigate("ContestAdd2", { name });
   };
 
   return (

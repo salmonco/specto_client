@@ -30,7 +30,7 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const handleNext = useCallback(async () => {
-    const formData = new FormData();
+    // const formData = new FormData();
 
     enum ActivityCategory {
       ACTIVITY = "ACTIVITY",

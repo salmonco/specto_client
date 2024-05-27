@@ -13,24 +13,16 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ContestAddScreenStackParamList } from "@stackNav/ContestAddScreen";
 import { Dropdown } from "react-native-element-dropdown";
-
-const API_URL = "http://your-api-url.com"; // 여기에 백엔드 API 엔드포인트 URL을 입력해주세요.
-
-const data = [
-  { label: "기획/아이디어", value: "기획/아이디어" },
-  { label: "브랜드/네이밍", value: "브랜드/네이밍" },
-  { label: "사진/영상", value: "사진/영상" },
-  { label: "디자인", value: "디자인" },
-  { label: "예체능", value: "예체능" },
-  { label: "IT/SW", value: "IT/SW" },
-];
+import { FIELD_MENU } from "./ActivityAdd2";
+import getDateString from "src/utils/getDateString";
 
 type ContestProps = NativeStackScreenProps<
   ContestAddScreenStackParamList,
   "ContestAdd2"
 >;
 
-function ContestAdd2({ navigation }: Readonly<ContestProps>) {
+function ContestAdd2({ route, navigation }: Readonly<ContestProps>) {
+  const { name } = route.params;
   const [host, setHost] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -43,29 +35,23 @@ function ContestAdd2({ navigation }: Readonly<ContestProps>) {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const handleNext = async () => {
-    try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          host,
-          startDate,
-          endDate,
-          field,
-          contents,
-        }),
-      });
+    console.log("ContestAdd2 -> ContestAdd3", {
+      name,
+      host,
+      startDate: startDate ? getDateString(startDate) : "",
+      endDate: endDate ? getDateString(endDate) : "",
+      field,
+      contents,
+    });
 
-      if (!response.ok) {
-        throw new Error("Failed to submit data");
-      }
-
-      navigation.navigate("ContestAdd3");
-    } catch (error) {
-      console.error("Error:", error as Error);
-    }
+    navigation.navigate("ContestAdd3", {
+      name,
+      host,
+      startDate: startDate ? getDateString(startDate) : "",
+      endDate: endDate ? getDateString(endDate) : "",
+      field,
+      contents,
+    });
   };
 
   useEffect(() => {
@@ -194,7 +180,7 @@ function ContestAdd2({ navigation }: Readonly<ContestProps>) {
               style={{ width: "100%" }}
               placeholderStyle={styles.inputText}
               selectedTextStyle={[styles.inputText, { color: "#373737" }]}
-              data={data}
+              data={FIELD_MENU}
               labelField="label"
               valueField="value"
               placeholder={"분야를 선택해주세요."}

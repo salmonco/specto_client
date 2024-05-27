@@ -16,6 +16,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ActivityAddScreenStackParamList } from "@stackNav/ActivityAddScreen";
 import { Dropdown } from "react-native-element-dropdown";
 import * as DocumentPicker from "expo-document-picker";
+import getDateString from "src/utils/getDateString";
 
 // export const FIELD_LABEL = {
 //   "기획/아이디어": "IDEATION",
@@ -80,8 +81,8 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
     console.log("ActivityAdd2 -> ActivityAdd3", {
       name,
       host,
-      startDate,
-      endDate,
+      startDate: startDate ? getDateString(startDate) : "",
+      endDate: endDate ? getDateString(endDate) : "",
       field,
       contents,
       proofFile,
@@ -90,8 +91,8 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
     navigation.navigate("ActivityAdd3", {
       name,
       host,
-      startDate,
-      endDate,
+      startDate: startDate ? getDateString(startDate) : "",
+      endDate: endDate ? getDateString(endDate) : "",
       field,
       contents,
       proofFile,

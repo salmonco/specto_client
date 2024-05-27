@@ -102,7 +102,7 @@ function CertificateAdd3({ route, navigation }: Readonly<CertificateProps>) {
               onPress={() => setIsStartDatePickerVisible(true)}
               style={styles.datePicker}
             >
-              <Text style={styles.datePickerLabel}>수상일자</Text>
+              <Text style={styles.datePickerLabel}>취득 날짜</Text>
               <Text style={styles.datePickerText}>{formatDate(date)}</Text>
             </TouchableOpacity>
           </View>

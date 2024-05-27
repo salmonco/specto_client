@@ -12,8 +12,8 @@ export type ActivityAddScreenStackParamList = {
   ActivityAdd3: {
     name: string;
     host: string;
-    startDate: Date | null;
-    endDate: Date | null;
+    startDate: string | null;
+    endDate: string | null;
     field: string;
     contents: string | null;
     proofFile: ProofFileBase | null;
