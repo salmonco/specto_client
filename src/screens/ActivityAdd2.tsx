@@ -49,15 +49,19 @@ export interface ProofFileBase {
 }
 
 function ActivityAdd2({ route, navigation }: ActivityProps) {
-  const { id, name } = route.params;
-  const [host, setHost] = useState("");
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const { id, specDetail, name } = route.params;
+  const [host, setHost] = useState(specDetail?.detail?.host ?? "");
+  const [startDate, setStartDate] = useState<Date | string | null>(
+    specDetail?.startDate ?? null
+  );
+  const [endDate, setEndDate] = useState<Date | string | null>(
+    specDetail?.endDate ?? null
+  );
   const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
     useState(false);
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
-  const [field, setField] = useState("");
-  const [contents, setContents] = useState<string | null>(null);
+  const [field, setField] = useState(specDetail?.detail?.field ?? "");
+  const [contents, setContents] = useState<string>(specDetail?.contents ?? "");
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [proofFile, setProofFile] = useState<ProofFileBase | null>(null);
 
@@ -76,27 +80,27 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
 
     // const formattedStartDate = formatDateOnly(startDate);
     // const formattedEndDate = formatDateOnly(endDate);
-
-    console.log("ActivityAdd2 -> ActivityAdd3", {
-      name,
-      host,
-      startDate: startDate ? getDateString(startDate) : "",
-      endDate: endDate ? getDateString(endDate) : "",
-      field,
-      contents,
-      proofFile,
-    });
-
-    navigation.navigate("ActivityAdd3", {
+    const value = {
       id,
+      specDetail,
       name,
       host,
-      startDate: startDate ? getDateString(startDate) : "",
-      endDate: endDate ? getDateString(endDate) : "",
+      startDate: startDate
+        ? typeof startDate === "object"
+          ? getDateString(startDate)
+          : startDate
+        : "",
+      endDate: endDate
+        ? typeof endDate === "object"
+          ? getDateString(endDate)
+          : endDate
+        : "",
       field,
       contents,
       proofFile,
-    });
+    };
+    console.log("ActivityAdd2 -> ActivityAdd3", value);
+    navigation.navigate("ActivityAdd3", value);
   };
 
   useEffect(() => {
@@ -176,7 +180,7 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
         </View>
         <View style={styles.section}>
           <Text style={[styles.sectionSubtitle, { marginTop: 10 }]}>
-            활동 시작/종료 날짜을 선택해주세요.
+            활동 시작/종료 날짜를 선택해주세요.
           </Text>
           <View style={styles.datePickerRow}>
             <TouchableOpacity
@@ -184,14 +188,20 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
               style={styles.datePicker}
             >
               <Text style={styles.datePickerLabel}>시작날짜:</Text>
-              <Text style={styles.datePickerText}>{formatDate(startDate)}</Text>
+              <Text style={styles.datePickerText}>
+                {typeof startDate === "string"
+                  ? startDate
+                  : formatDate(startDate)}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setIsEndDatePickerVisible(true)}
               style={styles.datePicker}
             >
               <Text style={styles.datePickerLabel}>종료날짜:</Text>
-              <Text style={styles.datePickerText}>{formatDate(endDate)}</Text>
+              <Text style={styles.datePickerText}>
+                {typeof endDate === "string" ? endDate : formatDate(endDate)}
+              </Text>
             </TouchableOpacity>
           </View>
           <Modal

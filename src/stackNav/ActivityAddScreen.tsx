@@ -5,12 +5,14 @@ import ActivityAdd2, { ProofFileBase } from "../screens/ActivityAdd2";
 import ActivityAdd3 from "../screens/ActivityAdd3";
 import SpecAddComplete from "../screens/SpecAddComplete";
 import SpecSend from "@screens/SpecSend";
+import { SpecDetailBase } from "@screens/SpecDetail";
 
 export type ActivityAddScreenStackParamList = {
-  ActivityAdd1: { id?: number };
-  ActivityAdd2: { id?: number; name: string };
+  ActivityAdd1: { id?: number; specDetail?: SpecDetailBase };
+  ActivityAdd2: { id?: number; specDetail?: SpecDetailBase; name: string };
   ActivityAdd3: {
     id?: number;
+    specDetail?: SpecDetailBase;
     name: string;
     host: string;
     startDate: string | null;

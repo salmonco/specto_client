@@ -167,7 +167,7 @@ function ProjectAdd2({ route, navigation }: ActivityProps) {
         </View>
         <View style={styles.section}>
           <Text style={[styles.sectionSubtitle, { marginTop: 10 }]}>
-            활동 시작/종료 날짜을 선택해주세요.
+            활동 시작/종료 날짜를 선택해주세요.
           </Text>
           <View style={styles.datePickerRow}>
             <TouchableOpacity

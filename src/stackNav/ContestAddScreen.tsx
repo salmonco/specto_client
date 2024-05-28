@@ -4,12 +4,14 @@ import ContestAdd1 from "../screens/ContestAdd1";
 import ContestAdd2 from "../screens/ContestAdd2";
 import ContestAdd3 from "../screens/ContestAdd3";
 import SpecAddComplete from "../screens/SpecAddComplete";
+import { SpecDetailBase } from "@screens/SpecDetail";
 
 export type ContestAddScreenStackParamList = {
-  ContestAdd1: { id?: number }; // 수정된 부분
-  ContestAdd2: { id?: number; name: string };
+  ContestAdd1: { id?: number; specDetail?: SpecDetailBase }; // 수정된 부분
+  ContestAdd2: { id?: number; specDetail?: SpecDetailBase; name: string };
   ContestAdd3: {
     id?: number;
+    specDetail?: SpecDetailBase;
     name: string;
     host: string;
     startDate: string | null;

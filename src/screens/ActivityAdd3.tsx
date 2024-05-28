@@ -24,11 +24,24 @@ type ActivityProps = NativeStackScreenProps<
 >;
 
 function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
-  const { id, name, host, startDate, endDate, field, contents, proofFile } =
-    route.params || {};
-  const [motivation, setMotivation] = useState<string | null>(null);
-  const [goal, setGoal] = useState<string | null>(null);
-  const [direction, setDirection] = useState<string | null>(null);
+  const {
+    id,
+    specDetail,
+    name,
+    host,
+    startDate,
+    endDate,
+    field,
+    contents,
+    proofFile,
+  } = route.params || {};
+  const [motivation, setMotivation] = useState<string>(
+    specDetail?.detail?.motivation ?? ""
+  );
+  const [goal, setGoal] = useState<string>(specDetail?.detail?.goal ?? "");
+  const [direction, setDirection] = useState<string>(
+    specDetail?.detail?.direction ?? ""
+  );
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const isEditing = !!id; // id가 있으면 수정 모드
 

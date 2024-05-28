@@ -1,7 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Spec, { SpecBase } from "../screens/Spec";
-import SpecDetail from "../screens/SpecDetail";
+import SpecDetail, { SpecDetailBase } from "../screens/SpecDetail";
 import ContestAddScreen from "./ContestAddScreen";
 import CertificateAddScreen from "./CertificateAddScreen";
 import InternAddScreen from "./InternAddScreen";
@@ -14,11 +14,26 @@ import SpecAddComplete from "../screens/SpecAddComplete";
 export type SpecScreenStackParamList = {
   Spec: undefined;
   SpecDetail: { id: number; category: string }; // id와 category 매개변수 추가
-  ContestAddScreen: { screen: "ContestAdd1"; params: { id?: number } };
-  CertificateAddScreen: { screen: "CertificateAdd1"; params: { id?: number } };
-  InternAddScreen: { screen: "InternAdd1"; params: { id?: number } };
-  ActivityAddScreen: { screen: "ActivityAdd1"; params: { id?: number } };
-  ProjectAddScreen: { screen: "ProjectAdd1"; params: { id?: number } };
+  ContestAddScreen: {
+    screen: "ContestAdd1";
+    params: { id?: number; specDetail?: SpecDetailBase };
+  };
+  CertificateAddScreen: {
+    screen: "CertificateAdd1";
+    params: { id?: number; specDetail?: SpecDetailBase };
+  };
+  InternAddScreen: {
+    screen: "InternAdd1";
+    params: { id?: number; specDetail?: SpecDetailBase };
+  };
+  ActivityAddScreen: {
+    screen: "ActivityAdd1";
+    params: { id?: number; specDetail?: SpecDetailBase };
+  };
+  ProjectAddScreen: {
+    screen: "ProjectAdd1";
+    params: { id?: number; specDetail?: SpecDetailBase };
+  };
   SpecCategorySelect: undefined;
   ReviewListScreen: { screen: "ReviewListUp"; params: { specItem: SpecBase } };
   SpecAddComplete: { name: string };

@@ -19,7 +19,10 @@ const SpecCategorySelect: React.FC<SpecCategorySelectProps> = ({
       <Pressable
         style={styles.categoryButton}
         onPress={() => {
-          navigation.navigate("ContestAddScreen", { screen: "ContestAdd1" });
+          navigation.navigate("ContestAddScreen", {
+            screen: "ContestAdd1",
+            params: {},
+          });
           onSelectCategory("공모전/수상");
           onClose();
         }}
@@ -31,6 +34,7 @@ const SpecCategorySelect: React.FC<SpecCategorySelectProps> = ({
         onPress={() => {
           navigation.navigate("CertificateAddScreen", {
             screen: "CertificateAdd1",
+            params: {},
           });
           onClose();
           onSelectCategory("자격증");
@@ -43,6 +47,7 @@ const SpecCategorySelect: React.FC<SpecCategorySelectProps> = ({
         onPress={() => {
           navigation.navigate("InternAddScreen", {
             screen: "InternAdd1",
+            params: {},
           });
           onClose();
           onSelectCategory("인턴");
@@ -55,6 +60,7 @@ const SpecCategorySelect: React.FC<SpecCategorySelectProps> = ({
         onPress={() => {
           navigation.navigate("ActivityAddScreen", {
             screen: "ActivityAdd1",
+            params: {},
           });
           onSelectCategory("대외활동");
           onClose();
@@ -67,6 +73,7 @@ const SpecCategorySelect: React.FC<SpecCategorySelectProps> = ({
         onPress={() => {
           navigation.navigate("ProjectAddScreen", {
             screen: "ProjectAdd1",
+            params: {},
           });
           onSelectCategory("논문/프로젝트");
           onClose();

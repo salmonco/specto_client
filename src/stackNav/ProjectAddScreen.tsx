@@ -5,12 +5,14 @@ import ProjectAdd2, { ProofFileBase } from "../screens/ProjectAdd2";
 import ProjectAdd3 from "../screens/ProjectAdd3";
 import SpecAddComplete from "../screens/SpecAddComplete";
 import SpecSend from "@screens/SpecSend";
+import { SpecDetailBase } from "@screens/SpecDetail";
 
 export type ProjectAddScreenStackParamList = {
-  ProjectAdd1: { id?: number };
-  ProjectAdd2: { id?: number; name: string };
+  ProjectAdd1: { id?: number; specDetail?: SpecDetailBase };
+  ProjectAdd2: { id?: number; specDetail?: SpecDetailBase; name: string };
   ProjectAdd3: {
     id?: number;
+    specDetail?: SpecDetailBase;
     name: string;
     host: string;
     startDate: string | null;
