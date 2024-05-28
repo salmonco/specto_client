@@ -16,6 +16,9 @@ import { AuthStackParamList } from "@stackNav/Auth";
 import getEnvVars from "environment";
 import axiosInstance from "src/api/axiosInstance";
 import axios from "axios";
+import * as SecureStore from "expo-secure-store";
+import { RootStackParamList } from "AppInner";
+import { CompositeScreenProps } from "@react-navigation/native";
 const VIEW_HEIGHT = Dimensions.get("window").height; // 화면 세로길이
 
 type AuthProps = NativeStackScreenProps<AuthStackParamList, "Login">;
@@ -72,6 +75,17 @@ function Login({ navigation }: Readonly<AuthProps>) {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, styles.googleButton]}
+          onPress={() => navigation.navigate("LoginTest")}
+        >
+          {/* <AntDesign name="google" size={18} color="black" /> */}
+          <Text
+            style={[styles.buttonText, styles.googleText, { marginLeft: 10 }]}
+          >
+            로그인하기
+          </Text>
+        </TouchableOpacity>
+        {/* <TouchableOpacity
+          style={[styles.button, styles.googleButton]}
           onPress={handleGoogleLogin}
         >
           <AntDesign name="google" size={18} color="black" />
@@ -80,7 +94,7 @@ function Login({ navigation }: Readonly<AuthProps>) {
           >
             구글로 계속하기
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           style={[styles.button, styles.kakaoButton]}
           onPress={handleKakaoLogin}
