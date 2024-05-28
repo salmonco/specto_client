@@ -30,7 +30,7 @@ type ContestProps = NativeStackScreenProps<
 >;
 
 function ContestAdd3({ route, navigation }: Readonly<ContestProps>) {
-  const { name, host, startDate, endDate, field, contents } =
+  const { id, name, host, startDate, endDate, field, contents } =
     route.params || {}; // id 추가
   const [awardTitle, setAwardTitle] = useState("");
   const [date, setDate] = useState<Date | null>(null);

@@ -14,12 +14,13 @@ type CertificateProps = NativeStackScreenProps<
   "CertificateAdd1"
 >;
 
-function CertificateAdd1({ navigation }: Readonly<CertificateProps>) {
+function CertificateAdd1({ route, navigation }: Readonly<CertificateProps>) {
+  const { id } = route.params;
   const [name, setName] = useState("");
 
   const handleNext = () => {
     console.log("CertificateAdd1 -> CertificateAdd2", { name });
-    navigation.navigate("CertificateAdd2", { name });
+    navigation.navigate("CertificateAdd2", { id, name });
   };
 
   return (

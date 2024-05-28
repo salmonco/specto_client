@@ -7,9 +7,10 @@ import SpecAddComplete from "../screens/SpecAddComplete";
 import SpecSend from "@screens/SpecSend";
 
 export type ActivityAddScreenStackParamList = {
-  ActivityAdd1: undefined;
-  ActivityAdd2: { name: string };
+  ActivityAdd1: { id?: number };
+  ActivityAdd2: { id?: number; name: string };
   ActivityAdd3: {
+    id?: number;
     name: string;
     host: string;
     startDate: string | null;

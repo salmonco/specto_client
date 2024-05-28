@@ -5,8 +5,9 @@ import InternAdd2 from "../screens/InternAdd2";
 import SpecAddComplete from "../screens/SpecAddComplete";
 
 export type InternAddScreenStackParamList = {
-  InternAdd1: undefined;
+  InternAdd1: { id?: number };
   InternAdd2: {
+    id?: number;
     name: string;
     company: string;
     work: string;

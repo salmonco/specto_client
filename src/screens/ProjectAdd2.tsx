@@ -40,6 +40,7 @@ export interface ProofFileBase {
 }
 
 function ProjectAdd2({ route, navigation }: ActivityProps) {
+  const { id, name } = route.params;
   const [host, setHost] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -50,8 +51,6 @@ function ProjectAdd2({ route, navigation }: ActivityProps) {
   const [contents, setContents] = useState<string | null>(null);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [proofFile, setProofFile] = useState<ProofFileBase | null>(null);
-
-  const { name } = route.params;
 
   // useEffect(() => {
   //   console.log("ActivityAdd2 received params", { name });
@@ -80,6 +79,7 @@ function ProjectAdd2({ route, navigation }: ActivityProps) {
     });
 
     navigation.navigate("ProjectAdd3", {
+      id,
       name,
       host,
       startDate: startDate ? getDateString(startDate) : "",

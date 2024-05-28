@@ -20,7 +20,8 @@ type InternProps = NativeStackScreenProps<
   "InternAdd1"
 >;
 
-function InternAdd1({ navigation }: Readonly<InternProps>) {
+function InternAdd1({ route, navigation }: Readonly<InternProps>) {
+  const { id } = route.params;
   const [company, setCompany] = useState("");
   const [work, setWork] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -43,6 +44,7 @@ function InternAdd1({ navigation }: Readonly<InternProps>) {
     });
 
     navigation.navigate("InternAdd2", {
+      id,
       name: `${company} 인턴`,
       company,
       work,

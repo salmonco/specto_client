@@ -30,13 +30,14 @@ type CertificateProps = NativeStackScreenProps<
 >;
 
 function CertificateAdd3({ route, navigation }: Readonly<CertificateProps>) {
-  const { name, host, startDate, endDate, field, contents } =
+  const { id, name, host, startDate, endDate, field, contents } =
     route.params || {};
   const [date, setDate] = useState<Date | null>(null);
   const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
     useState(false);
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
   const [proofFile, setProofFile] = useState<string | null>(null);
+  const isEditing = !!id; // id가 있으면 수정 모드
 
   const handleNext = async () => {
     const value = {

@@ -18,13 +18,14 @@ type ContestProps = NativeStackScreenProps<
   "ActivityAdd1"
 >;
 
-function ActivityAdd1({ navigation }: Readonly<ContestProps>) {
+function ActivityAdd1({ route, navigation }: Readonly<ContestProps>) {
+  const { id } = route.params;
   const [name, setName] = useState(""); // 활동명 상태 생성
 
   const handleNext = () => {
     // ActivityAdd2로 이동하면서 name 값을 전달
     console.log("ActivityAdd1 -> ActivityAdd2", { name });
-    navigation.navigate("ActivityAdd2", { name });
+    navigation.navigate("ActivityAdd2", { id, name });
   };
 
   return (
