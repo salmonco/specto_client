@@ -43,6 +43,7 @@ function ProjectAdd1({ route, navigation }: Readonly<ContestProps>) {
           style={styles.inputText}
           placeholder="활동 이름을 입력해주세요."
           onChangeText={(text) => setName(text)} // name 값 업데이트
+          value={name}
         />
       </View>
       <TouchableOpacity style={styles.buttonContainer} onPress={handleNext}>

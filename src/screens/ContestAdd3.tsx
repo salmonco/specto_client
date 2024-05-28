@@ -22,14 +22,20 @@ type ContestProps = NativeStackScreenProps<
 >;
 
 function ContestAdd3({ route, navigation }: Readonly<ContestProps>) {
-  const { id, name, host, startDate, endDate, field, contents } =
+  const { id, specDetail, name, host, startDate, endDate, field, contents } =
     route.params || {}; // id 추가
-  const [awardTitle, setAwardTitle] = useState("");
-  const [date, setDate] = useState<Date | null>(null);
+  const [awardTitle, setAwardTitle] = useState(
+    specDetail?.detail?.awardTitle ?? ""
+  );
+  const [date, setDate] = useState<Date | string | null>(
+    specDetail?.detail?.date ?? null
+  );
   const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
     useState(false);
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
-  const [awardStatus, setAwardStatus] = useState<boolean | null>(null); // 공모전 수상여부
+  const [awardStatus, setAwardStatus] = useState<boolean | null>(
+    specDetail?.detail?.awardStatus ?? null
+  ); // 공모전 수상여부
   const [proofFile, setProofFile] = useState<string | null>(null);
 
   const isEditing = !!id; // id가 있으면 수정 모드
@@ -144,7 +150,9 @@ function ContestAdd3({ route, navigation }: Readonly<ContestProps>) {
               style={styles.datePicker}
             >
               <Text style={styles.datePickerLabel}>수상일자</Text>
-              <Text style={styles.datePickerText}>{formatDate(date)}</Text>
+              <Text style={styles.datePickerText}>
+                {typeof date === "string" ? date : formatDate(date)}
+              </Text>
             </TouchableOpacity>
           </View>
           <Modal
