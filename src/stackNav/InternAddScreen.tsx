@@ -3,11 +3,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import InternAdd1 from "../screens/InternAdd1";
 import InternAdd2 from "../screens/InternAdd2";
 import SpecAddComplete from "../screens/SpecAddComplete";
+import { SpecDetailBase } from "@screens/SpecDetail";
 
 export type InternAddScreenStackParamList = {
-  InternAdd1: { id?: number };
+  InternAdd1: { id?: number; specDetail?: SpecDetailBase };
   InternAdd2: {
     id?: number;
+    specDetail?: SpecDetailBase;
     name: string;
     company: string;
     work: string;

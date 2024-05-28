@@ -143,31 +143,31 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
       case "CONTEST":
         navigation.navigate("ContestAddScreen", {
           screen: "ContestAdd1",
-          params: { id },
+          params: { id, specDetail: specInfo },
         });
         break;
       case "CERTIFICATION":
         navigation.navigate("CertificateAddScreen", {
           screen: "CertificateAdd1",
-          params: { id },
+          params: { id, specDetail: specInfo },
         });
         break;
       case "INTERNSHIP":
         navigation.navigate("InternAddScreen", {
           screen: "InternAdd1",
-          params: { id },
+          params: { id, specDetail: specInfo },
         });
         break;
       case "ACTIVITY":
         navigation.navigate("ActivityAddScreen", {
           screen: "ActivityAdd1",
-          params: { id },
+          params: { id, specDetail: specInfo },
         });
         break;
       case "PROJECT":
         navigation.navigate("ProjectAddScreen", {
           screen: "ProjectAdd1",
-          params: { id },
+          params: { id, specDetail: specInfo },
         });
         break;
       default:

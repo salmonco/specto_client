@@ -19,13 +19,14 @@ type ContestProps = NativeStackScreenProps<
 >;
 
 function ActivityAdd1({ route, navigation }: Readonly<ContestProps>) {
-  const { id } = route.params;
-  const [name, setName] = useState(""); // 활동명 상태 생성
+  const { id, specDetail } = route.params;
+  const [name, setName] = useState(specDetail?.name ?? ""); // 활동명 상태 생성
 
   const handleNext = () => {
     // ActivityAdd2로 이동하면서 name 값을 전달
-    console.log("ActivityAdd1 -> ActivityAdd2", { name });
-    navigation.navigate("ActivityAdd2", { id, name });
+    const value = { id, specDetail, name };
+    console.log("ActivityAdd1 -> ActivityAdd2", value);
+    navigation.navigate("ActivityAdd2", value);
   };
 
   return (
@@ -43,6 +44,7 @@ function ActivityAdd1({ route, navigation }: Readonly<ContestProps>) {
           style={styles.inputText}
           placeholder="활동 이름을 입력해주세요."
           onChangeText={(text) => setName(text)} // name 값 업데이트
+          value={name}
         />
       </View>
       <TouchableOpacity style={styles.buttonContainer} onPress={handleNext}>
