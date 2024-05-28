@@ -69,6 +69,10 @@ function MyPage({ navigation }: MyPageProps) {
     setShowPopup(false);
   };
 
+  const handlePrivacy = () => {
+    navigation.navigate("Privacy");
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.pageTitle}>마이페이지</Text>
@@ -90,7 +94,9 @@ function MyPage({ navigation }: MyPageProps) {
         <TouchableOpacity onPress={handle1to1InquiryPress}>
           <MenuItem text="1:1 문의" top={285} />
         </TouchableOpacity>
-        <MenuItem text="개인정보처리방침" top={330} />
+        <TouchableOpacity onPress={handlePrivacy}>
+          <MenuItem text="개인정보처리방침" top={330} />
+        </TouchableOpacity>
         <TouchableOpacity onPress={handleLogoutPress}>
           <MenuItem text="로그아웃" top={375} />
         </TouchableOpacity>

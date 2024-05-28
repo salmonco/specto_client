@@ -2,10 +2,12 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MyPage from "../screens/MyPage";
 import ProfileChange from "../screens/ProfileChange";
+import Privacy from "@screens/Privacy";
 
 export type MyPageScreenStackParamList = {
   MyPage: undefined;
   ProfileChange: undefined;
+  Privacy: undefined;
 };
 
 const MyPageScreenStack =
@@ -18,6 +20,11 @@ function MyPageScreen() {
       <MyPageScreenStack.Screen
         name="ProfileChange"
         component={ProfileChange}
+      />
+      <MyPageScreenStack.Screen
+        name="Privacy"
+        component={Privacy}
+        options={{ headerShown: true, title: "개인정보처리방침" }}
       />
     </MyPageScreenStack.Navigator>
   );
