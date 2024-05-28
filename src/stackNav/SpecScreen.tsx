@@ -14,11 +14,11 @@ import SpecAddComplete from "../screens/SpecAddComplete";
 export type SpecScreenStackParamList = {
   Spec: undefined;
   SpecDetail: { id: number; category: string }; // id와 category 매개변수 추가
-  ContestAddScreen: undefined;
-  CertificateAddScreen: undefined;
-  InternAddScreen: undefined;
-  ActivityAddScreen: undefined;
-  ProjectAddScreen: undefined;
+  ContestAddScreen: { screen: "ContestAdd1"; params: { id?: number } };
+  CertificateAddScreen: { screen: "CertificateAdd1"; params: { id?: number } };
+  InternAddScreen: { screen: "InternAdd1"; params: { id?: number } };
+  ActivityAddScreen: { screen: "ActivityAdd1"; params: { id?: number } };
+  ProjectAddScreen: { screen: "ProjectAdd1"; params: { id?: number } };
   SpecCategorySelect: undefined;
   ReviewListScreen: { screen: "ReviewListUp"; params: { specItem: SpecBase } };
   SpecAddComplete: { name: string };

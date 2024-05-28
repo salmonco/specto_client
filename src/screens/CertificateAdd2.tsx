@@ -22,7 +22,7 @@ type CertificateProps = NativeStackScreenProps<
 >;
 
 function CertificateAdd2({ route, navigation }: Readonly<CertificateProps>) {
-  const { name } = route.params;
+  const { id, name } = route.params;
   const [host, setHost] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -45,6 +45,7 @@ function CertificateAdd2({ route, navigation }: Readonly<CertificateProps>) {
     });
 
     navigation.navigate("CertificateAdd3", {
+      id,
       name,
       host,
       startDate: startDate ? getDateString(startDate) : "",

@@ -7,9 +7,10 @@ import SpecAddComplete from "../screens/SpecAddComplete";
 import SpecSend from "@screens/SpecSend";
 
 export type ProjectAddScreenStackParamList = {
-  ProjectAdd1: undefined;
-  ProjectAdd2: { name: string };
+  ProjectAdd1: { id?: number };
+  ProjectAdd2: { id?: number; name: string };
   ProjectAdd3: {
+    id?: number;
     name: string;
     host: string;
     startDate: string | null;

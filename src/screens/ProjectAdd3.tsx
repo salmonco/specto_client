@@ -23,12 +23,13 @@ type ActivityProps = NativeStackScreenProps<
 >;
 
 function ProjectAdd3({ route, navigation }: Readonly<ActivityProps>) {
-  const { name, host, startDate, endDate, field, contents, proofFile } =
+  const { id, name, host, startDate, endDate, field, contents, proofFile } =
     route.params || {};
   const [motivation, setMotivation] = useState<string | null>(null);
   const [goal, setGoal] = useState<string | null>(null);
   const [direction, setDirection] = useState<string | null>(null);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const isEditing = !!id; // id가 있으면 수정 모드
 
   const handleNext = useCallback(async () => {
     const value = {

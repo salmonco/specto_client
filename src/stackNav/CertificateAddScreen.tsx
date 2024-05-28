@@ -6,9 +6,10 @@ import CertificateAdd3 from "../screens/CertificateAdd3";
 import SpecAddComplete from "../screens/SpecAddComplete";
 
 export type CertificateAddScreenStackParamList = {
-  CertificateAdd1: undefined;
-  CertificateAdd2: { name: string };
+  CertificateAdd1: { id?: number };
+  CertificateAdd2: { id?: number; name: string };
   CertificateAdd3: {
+    id?: number;
     name: string;
     host: string;
     startDate: string | null;

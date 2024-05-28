@@ -14,18 +14,14 @@ type ContestProps = NativeStackScreenProps<
   "ContestAdd1"
 >;
 
-interface RouteParams {
-  id?: number; // Make id type number
-}
-
 function ContestAdd1({ route, navigation }: Readonly<ContestProps>) {
-  const { id }: RouteParams = route.params || {}; // Destructure id from route.params
+  const { id } = route.params;
   const [name, setName] = useState("");
 
   const handleNext = async () => {
     console.log("ContestAdd1 -> ContestAdd2", { name });
     // Pass id and name to the next screen
-    navigation.navigate("ContestAdd2", { id: id ?? null, name });
+    navigation.navigate("ContestAdd2", { id, name });
   };
 
   return (

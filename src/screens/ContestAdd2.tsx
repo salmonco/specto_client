@@ -21,12 +21,8 @@ type ContestProps = NativeStackScreenProps<
   "ContestAdd2"
 >;
 
-interface RouteParams {
-  id?: string; // Make id optional
-}
-
 function ContestAdd2({ route, navigation }: Readonly<ContestProps>) {
-  const { id, name }: { id?: string; name: string } = route.params || {}; // Destructure id and name from route.params
+  const { id, name } = route.params;
   const [host, setHost] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -69,6 +65,7 @@ function ContestAdd2({ route, navigation }: Readonly<ContestProps>) {
     });
 
     navigation.navigate("ContestAdd3", {
+      id,
       name,
       host,
       startDate: startDate ? getDateString(startDate) : "",
