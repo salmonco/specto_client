@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Pressable,
   View,
   StyleSheet,
@@ -21,6 +22,7 @@ type SpecDetailScreenProps = NativeStackScreenProps<
   SpecScreenStackParamList,
   "SpecDetail"
 >;
+
 const chartConfig = {
   backgroundGradientFrom: "white",
   backgroundGradientFromOpacity: 1,
@@ -28,7 +30,6 @@ const chartConfig = {
   backgroundGradientToOpacity: 1,
   fillShadowGradientFromOpacity: 0,
   fillShadowGradientToOpacity: 0,
-  // useShadowColorFromDataset: false,
   color: (opacity = 1) => `rgba(55, 55, 55, ${opacity})`,
   strokeWidth: 5,
   barPercentage: 0.5,
@@ -37,23 +38,19 @@ const chartConfig = {
     fontWeight: "500",
     color: "#7B7B7B",
   },
-  // propsForDots: {
-  //   r: "6", // 점의 반지름 설정
-  //   strokeWidth: "3", // 점의 테두리 두께 설정
-  //   stroke: "#0094FF", // 점의 테두리 색상 설정
-  //   fill: "white", // 점의 내부 색상 설정
-  // },
 };
+
 const data = {
   labels: ["1월 첫째주", "1월 둘째주", "1월 셋째주", "1월 넷째주"],
   datasets: [
     {
-      data: [20, 50, 80, 100], // data -> progress로 바꾸고 싶어
+      data: [20, 50, 80, 100],
       color: (opacity = 1) => `rgba(224, 224, 224, ${opacity})`,
       strokeWidth: 3,
     },
   ],
 };
+
 export const CATEGORY_DETAIL_MENU = {
   CONTEST: [
     "host",
@@ -94,6 +91,7 @@ export const CATEGORY_DETAIL_MENU = {
     "documentation",
   ],
 };
+
 export const DETAIL_MENU: { [key: string]: string } = {
   host: "주최 기관",
   field: "분야",
@@ -108,6 +106,7 @@ export const DETAIL_MENU: { [key: string]: string } = {
   project: "프로젝트 내용",
   direction: "방향성",
 };
+
 export interface SpecDetailDetailBase {
   host: string;
   field: string;
@@ -122,6 +121,7 @@ export interface SpecDetailDetailBase {
   project: string;
   direction: string;
 }
+
 export interface SpecDetailBase {
   name: string;
   category: string;
@@ -132,50 +132,83 @@ export interface SpecDetailBase {
   summary: string;
   detail: SpecDetailDetailBase;
 }
+
 const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
   const { id, category } = route.params;
-  // TODO: id로 스펙 상세조회
-  // const [progress, setProgress] = useState("50%"); // 예시로 50%로 초기화
-  //const [specInfo, setSpecInfo] = useState<any>(null);
   const [specInfo, setSpecInfo] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(true);
 
-  const handleEditPress = () => {
-    // Navigate to the appropriate category screen based on the 'category' parameter
-    switch (category) {
-      case "CONTEST":
-        navigation.navigate("ContestAddScreen");
-        break;
-      case "CERTIFICATION":
-        navigation.navigate("CertificateAddScreen");
-        break;
-      case "INTERNSHIP":
-        navigation.navigate("InternAddScreen");
-        break;
-      case "ACTIVITY":
-        navigation.navigate("ActivityAddScreen");
-        break;
-      // Add cases for other categories as needed
-      default:
-        // Navigate to a default screen if the category is not recognized
-        navigation.navigate("Spec");
-        break;
+  const handleEditPress = (id: number | undefined) => {
+    try {
+      switch (category) {
+        case "CONTEST":
+          navigation.navigate("ContestAddScreen", { id });
+          break;
+        case "CERTIFICATION":
+          navigation.navigate("CertificateAddScreen", { id });
+          break;
+        case "INTERNSHIP":
+          navigation.navigate("InternAddScreen", { id });
+          break;
+        case "ACTIVITY":
+          navigation.navigate("ActivityAddScreen", { id });
+          break;
+        default:
+          navigation.navigate("Spec", { id });
+          break;
+      }
+    } catch (error) {
+      console.error("Error updating spec:", error);
+      Alert.alert("수정 실패", "스펙 수정에 실패했습니다.");
+    }
+  };
+
+  const handleDeletePress = async () => {
+    try {
+      await axiosInstance.delete(`/api/v1/spec/${id}`);
+      Alert.alert("삭제 완료", "스펙이 성공적으로 삭제되었습니다.");
+      navigation.goBack(); // Go back to the previous screen
+    } catch (error) {
+      console.error("Error deleting spec:", error);
+      Alert.alert("삭제 실패", "스펙 삭제에 실패했습니다.");
     }
   };
 
   useEffect(() => {
-    // 스크린 옵션 설정 (헤더 우측에 "수정" 버튼 표시)
     navigation.setOptions({
       headerRight: () => (
-        // <Pressable onPress={() => console.log("수정 버튼을 눌렀습니다.")}>
-        //   <Text className="text-[#0094FF]">수정</Text>
-        // </Pressable>
-        <Pressable style={styles.editButton} onPress={handleEditPress}>
-          <Text style={styles.editButtonText}>수정</Text>
-        </Pressable>
+        <View style={styles.headerButtonsContainer}>
+          <Pressable
+            style={styles.editButton}
+            onPress={() => handleEditPress(route.params.id)}
+          >
+            <Text style={styles.editButtonText}>수정</Text>
+          </Pressable>
+          <Pressable style={styles.deleteButton} onPress={handleDeletePress}>
+            <Text style={styles.deleteButtonText}>삭제</Text>
+          </Pressable>
+        </View>
       ),
     });
-  }, [navigation]);
+  }, [navigation, specInfo]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={styles.headerButtonsContainer}>
+          <Pressable
+            style={styles.editButton}
+            onPress={() => handleEditPress(route.params.id)}
+          >
+            <Text style={styles.editButtonText}>수정</Text>
+          </Pressable>
+          <Pressable style={styles.deleteButton} onPress={handleDeletePress}>
+            <Text style={styles.deleteButtonText}>삭제</Text>
+          </Pressable>
+        </View>
+      ),
+    });
+  }, [navigation, specInfo]);
 
   useEffect(() => {
     const fetchSpecDetail = async () => {
@@ -189,7 +222,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
       }
     };
     fetchSpecDetail();
-  }, []);
+  }, [id]);
 
   if (loading) {
     return (
@@ -228,7 +261,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
               </Text>
             </View>
             <Pressable
-              style={styles.editButton}
+              style={styles.myReviewButton}
               onPress={() =>
                 navigation.navigate("ReviewListScreen", {
                   screen: "ReviewListUp",
@@ -362,10 +395,45 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  headerButtonText: {
-    color: "#0094FF",
-    fontSize: 16,
-    marginRight: 15,
+  headerButtonsContainer: {
+    flexDirection: "row",
+  },
+  myReviewButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0094FF",
+    borderRadius: 4,
+    width: 69,
+    height: 22,
+    marginLeft: 10,
+  },
+  editButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0094FF",
+    borderRadius: 4,
+    width: 60,
+    height: 22,
+    marginLeft: 10,
+  },
+  deleteButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FF0909",
+    borderRadius: 4,
+    width: 60,
+    height: 22,
+    marginLeft: 10,
+  },
+  editButtonText: {
+    fontFamily: "Inter-SemiBold",
+    fontSize: 12,
+    color: "#FFFFFF",
+  },
+  deleteButtonText: {
+    fontFamily: "Inter-SemiBold",
+    fontSize: 12,
+    color: "#FFFFFF",
   },
   container: {
     flex: 1,
@@ -403,20 +471,6 @@ const styles = StyleSheet.create({
   statusText: {
     fontFamily: "Inter-SemiBold",
     fontSize: 12,
-  },
-  editButton: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#0094FF",
-    borderRadius: 4,
-    width: 69,
-    height: 22,
-    marginLeft: 10,
-  },
-  editButtonText: {
-    fontFamily: "Inter-SemiBold",
-    fontSize: 12,
-    color: "#FFFFFF",
   },
   detailContainer: {
     alignItems: "center",

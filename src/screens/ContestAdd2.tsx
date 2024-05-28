@@ -21,8 +21,12 @@ type ContestProps = NativeStackScreenProps<
   "ContestAdd2"
 >;
 
+interface RouteParams {
+  id?: string; // Make id optional
+}
+
 function ContestAdd2({ route, navigation }: Readonly<ContestProps>) {
-  const { name } = route.params;
+  const { id, name }: { id?: string; name: string } = route.params || {}; // Destructure id and name from route.params
   const [host, setHost] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -33,6 +37,26 @@ function ContestAdd2({ route, navigation }: Readonly<ContestProps>) {
   const [contents, setContents] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false); // 모달 가시성 상태
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  // 키보드 이벤트를 처리하기 위한 useEffect 훅입니다.
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      (event) => {
+        setKeyboardHeight(event.endCoordinates.height);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardHeight(0);
+      }
+    );
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   const handleNext = async () => {
     console.log("ContestAdd2 -> ContestAdd3", {
@@ -53,26 +77,6 @@ function ContestAdd2({ route, navigation }: Readonly<ContestProps>) {
       contents,
     });
   };
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      (event) => {
-        setKeyboardHeight(event.endCoordinates.height);
-      }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        setKeyboardHeight(0);
-      }
-    );
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-
   const formatDate = (date: Date | null): string => {
     if (!date) return "날짜 선택";
     const month = date.getMonth() + 1;

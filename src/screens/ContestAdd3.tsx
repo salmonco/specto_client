@@ -31,16 +31,24 @@ type ContestProps = NativeStackScreenProps<
 
 function ContestAdd3({ route, navigation }: Readonly<ContestProps>) {
   const { name, host, startDate, endDate, field, contents } =
-    route.params || {};
-  const [awardTitle, setawardTitle] = useState("");
+    route.params || {}; // id 추가
+  const [awardTitle, setAwardTitle] = useState("");
   const [date, setDate] = useState<Date | null>(null);
   const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
     useState(false);
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
   const [awardStatus, setAwardStatus] = useState<boolean | null>(null); // 공모전 수상여부
   const [proofFile, setProofFile] = useState<string | null>(null);
-  // const [modalVisible, setModalVisible] = useState(false); // 모달 가시성 상태
-  // const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  const idGet = async () => {
+    try {
+      await axiosInstance.get(`/api/v1/spec/${id}`);
+    } catch (error) {
+      console.error("Error getting spec id:", error);
+    }
+  };
+
+  const isEditing = !!id; // id가 있으면 수정 모드
 
   const handleNext = async () => {
     const value = {
@@ -59,8 +67,13 @@ function ContestAdd3({ route, navigation }: Readonly<ContestProps>) {
     };
 
     try {
-      const res = await axiosInstance.post(`/api/v1/spec/json`, value);
-      console.log(`/api/v1/spec`, res);
+      if (isEditing) {
+        const res = await axiosInstance.put(`/api/v1/spec/json/${id}`, value);
+        console.log(`/api/v1/spec/${id}`, res);
+      } else {
+        const res = await axiosInstance.post(`/api/v1/spec/json`, value);
+        console.log(`/api/v1/spec`, res);
+      }
       navigation.navigate("SpecAddComplete", { name });
     } catch (error) {
       console.error("Error 에러:", error);
@@ -137,7 +150,7 @@ function ContestAdd3({ route, navigation }: Readonly<ContestProps>) {
               style={styles.inputText}
               placeholder="수상명을 입력해주세요."
               value={awardTitle}
-              onChangeText={(text) => setawardTitle(text)}
+              onChangeText={(text) => setAwardTitle(text)}
             />
           </View>
         </View>

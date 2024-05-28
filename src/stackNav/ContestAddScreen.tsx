@@ -6,8 +6,8 @@ import ContestAdd3 from "../screens/ContestAdd3";
 import SpecAddComplete from "../screens/SpecAddComplete";
 
 export type ContestAddScreenStackParamList = {
-  ContestAdd1: undefined;
-  ContestAdd2: { name: string };
+  ContestAdd1: { id: number | undefined }; // 수정된 부분
+  ContestAdd2: { id: number | null; name: string };
   ContestAdd3: {
     name: string;
     host: string;
@@ -15,6 +15,7 @@ export type ContestAddScreenStackParamList = {
     endDate: string | null;
     field: string;
     contents: string | null;
+    id: number | null;
   };
   SpecAddComplete: { name: string };
 };

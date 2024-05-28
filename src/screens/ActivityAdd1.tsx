@@ -96,7 +96,8 @@ const styles = StyleSheet.create({
     fontWeight: "400",
   },
   buttonContainer: {
-    marginTop: 20,
+    position: "absolute",
+    bottom: 10,
     backgroundColor: "#0094FF",
     padding: 16,
     borderRadius: 12,
