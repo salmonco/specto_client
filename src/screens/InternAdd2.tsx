@@ -54,8 +54,14 @@ function InternAdd2({ route, navigation }: Readonly<InternProps>) {
     };
 
     try {
-      const res = await axiosInstance.post(`/api/v1/spec/json`, value);
-      console.log(`/api/v1/spec`, res);
+      if (isEditing) {
+        const res = await axiosInstance.patch(`/api/v1/spec/${id}`, value);
+        console.log(res);
+        console.log(`/api/v1/spec/${id}`, res);
+      } else {
+        const res = await axiosInstance.post(`/api/v1/spec/json`, value);
+        console.log(`/api/v1/spec`, res);
+      }
       navigation.navigate("SpecAddComplete", { name });
     } catch (error) {
       console.error("Error 에러:", error);

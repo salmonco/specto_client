@@ -33,7 +33,7 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
     endDate,
     field,
     contents,
-    proofFile,
+    // proofFile,
   } = route.params || {};
   const [motivation, setMotivation] = useState<string>(
     specDetail?.detail?.motivation ?? ""
@@ -45,46 +45,12 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const isEditing = !!id; // id가 있으면 수정 모드
 
-  const handleNext = useCallback(async () => {
+  const handleNext = async () => {
     // const formData = new FormData();
-
-    enum ActivityCategory {
-      ACTIVITY = "ACTIVITY",
-      CERTIFICATION = "CERTIFICATION",
-      CONTEST = "CONTEST",
-      INTERNSHIP = "INTERNSHIP",
-      PROJECT = "PROJECT",
-    }
-
-    // let documentation: Blob | null;
-    // if (proofFile) {
-    //   const response = await fetch(proofFile);
-    //   const blob = await response.blob();
-    //   // formData.append("documentation", blob);
-    //   documentation = blob;
-    // } else {
-    //   documentation = null;
-    // }
-
-    // let fileBase64: string;
-    // let fileUri: string;
-    // let fileName: string;
-    // if (proofFile) {
-    //   const base64 = await FileSystem.readAsStringAsync(proofFile.uri, {
-    //     encoding: "base64",
-    //   });
-    //   fileBase64 = base64;
-    //   fileUri = proofFile.uri;
-    //   fileName = proofFile.name;
-    // } else {
-    //   fileBase64 = "";
-    //   fileUri = "";
-    //   fileName = "";
-    // }
 
     const value = {
       name: name || "기본 이름",
-      category: ActivityCategory.ACTIVITY,
+      category: "ACTIVITY",
       startDate: startDate || "2024-03-06",
       endDate: endDate || "2024-03-06",
       contents: contents || "기본 내용",
@@ -96,59 +62,16 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
         direction: direction || "기본 목표",
       },
     };
-    // navigation.navigate("SpecSend", {
-    //   specPostReq: value,
-    //   // fileBase64,
-    //   fileUri,
-    //   fileName,
-    // });
-    // console.log(value);
-
-    // const blob = new Blob([JSON.stringify(value)], {
-    //   type: "application/json",
-    // });
-    // formData.append("specPostReq", blob);
-
-    // console.log("블랍:", blob);
-    // console.log("폼데이터:", formData);
 
     try {
-      // const res = await axiosInstance.post(`/api/v1/spec`, formData, {
-      //   headers: {
-      //     // "Content-Type": "multipart/form-data; boundary='boundary'",
-      //     "Content-Type": "multipart/form-data",
-      //   },
-      //   transformRequest: (data, headers) => {
-      //     return data;
-      //   },
-      // });
-      // const res = await axios.post(
-      //   `${getEnvVars()?.apiUrl}/api/v1/spec`,
-      //   formData,
-      //   {
-      //     headers: {
-      //       // "Content-Type": "multipart/form-data; boundary='boundary'",
-      //       "Content-Type": "multipart/form-data",
-      //       Authorization: `Bearer ${await SecureStore.getItemAsync(
-      //         "accessToken"
-      //       )}`,
-      //     },
-      //   }
-      // );
-      // const res = await fetch(`${getEnvVars()?.apiUrl}/api/v1/spec`, {
-      //   method: "POST",
-      //   body: formData,
-      //   headers: {
-      //     // "Content-Type": "multipart/form-data",
-      //     Authorization: `Bearer ${await SecureStore.getItemAsync(
-      //       "accessToken"
-      //     )}`,
-      //   },
-      // });
-
-      const res = await axiosInstance.post(`/api/v1/spec/json`, value);
-
-      console.log(`/api/v1/spec`, res);
+      if (isEditing) {
+        const res = await axiosInstance.patch(`/api/v1/spec/${id}`, value);
+        console.log(res);
+        console.log(`/api/v1/spec/${id}`, res);
+      } else {
+        const res = await axiosInstance.post(`/api/v1/spec/json`, value);
+        console.log(`/api/v1/spec`, res);
+      }
       navigation.navigate("SpecAddComplete", { name });
     } catch (error) {
       console.error("Error 에러:", error);
@@ -156,18 +79,7 @@ function ActivityAdd3({ route, navigation }: Readonly<ActivityProps>) {
         "양식을 제출하는 동안 오류가 발생했습니다. 다시 시도해 주세요."
       );
     }
-  }, [
-    name,
-    host,
-    startDate,
-    endDate,
-    field,
-    contents,
-    motivation,
-    goal,
-    direction,
-    proofFile,
-  ]);
+  };
 
   return (
     <View style={styles.container}>

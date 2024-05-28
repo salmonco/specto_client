@@ -23,7 +23,6 @@ function ActivityAdd1({ route, navigation }: Readonly<ContestProps>) {
   const [name, setName] = useState(specDetail?.name ?? ""); // 활동명 상태 생성
 
   const handleNext = () => {
-    // ActivityAdd2로 이동하면서 name 값을 전달
     const value = { id, specDetail, name };
     console.log("ActivityAdd1 -> ActivityAdd2", value);
     navigation.navigate("ActivityAdd2", value);

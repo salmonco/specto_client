@@ -17,26 +17,22 @@ import { Dropdown } from "react-native-element-dropdown";
 import * as DocumentPicker from "expo-document-picker";
 import axiosInstance from "src/api/axiosInstance";
 
-type DocumentPickerResponse = {
-  uri: string;
-  type: string;
-  name: string;
-  size: number;
-};
-
 type CertificateProps = NativeStackScreenProps<
   CertificateAddScreenStackParamList,
   "CertificateAdd3"
 >;
 
 function CertificateAdd3({ route, navigation }: Readonly<CertificateProps>) {
-  const { id, name, host, startDate, endDate, field, contents } =
+  const { id, specDetail, name, host, startDate, endDate, field, contents } =
     route.params || {};
-  const [date, setDate] = useState<Date | null>(null);
+  const [date, setDate] = useState<Date | string | null>(
+    specDetail?.startDate ?? null
+  );
+
   const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
     useState(false);
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
-  const [proofFile, setProofFile] = useState<string | null>(null);
+
   const isEditing = !!id; // id가 있으면 수정 모드
 
   const handleNext = async () => {
@@ -54,8 +50,14 @@ function CertificateAdd3({ route, navigation }: Readonly<CertificateProps>) {
     };
 
     try {
-      const res = await axiosInstance.post(`/api/v1/spec/json`, value);
-      console.log(`/api/v1/spec`, res);
+      if (isEditing) {
+        const res = await axiosInstance.patch(`/api/v1/spec/${id}`, value);
+        console.log(res);
+        console.log(`/api/v1/spec/${id}`, res);
+      } else {
+        const res = await axiosInstance.post(`/api/v1/spec/json`, value);
+        console.log(`/api/v1/spec`, res);
+      }
       navigation.navigate("SpecAddComplete", { name });
     } catch (error) {
       console.error("Error 에러:", error);
@@ -63,12 +65,6 @@ function CertificateAdd3({ route, navigation }: Readonly<CertificateProps>) {
         "양식을 제출하는 동안 오류가 발생했습니다. 다시 시도해 주세요."
       );
     }
-  };
-
-  const pickDocument = async () => {
-    const result = await DocumentPicker.getDocumentAsync({});
-    alert(result);
-    console.log(result);
   };
 
   const formatDate = (date: Date | null): string => {
@@ -104,7 +100,9 @@ function CertificateAdd3({ route, navigation }: Readonly<CertificateProps>) {
               style={styles.datePicker}
             >
               <Text style={styles.datePickerLabel}>취득 날짜</Text>
-              <Text style={styles.datePickerText}>{formatDate(date)}</Text>
+              <Text style={styles.datePickerText}>
+                {typeof date === "string" ? date : formatDate(date)}
+              </Text>
             </TouchableOpacity>
           </View>
           <Modal
@@ -134,21 +132,6 @@ function CertificateAdd3({ route, navigation }: Readonly<CertificateProps>) {
             </View>
           </Modal>
         </View>
-
-        {/* 섹션 4: 증빙자료 업로드 */}
-        {/* <View style={styles.section}>
-          <Text style={[styles.sectionSubtitle, { marginTop: 10 }]}>
-            증빙자료를 업로드해주세요.
-          </Text>
-          <TouchableOpacity
-            style={[styles.inputBox, { width: 110 }]}
-            onPress={pickDocument}
-          >
-            <View>
-              <Text style={styles.inputText}>파일 업로드</Text>
-            </View>
-          </TouchableOpacity>
-        </View> */}
       </ScrollView>
       {/* 다음으로 버튼 */}
       <TouchableOpacity style={styles.nextButton} onPress={handleNext}>

@@ -23,18 +23,33 @@ type ActivityProps = NativeStackScreenProps<
 >;
 
 function ProjectAdd3({ route, navigation }: Readonly<ActivityProps>) {
-  const { id, name, host, startDate, endDate, field, contents, proofFile } =
-    route.params || {};
-  const [motivation, setMotivation] = useState<string | null>(null);
-  const [goal, setGoal] = useState<string | null>(null);
-  const [direction, setDirection] = useState<string | null>(null);
+  const {
+    id,
+    specDetail,
+    name,
+    host,
+    startDate,
+    endDate,
+    field,
+    contents,
+    // proofFile,
+  } = route.params || {};
+  const [motivation, setMotivation] = useState<string>(
+    specDetail?.detail?.motivation ?? ""
+  );
+  const [goal, setGoal] = useState<string>(specDetail?.detail?.goal ?? "");
+  const [direction, setDirection] = useState<string>(
+    specDetail?.detail?.direction ?? ""
+  );
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const isEditing = !!id; // id가 있으면 수정 모드
 
-  const handleNext = useCallback(async () => {
+  const handleNext = async () => {
+    // const formData = new FormData();
+
     const value = {
       name: name || "기본 이름",
-      category: "PROJECT",
+      category: "ACTIVITY",
       startDate: startDate || "2024-03-06",
       endDate: endDate || "2024-03-06",
       contents: contents || "기본 내용",
@@ -48,8 +63,14 @@ function ProjectAdd3({ route, navigation }: Readonly<ActivityProps>) {
     };
 
     try {
-      const res = await axiosInstance.post(`/api/v1/spec/json`, value);
-      console.log(`/api/v1/spec`, res);
+      if (isEditing) {
+        const res = await axiosInstance.patch(`/api/v1/spec/${id}`, value);
+        console.log(res);
+        console.log(`/api/v1/spec/${id}`, res);
+      } else {
+        const res = await axiosInstance.post(`/api/v1/spec/json`, value);
+        console.log(`/api/v1/spec`, res);
+      }
       navigation.navigate("SpecAddComplete", { name });
     } catch (error) {
       console.error("Error 에러:", error);
@@ -57,18 +78,7 @@ function ProjectAdd3({ route, navigation }: Readonly<ActivityProps>) {
         "양식을 제출하는 동안 오류가 발생했습니다. 다시 시도해 주세요."
       );
     }
-  }, [
-    name,
-    host,
-    startDate,
-    endDate,
-    field,
-    contents,
-    motivation,
-    goal,
-    direction,
-    proofFile,
-  ]);
+  };
 
   return (
     <View style={styles.container}>

@@ -14,15 +14,7 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ContestAddScreenStackParamList } from "@stackNav/ContestAddScreen";
 import { Dropdown } from "react-native-element-dropdown";
-import * as DocumentPicker from "expo-document-picker";
 import axiosInstance from "src/api/axiosInstance";
-
-type DocumentPickerResponse = {
-  uri: string;
-  type: string;
-  name: string;
-  size: number;
-};
 
 type ContestProps = NativeStackScreenProps<
   ContestAddScreenStackParamList,
@@ -39,14 +31,6 @@ function ContestAdd3({ route, navigation }: Readonly<ContestProps>) {
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
   const [awardStatus, setAwardStatus] = useState<boolean | null>(null); // 공모전 수상여부
   const [proofFile, setProofFile] = useState<string | null>(null);
-
-  const idGet = async () => {
-    try {
-      await axiosInstance.get(`/api/v1/spec/${id}`);
-    } catch (error) {
-      console.error("Error getting spec id:", error);
-    }
-  };
 
   const isEditing = !!id; // id가 있으면 수정 모드
 
@@ -68,7 +52,7 @@ function ContestAdd3({ route, navigation }: Readonly<ContestProps>) {
 
     try {
       if (isEditing) {
-        const res = await axiosInstance.put(`/api/v1/spec/json/${id}`, value);
+        const res = await axiosInstance.patch(`/api/v1/spec/${id}`, value);
         console.log(`/api/v1/spec/${id}`, res);
       } else {
         const res = await axiosInstance.post(`/api/v1/spec/json`, value);
@@ -81,12 +65,6 @@ function ContestAdd3({ route, navigation }: Readonly<ContestProps>) {
         "양식을 제출하는 동안 오류가 발생했습니다. 다시 시도해 주세요."
       );
     }
-  };
-
-  const pickDocument = async () => {
-    const result = await DocumentPicker.getDocumentAsync({});
-    alert(result);
-    console.log(result);
   };
 
   const formatDate = (date: Date | null): string => {

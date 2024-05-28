@@ -138,41 +138,40 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
   const [specInfo, setSpecInfo] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(true);
 
-  const handleEditPress = () => {
-    switch (category) {
-      case "CONTEST":
-        navigation.navigate("ContestAddScreen", {
-          screen: "ContestAdd1",
-          params: { id, specDetail: specInfo },
-        });
-        break;
-      case "CERTIFICATION":
-        navigation.navigate("CertificateAddScreen", {
-          screen: "CertificateAdd1",
-          params: { id, specDetail: specInfo },
-        });
-        break;
-      case "INTERNSHIP":
-        navigation.navigate("InternAddScreen", {
-          screen: "InternAdd1",
-          params: { id, specDetail: specInfo },
-        });
-        break;
-      case "ACTIVITY":
-        navigation.navigate("ActivityAddScreen", {
-          screen: "ActivityAdd1",
-          params: { id, specDetail: specInfo },
-        });
-        break;
-      case "PROJECT":
-        navigation.navigate("ProjectAddScreen", {
-          screen: "ProjectAdd1",
-          params: { id, specDetail: specInfo },
-        });
-        break;
-      default:
-        // navigation.navigate("Spec", { id });
-        break;
+  const handleEditPress = (id: number | undefined) => {
+    try {
+      switch (category) {
+        case "CONTEST":
+          navigation.navigate("ContestAddScreen", {
+            screen: "ContestAdd1",
+            params: { id },
+          });
+          break;
+        case "CERTIFICATION":
+          navigation.navigate("CertificateAddScreen", {
+            screen: "CertificateAdd1",
+            params: { id },
+          });
+          break;
+        case "INTERNSHIP":
+          navigation.navigate("InternAddScreen", {
+            screen: "InternAdd1",
+            params: { id },
+          });
+          break;
+        case "ACTIVITY":
+          navigation.navigate("ActivityAddScreen", {
+            screen: "ActivityAdd1",
+            params: { id },
+          });
+          break;
+        default:
+          // navigation.navigate("Spec", { id });
+          break;
+      }
+    } catch (error) {
+      console.error("Error updating spec:", error);
+      Alert.alert("수정 실패", "스펙 수정에 실패했습니다.");
     }
   };
 
@@ -191,7 +190,10 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
     navigation.setOptions({
       headerRight: () => (
         <View style={styles.headerButtonsContainer}>
-          <Pressable style={styles.editButton} onPress={handleEditPress}>
+          <Pressable
+            style={styles.editButton}
+            onPress={() => handleEditPress(route.params.id)}
+          >
             <Text style={styles.editButtonText}>수정</Text>
           </Pressable>
           <Pressable style={styles.deleteButton} onPress={handleDeletePress}>
@@ -206,7 +208,10 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
     navigation.setOptions({
       headerRight: () => (
         <View style={styles.headerButtonsContainer}>
-          <Pressable style={styles.editButton} onPress={handleEditPress}>
+          <Pressable
+            style={styles.editButton}
+            onPress={() => handleEditPress(route.params.id)}
+          >
             <Text style={styles.editButtonText}>수정</Text>
           </Pressable>
           <Pressable style={styles.deleteButton} onPress={handleDeletePress}>
@@ -309,7 +314,8 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
           <View style={styles.separator} />
           <View style={styles.titleContainer}>
             <Text style={styles.summaryTitle}>
-              {specInfo.user}님의 {specInfo.name}
+              {/* {specInfo.user}님의 {specInfo.name} */}
+              스펙토 유저님의 {specInfo.name}
             </Text>
             <Pressable
               style={styles.createButton}
@@ -328,7 +334,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
               </Text>
             </View>
           </View>
-          <Text
+          {/* <Text
             style={{
               width: "100%",
               color: "#373737",
@@ -384,7 +390,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
                 );
               }}
             />
-          </View>
+          </View> */}
         </View>
       </View>
     </ScrollView>

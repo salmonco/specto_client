@@ -129,39 +129,39 @@ function ActivityAdd2({ route, navigation }: ActivityProps) {
     return `${month}월 ${day}일`;
   };
 
-  const pickDocument = async () => {
-    try {
-      const proofFile = await DocumentPicker.getDocumentAsync({});
+  // const pickDocument = async () => {
+  //   try {
+  //     const proofFile = await DocumentPicker.getDocumentAsync({});
 
-      if (proofFile.canceled) {
-        Alert.alert("Document selection was canceled.");
-        return null;
-      } else {
-        const document = proofFile.assets[0];
-        const { name, size, uri, mimeType } = document;
-        Alert.alert(
-          "Selected Document",
-          `Name: ${name}\nSize: ${size} bytes\nType: ${mimeType}\nURI: ${uri}`
-        );
-        console.log(proofFile);
-        // Return the selected document
-        return document;
-      }
-    } catch (error) {
-      console.error(error);
-      Alert.alert("An error occurred while picking the document.");
-      return null;
-    }
-  };
+  //     if (proofFile.canceled) {
+  //       Alert.alert("Document selection was canceled.");
+  //       return null;
+  //     } else {
+  //       const document = proofFile.assets[0];
+  //       const { name, size, uri, mimeType } = document;
+  //       Alert.alert(
+  //         "Selected Document",
+  //         `Name: ${name}\nSize: ${size} bytes\nType: ${mimeType}\nURI: ${uri}`
+  //       );
+  //       console.log(proofFile);
+  //       // Return the selected document
+  //       return document;
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     Alert.alert("An error occurred while picking the document.");
+  //     return null;
+  //   }
+  // };
 
-  const handleFileUpload = async () => {
-    const document = await pickDocument();
-    if (document !== null) {
-      console.log("Selected file:", document);
-      setProofFile({ uri: document.uri, name: document.name });
-      // Perform further actions with the selected file if necessary
-    }
-  };
+  // const handleFileUpload = async () => {
+  //   const document = await pickDocument();
+  //   if (document !== null) {
+  //     console.log("Selected file:", document);
+  //     setProofFile({ uri: document.uri, name: document.name });
+  //     // Perform further actions with the selected file if necessary
+  //   }
+  // };
 
   return (
     <View style={styles.container}>

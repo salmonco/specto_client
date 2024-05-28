@@ -22,15 +22,19 @@ type ContestProps = NativeStackScreenProps<
 >;
 
 function ContestAdd2({ route, navigation }: Readonly<ContestProps>) {
-  const { id, name } = route.params;
-  const [host, setHost] = useState("");
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const { id, specDetail, name } = route.params;
+  const [host, setHost] = useState(specDetail?.detail?.host ?? "");
+  const [startDate, setStartDate] = useState<Date | string | null>(
+    specDetail?.startDate ?? null
+  );
+  const [endDate, setEndDate] = useState<Date | string | null>(
+    specDetail?.endDate ?? null
+  );
   const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
     useState(false);
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
-  const [field, setField] = useState(""); // 선택된 분야
-  const [contents, setContents] = useState<string | null>(null);
+  const [field, setField] = useState(specDetail?.detail?.field ?? "");
+  const [contents, setContents] = useState<string>(specDetail?.contents ?? "");
   const [modalVisible, setModalVisible] = useState(false); // 모달 가시성 상태
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
@@ -55,25 +59,28 @@ function ContestAdd2({ route, navigation }: Readonly<ContestProps>) {
   }, []);
 
   const handleNext = async () => {
-    console.log("ContestAdd2 -> ContestAdd3", {
-      name,
-      host,
-      startDate: startDate ? getDateString(startDate) : "",
-      endDate: endDate ? getDateString(endDate) : "",
-      field,
-      contents,
-    });
-
-    navigation.navigate("ContestAdd3", {
+    const value = {
       id,
+      specDetail,
       name,
       host,
-      startDate: startDate ? getDateString(startDate) : "",
-      endDate: endDate ? getDateString(endDate) : "",
+      startDate: startDate
+        ? typeof startDate === "object"
+          ? getDateString(startDate)
+          : startDate
+        : "",
+      endDate: endDate
+        ? typeof endDate === "object"
+          ? getDateString(endDate)
+          : endDate
+        : "",
       field,
       contents,
-    });
+    };
+    console.log("ContestAdd2 -> ContestAdd3", value);
+    navigation.navigate("ContestAdd3", value);
   };
+
   const formatDate = (date: Date | null): string => {
     if (!date) return "날짜 선택";
     const month = date.getMonth() + 1;
@@ -114,14 +121,20 @@ function ContestAdd2({ route, navigation }: Readonly<ContestProps>) {
               style={styles.datePicker}
             >
               <Text style={styles.datePickerLabel}>시작~준비기간:</Text>
-              <Text style={styles.datePickerText}>{formatDate(startDate)}</Text>
+              <Text style={styles.datePickerText}>
+                {typeof startDate === "string"
+                  ? startDate
+                  : formatDate(startDate)}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setIsEndDatePickerVisible(true)}
               style={styles.datePicker}
             >
               <Text style={styles.datePickerLabel}>마감기간:</Text>
-              <Text style={styles.datePickerText}>{formatDate(endDate)}</Text>
+              <Text style={styles.datePickerText}>
+                {typeof endDate === "string" ? endDate : formatDate(endDate)}
+              </Text>
             </TouchableOpacity>
           </View>
           <Modal

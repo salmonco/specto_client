@@ -21,37 +21,45 @@ type InternProps = NativeStackScreenProps<
 >;
 
 function InternAdd1({ route, navigation }: Readonly<InternProps>) {
-  const { id } = route.params;
-  const [company, setCompany] = useState("");
-  const [work, setWork] = useState("");
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const { id, specDetail } = route.params;
+  const [company, setCompany] = useState<string>(
+    specDetail?.detail?.company ?? ""
+  );
+  const [work, setWork] = useState(specDetail?.detail?.work ?? "");
+  const [startDate, setStartDate] = useState<Date | string | null>(
+    specDetail?.startDate ?? null
+  );
+  const [endDate, setEndDate] = useState<Date | string | null>(
+    specDetail?.endDate ?? null
+  );
   const [isStartDatePickerVisible, setIsStartDatePickerVisible] =
     useState(false);
   const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState(false);
-  const [contents, setContents] = useState<string | null>(null);
+  const [contents, setContents] = useState<string>(specDetail?.contents ?? "");
   const [modalVisible, setModalVisible] = useState(false); // 모달 가시성 상태
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const handleNext = async () => {
-    console.log("InternAdd1 -> InternAdd2", {
-      name: `${company} 인턴`,
-      company,
-      work,
-      startDate: startDate ? getDateString(startDate) : "",
-      endDate: endDate ? getDateString(endDate) : "",
-      contents,
-    });
-
-    navigation.navigate("InternAdd2", {
+    const value = {
       id,
       name: `${company} 인턴`,
+      specDetail,
       company,
       work,
-      startDate: startDate ? getDateString(startDate) : "",
-      endDate: endDate ? getDateString(endDate) : "",
+      startDate: startDate
+        ? typeof startDate === "object"
+          ? getDateString(startDate)
+          : startDate
+        : "",
+      endDate: endDate
+        ? typeof endDate === "object"
+          ? getDateString(endDate)
+          : endDate
+        : "",
       contents,
-    });
+    };
+    console.log("InternAdd1 -> InternAdd2", value);
+    navigation.navigate("InternAdd2", value);
   };
 
   useEffect(() => {
@@ -136,14 +144,20 @@ function InternAdd1({ route, navigation }: Readonly<InternProps>) {
               style={styles.datePicker}
             >
               <Text style={styles.datePickerLabel}>시작날짜</Text>
-              <Text style={styles.datePickerText}>{formatDate(startDate)}</Text>
+              <Text style={styles.datePickerText}>
+                {typeof startDate === "string"
+                  ? startDate
+                  : formatDate(startDate)}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setIsEndDatePickerVisible(true)}
               style={styles.datePicker}
             >
               <Text style={styles.datePickerLabel}>종료날짜</Text>
-              <Text style={styles.datePickerText}>{formatDate(endDate)}</Text>
+              <Text style={styles.datePickerText}>
+                {typeof endDate === "string" ? endDate : formatDate(endDate)}
+              </Text>
             </TouchableOpacity>
           </View>
           <Modal

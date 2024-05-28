@@ -19,28 +19,28 @@ export type ActivityAddScreenStackParamList = {
     endDate: string | null;
     field: string;
     contents: string | null;
-    proofFile: ProofFileBase | null;
+    // proofFile: ProofFileBase | null;
   };
   SpecAddComplete: { name: string };
-  SpecSend: {
-    specPostReq: {
-      name: string;
-      category: string;
-      startDate: Date | string | null;
-      endDate: Date | string | null;
-      contents: string | null;
-      detail: {
-        host: string;
-        field: string;
-        motivation: string;
-        goal: string;
-        direction: string;
-      };
-    };
-    // fileBase64: string;
-    fileUri: string;
-    fileName: string;
-  };
+  // SpecSend: {
+  //   specPostReq: {
+  //     name: string;
+  //     category: string;
+  //     startDate: Date | string | null;
+  //     endDate: Date | string | null;
+  //     contents: string | null;
+  //     detail: {
+  //       host: string;
+  //       field: string;
+  //       motivation: string;
+  //       goal: string;
+  //       direction: string;
+  //     };
+  //   };
+  //   // fileBase64: string;
+  //   fileUri: string;
+  //   fileName: string;
+  // };
 };
 
 const ActivityAddScreenStack =
@@ -65,7 +65,7 @@ function ActivityAddScreen() {
         name="SpecAddComplete"
         component={SpecAddComplete}
       />
-      <ActivityAddScreenStack.Screen name="SpecSend" component={SpecSend} />
+      {/* <ActivityAddScreenStack.Screen name="SpecSend" component={SpecSend} /> */}
     </ActivityAddScreenStack.Navigator>
   );
 }

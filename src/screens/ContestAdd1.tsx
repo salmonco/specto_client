@@ -15,13 +15,13 @@ type ContestProps = NativeStackScreenProps<
 >;
 
 function ContestAdd1({ route, navigation }: Readonly<ContestProps>) {
-  const { id } = route.params;
-  const [name, setName] = useState("");
+  const { id, specDetail } = route.params;
+  const [name, setName] = useState(specDetail?.name ?? ""); // 활동명 상태 생성
 
   const handleNext = async () => {
-    console.log("ContestAdd1 -> ContestAdd2", { name });
-    // Pass id and name to the next screen
-    navigation.navigate("ContestAdd2", { id, name });
+    const value = { id, specDetail, name };
+    console.log("ContestAdd1 -> ContestAdd2", value);
+    navigation.navigate("ContestAdd2", value);
   };
 
   return (

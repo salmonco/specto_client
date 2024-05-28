@@ -19,13 +19,13 @@ type ContestProps = NativeStackScreenProps<
 >;
 
 function ProjectAdd1({ route, navigation }: Readonly<ContestProps>) {
-  const { id } = route.params;
-  const [name, setName] = useState(""); // 활동명 상태 생성
+  const { id, specDetail } = route.params;
+  const [name, setName] = useState(specDetail?.name ?? ""); // 활동명 상태 생성
 
   const handleNext = () => {
-    // ActivityAdd2로 이동하면서 name 값을 전달
-    console.log("ProjectAdd1 -> ProjectAdd2", { name });
-    navigation.navigate("ProjectAdd2", { id, name });
+    const value = { id, specDetail, name };
+    console.log("ProjectAdd1 -> ProjectAdd2", value);
+    navigation.navigate("ProjectAdd2", value);
   };
 
   return (
