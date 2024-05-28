@@ -4,7 +4,7 @@ import ProjectAdd1 from "../screens/ProjectAdd1";
 import ProjectAdd2, { ProofFileBase } from "../screens/ProjectAdd2";
 import ProjectAdd3 from "../screens/ProjectAdd3";
 import SpecAddComplete from "../screens/SpecAddComplete";
-import SpecSend from "@screens/SpecSend";
+// import SpecSend from "@screens/SpecSend";
 import { SpecDetailBase } from "@screens/SpecDetail";
 
 export type ProjectAddScreenStackParamList = {
@@ -22,25 +22,25 @@ export type ProjectAddScreenStackParamList = {
     proofFile: ProofFileBase | null;
   };
   SpecAddComplete: { name: string };
-  SpecSend: {
-    specPostReq: {
-      name: string;
-      category: string;
-      startDate: Date | string | null;
-      endDate: Date | string | null;
-      contents: string | null;
-      detail: {
-        host: string;
-        field: string;
-        motivation: string;
-        goal: string;
-        direction: string;
-      };
-    };
-    // fileBase64: string;
-    fileUri: string;
-    fileName: string;
-  };
+  // SpecSend: {
+  //   specPostReq: {
+  //     name: string;
+  //     category: string;
+  //     startDate: Date | string | null;
+  //     endDate: Date | string | null;
+  //     contents: string | null;
+  //     detail: {
+  //       host: string;
+  //       field: string;
+  //       motivation: string;
+  //       goal: string;
+  //       direction: string;
+  //     };
+  //   };
+  //   // fileBase64: string;
+  //   fileUri: string;
+  //   fileName: string;
+  // };
 };
 
 const ProjectAddScreenStack =
@@ -65,7 +65,7 @@ function ProjectAddScreen() {
         name="SpecAddComplete"
         component={SpecAddComplete}
       />
-      <ProjectAddScreenStack.Screen name="SpecSend" component={SpecSend} />
+      {/* <ProjectAddScreenStack.Screen name="SpecSend" component={SpecSend} /> */}
     </ProjectAddScreenStack.Navigator>
   );
 }

@@ -49,7 +49,7 @@ function ProjectAdd3({ route, navigation }: Readonly<ActivityProps>) {
 
     const value = {
       name: name || "기본 이름",
-      category: "ACTIVITY",
+      category: "PROJECT",
       startDate: startDate || "2024-03-06",
       endDate: endDate || "2024-03-06",
       contents: contents || "기본 내용",

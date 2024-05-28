@@ -28,11 +28,15 @@ type InternProps = NativeStackScreenProps<
 >;
 
 function InternAdd2({ route, navigation }: Readonly<InternProps>) {
-  const { id, name, company, work, startDate, endDate, contents } =
+  const { id, specDetail, name, company, work, startDate, endDate, contents } =
     route.params || {};
-  const [motivation, setMotivation] = useState<string | null>(null);
-  const [goal, setGoal] = useState<string | null>(null);
-  const [project, setProject] = useState<string | null>(null);
+  const [motivation, setMotivation] = useState<string>(
+    specDetail?.detail?.motivation ?? ""
+  );
+  const [goal, setGoal] = useState<string>(specDetail?.detail?.goal ?? "");
+  const [project, setProject] = useState<string>(
+    specDetail?.detail?.project ?? ""
+  );
   const [proofFile, setProofFile] = useState<string | null>(null);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const isEditing = !!id; // id가 있으면 수정 모드

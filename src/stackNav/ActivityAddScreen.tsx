@@ -4,7 +4,7 @@ import ActivityAdd1 from "../screens/ActivityAdd1";
 import ActivityAdd2, { ProofFileBase } from "../screens/ActivityAdd2";
 import ActivityAdd3 from "../screens/ActivityAdd3";
 import SpecAddComplete from "../screens/SpecAddComplete";
-import SpecSend from "@screens/SpecSend";
+// import SpecSend from "@screens/SpecSend";
 import { SpecDetailBase } from "@screens/SpecDetail";
 
 export type ActivityAddScreenStackParamList = {
