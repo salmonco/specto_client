@@ -3,7 +3,7 @@ import { Platform } from "react-native";
 
 const localhost = Platform.OS === "ios" ? "localhost:8080" : "10.0.2.2:8080";
 const KAKAO_REST_API_KEY = "9a0bd424b1cfd4144df8ad8a3a2d39db";
-const KAKAO_REDIRECT_URI = "https://auth.expo.io/@bongjs/specto-client";
+const KAKAO_REDIRECT_URI = "https://spectacle-specto.vercel.app/loading";
 const KAKAO_CLIENT_SECRET = "HKVOwsqW8RdZogyaz8dxHawXYVnvramd";
 
 const ENV = {
