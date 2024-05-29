@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Image, Pressable, ScrollView, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -10,7 +10,7 @@ import ReviewListItem, {
 } from "@components/ReviewListItem";
 import axiosInstance from "src/api/axiosInstance";
 import getDateString from "src/utils/getDateString";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import ReviewDetail from "@components/ReviewDetail";
 
 export type ReviewCalendarScreenProps = NativeStackNavigationProp<
@@ -34,25 +34,32 @@ function ReviewCalendar() {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [selectedReviewId, setSelectedReviewId] = useState(0);
 
+  const getReviewList = async () => {
+    try {
+      setLoading(true);
+      const dateStr = getDateString(clickedDate);
+      const res = await axiosInstance.get(
+        `/api/v1/review/calendar?date=${dateStr}`
+      );
+      console.log(`/review/calendar?date=${dateStr}`, res);
+      // setReviewList(REVIEW_DATA);
+      setReviewList(res.data);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const getReviewList = async () => {
-      try {
-        setLoading(true);
-        const dateStr = getDateString(clickedDate);
-        const res = await axiosInstance.get(
-          `/api/v1/review/calendar?date=${dateStr}`
-        );
-        console.log(`/review/calendar?date=${dateStr}`, res);
-        // setReviewList(REVIEW_DATA);
-        setReviewList(res.data);
-      } catch (e) {
-        console.log(e);
-      } finally {
-        setLoading(false);
-      }
-    };
     getReviewList();
   }, [clickedDate]);
+
+  useFocusEffect(
+    useCallback(() => {
+      getReviewList();
+    }, [])
+  );
 
   return (
     <View className="flex-1 relative">

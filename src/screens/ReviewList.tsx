@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FlatList, Image, Pressable, View } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -6,6 +6,7 @@ import { ReviewListScreenStackParamList } from "@stackNav/ReviewListScreen";
 import { SPEC_DATA, SPEC_MENU, SpecBase } from "./Spec";
 import SpecListItem from "@components/SpecListItem";
 import axiosInstance from "src/api/axiosInstance";
+import { useFocusEffect } from "@react-navigation/native";
 
 export const SORT_MENU = [
   { idx: 0, label: "최근 등록순", path: "recent" },
@@ -78,6 +79,12 @@ function ReviewList({ navigation }: Readonly<ReviewListScreenProps>) {
   useEffect(() => {
     getSpecList();
   }, [clickedCategory]);
+
+  useFocusEffect(
+    useCallback(() => {
+      getSpecList();
+    }, [])
+  );
 
   useEffect(() => {
     if (sortOpen) return;
