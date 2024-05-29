@@ -233,7 +233,7 @@ function ReviewAdd({ route, navigation }: Readonly<ReviewListScreenProps>) {
           // numberOfLines={4}
           onChangeText={(text) => setImpression(text)}
           value={impression}
-          placeholder="ex- 공모전 기획안이 완전히 다 뒤집혀서 팀원 모두가 멘붕이 된 것.."
+          placeholder="예) 공모전 기획안이 완전히 다 뒤집혀서 팀원 모두가 멘붕이 된 것.."
         />
       </View>
 
@@ -248,7 +248,7 @@ function ReviewAdd({ route, navigation }: Readonly<ReviewListScreenProps>) {
           // numberOfLines={4}
           onChangeText={(text) => setBearInMind(text)}
           value={bearInMind}
-          placeholder="ex- 공모전 기획안이 완전히 다 뒤집혀서 팀원 모두가 멘붕이 된 것.."
+          placeholder="예) 까먹지 않게 미리미리 문서 작성을 잘 해놓을 것"
         />
       </View>
 
