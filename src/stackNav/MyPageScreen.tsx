@@ -15,7 +15,9 @@ const MyPageScreenStack =
 
 function MyPageScreen() {
   return (
-    <MyPageScreenStack.Navigator screenOptions={{ headerShown: false }}>
+    <MyPageScreenStack.Navigator
+      screenOptions={{ headerShown: false, title: "마이페이지" }}
+    >
       <MyPageScreenStack.Screen name="MyPage" component={MyPage} />
       <MyPageScreenStack.Screen
         name="ProfileChange"
