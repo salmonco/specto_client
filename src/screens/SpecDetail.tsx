@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
+  Image,
 } from "react-native";
 import { CustomText as Text } from "@components/CustomText";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -137,6 +138,8 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
   const { id, category } = route.params;
   const [specInfo, setSpecInfo] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(true);
+  const [summary, setSummary] = useState("");
+  const [gptLoading, setGptLoading] = useState(false);
 
   const handleEditPress = (id: number | undefined) => {
     try {
@@ -189,6 +192,23 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
     } catch (error) {
       console.error("Error deleting spec:", error);
       Alert.alert("삭제 실패", "스펙 삭제에 실패했습니다.");
+    }
+  };
+
+  const handleReviewCreate = async () => {
+    try {
+      setGptLoading(true);
+      const res = await axiosInstance.post(`/api/v1/chatGpt/prompt`, {
+        prompt:
+          "이번 패스트 인턴을 통해서 기본적인 수준에서 벗어나 레벨업을 하기 위해 익히면 좋을 만한 프론트 엔드 기술들을 새롭게 익힐 수 있었다. 고급 JavaScript의 일환으로 비동기 프로그래밍을 새롭게 연습했다. Async/Await 뿐만 아니라 Promises까지 다루어 보았고 클로저, 고차 함수와 같은 개념들도 책을 통해 학습했다. 또한 타입스크립트를 추가하여 JavaScript에 정적 타입을 추가하였고 이를 통해 코드를 보호하고 유지보수성을 향상시킬 수 있었다. 이후에는 MobX와 같은 상태 관리 라이브러리를 사용해서 복잡한 애플리케이션 상태를 관리하는 연습을 해보았고, 엔드투엔드 테스트를 작성하여 React Testing 라이브러리를 사용해 유닛, 통합 테스트를 추가로 진행했다. 마지막으로 코드 스플리팅, 지연 로딩, 캐싱 전략 등에 관한 강의를 듣고 애플리케이션의 퍼포먼스를 최적화하는 데에 도전해 보았다. 단순히 프로그램이 정상적으로 돌아가는 것만을 목표로 하는 개발이 아니라 더 효율적이고 안정된 애플리케이션을 목표로 하다보니 낯설고 어려운 점들이 많았지만, 전문성을 기르는 과정이라 생각하니 얻은 것이 많은 인턴 경험이었던 것 같다. 다음 번에는 가능하다면 이번 인턴 활동을 통해 얻은 지식들을 가지고 지금보다 4배수 이상의 많은 유저가 접속하는 프로그램의 애플리케이션 프론트 엔드를 작성해 볼 수 있었으면 좋겠다",
+      });
+      console.log(res);
+      setSummary(res.data.content);
+    } catch (error) {
+      console.error("Error:", error);
+      Alert.alert("회고 생성 실패", "회고 생성에 실패했습니다.");
+    } finally {
+      setGptLoading(false);
     }
   };
 
@@ -323,10 +343,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
               {/* {specInfo.user}님의 {specInfo.name} */}
               {`김철수`}님의 {specInfo.name}
             </Text>
-            <Pressable
-              style={styles.createButton}
-              onPress={() => console.log("생성하기 버튼을 눌렀습니다.")}
-            >
+            <Pressable style={styles.createButton} onPress={handleReviewCreate}>
               <Text style={styles.createButtonText}>생성하기</Text>
             </Pressable>
           </View>
@@ -335,9 +352,18 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
           <View style={styles.innerDetailContainer}>
             <View style={styles.detailBox}>
               <Text style={styles.detailSubTitle}>요약내용: </Text>
-              <Text style={styles.summarycontentContainer}>
-                {specInfo.summary}
-              </Text>
+              {gptLoading ? (
+                <View className="w-full items-center justify-center">
+                  <Image
+                    source={require("@assets/images/loader-spinner.gif")}
+                    style={{ width: 50, height: 50 }}
+                  />
+                </View>
+              ) : (
+                <Text style={styles.summarycontentContainer}>
+                  {specInfo.summary ?? summary}
+                </Text>
+              )}
             </View>
           </View>
           {/* <Text
