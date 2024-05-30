@@ -58,13 +58,13 @@ export const CATEGORY_DETAIL_MENU = {
     "awardStatus",
     "awardTitle",
     { key: "date", label: "수상일자" },
-    "documentation",
+    // "documentation",
   ],
   CERTIFICATION: [
     "host",
     "field",
     { key: "date", label: "취득 날짜" },
-    "documentation",
+    // "documentation",
   ],
   INTERNSHIP: [
     "company",
@@ -72,7 +72,7 @@ export const CATEGORY_DETAIL_MENU = {
     "motivation",
     "goal",
     "project",
-    "documentation",
+    // "documentation",
   ],
   ACTIVITY: [
     "host",
@@ -80,7 +80,7 @@ export const CATEGORY_DETAIL_MENU = {
     { key: "motivation", label: "활동 배경" },
     { key: "goal", label: "활동 목표" },
     "direction",
-    "documentation",
+    // "documentation",
   ],
   PROJECT: [
     "host",
@@ -88,7 +88,7 @@ export const CATEGORY_DETAIL_MENU = {
     { key: "motivation", label: "활동 배경" },
     { key: "goal", label: "활동 목표" },
     "direction",
-    "documentation",
+    // "documentation",
   ],
 };
 
@@ -98,7 +98,7 @@ export const DETAIL_MENU: { [key: string]: string } = {
   awardStatus: "수상 여부",
   awardTitle: "수상명",
   date: "수상일자",
-  documentation: "증빙자료",
+  // documentation: "증빙자료",
   company: "기업명",
   work: "직무",
   motivation: "지원 경로",
@@ -321,7 +321,7 @@ const SpecDetail = ({ route, navigation }: Readonly<SpecDetailScreenProps>) => {
           <View style={styles.titleContainer}>
             <Text style={styles.summaryTitle}>
               {/* {specInfo.user}님의 {specInfo.name} */}
-              스펙토 유저님의 {specInfo.name}
+              {`김철수`}님의 {specInfo.name}
             </Text>
             <Pressable
               style={styles.createButton}
