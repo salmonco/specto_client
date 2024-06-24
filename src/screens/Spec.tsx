@@ -12,6 +12,7 @@ import AddIcon from "@assets/images/add-blue.svg";
 import SpecCategorySelect from "@screens/SpecCategorySelect";
 import axiosInstance from "src/api/axiosInstance";
 import { useFocusEffect } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
 
 type SpecScreenProps = NativeStackScreenProps<SpecScreenStackParamList, "Spec">;
 
@@ -63,6 +64,9 @@ function Spec({ navigation }: Readonly<SpecScreenProps>) {
   const [isCategorySelectOpen, setIsCategorySelectOpen] = useState(false);
 
   const fetchSpecList = useCallback(async () => {
+    // 아래 주석 제거해서 로그아웃하고 다시 주석 처리하기
+    // await SecureStore.deleteItemAsync("accessToken");
+    // await SecureStore.deleteItemAsync("refreshToken");
     try {
       setLoading(true);
       const res = await axiosInstance.get(
